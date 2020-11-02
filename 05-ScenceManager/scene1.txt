@@ -1,0 +1,153 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\mario.png	255	255	255
+20	textures\misc.png	176	224	248
+21	textures\misc-2.png	0	118	255
+10	textures\enemies.png	3	26	110
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# BIG MARIO 
+# idle right
+10001	216	243	230	270	0
+# walk
+10002	255	243	271	270	0
+10003	295	244	311	270	0
+# sit down
+10004	376	238	390	266	0
+# jump up
+10005	335	244	351	270	0
+# jump down
+10006	295	244	311	270	0
+# idle left
+10011	176	243	190	270	0
+# walk
+10012	135	243	151	270	0
+10013	95	244	111	270	0
+# sit down
+10014	16	238	30	266	0
+# jump up
+10015	55	244	71	270	0
+# jump down
+10016	95	244	111	270	0
+# die 
+10099	15	209	31	225	0
+
+# SMALL MARIO
+# idle small right
+10021	217	89	229	104	0
+# walk
+10022	256	89	271	105	0
+10023	217	89	229	104	0
+# change direction
+10024	216	129	230	145	0
+# jump right
+10025	335	89	351	105	0
+# idle small left
+10031	177	89	189	104	0
+# walk
+10032	135	89	150	105	0
+10033	177	89	189	104	0
+# change direction
+10034	176	129	190	145	0
+# jump left
+10035	55	89	71	105	0
+
+#GROUND TILE
+20001	3	774	147	806	21
+
+#GOOMBA
+30001	5	14	21	29	10
+30002	25	14	41	29	10
+#die
+30003	45	21	61	29	10
+
+#brick with question mark animation
+40001	300	117	316	133	20
+40002	318	117	334	133	20
+40003	336	117	352	133	20
+40004	355	117	370	133	20
+						
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+
+# ==== MARIO =========
+#idle BIG right
+400	10001	100
+#idle BIG left
+401	10011	100
+#idle small right
+402	10021	100
+#idle small left
+403	10031	100
+#walk right big
+500	10001	100	10002	100	10003	100
+#walk left big
+501	10011	100	10012	100	10013	100
+#walk right small
+502	10021	100	10022	100	10023	100
+#walk left small
+503	10031	100	10032	100	10033	100
+#die
+599	10099	100
+#sit down right
+404	10004	100
+#sit down left
+405	10014	100
+#jump small right
+406	10025	100
+#jump small left
+407	10035	100
+
+
+# ==== GROUND TILE =========
+601	20001	100
+
+# ==== QUESTION MARK BRICK =========
+602	40001	1000	40001	100	40002	100	40003	100	40004	100
+
+
+# ==== GOOMBA  =========
+# walk
+701	30001	100	30002	100
+# die
+702	30003	100
+
+
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+1	400	401	402	403	500	501	502	503	599	404	405	406	407
+# GROUND TILE 
+2	601
+# QUESTION MARK BRICK 
+22	602
+# GOOMBA
+3	701	702
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 10 = Ground tile
+# MARIO
+0	50.0	0	1
+
+# GOOMBA
+
+# GROUND TILE
+# --- platform (hint: I created the list using Excel!) ----
+10	0	170	2
+10	144	170	2
+10	288	170	2
+10	432	170	2
+10	576	170	2
+
+# ---- brick group 1 ----
+1	125	110	22
+1	141	110	22
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+
