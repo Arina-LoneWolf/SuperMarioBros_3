@@ -27,6 +27,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	if (attackStartTime && GetTickCount() - attackStartTime < 375)
+		SetState(MARIO_STATE_ATTACK);
+	else
+		attackStartTime = 0;
+
+
+	if (waggingTailStartTime && GetTickCount() - waggingTailStartTime < 150)
+		SetState(MARIO_STATE_JUMP_HIGH);
+	else
+	{
+		waggingTailStartTime = 0;
+		isWaggingTail = false;
+	}
+
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
@@ -120,8 +134,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (nx != 0)
 		{
 			vx = last_vx;
-			/*if (isRunning)
-				vx = 0;*/
+			if (isSpeedingUp) // ko co tac dung
+				vx = 0;
 		}
 
 		if (ny != 0)
@@ -130,6 +144,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isFalling = false;
 				isOnGround = true;
+				/*if (canFlyUpFromGround)
+					canFlyUpFromGround = false;*/
 			}
 			vy = 0;
 		}
@@ -239,10 +255,7 @@ void CMario::Render()
 			if (vx < MARIO_RUNNING_SPEED)
 				ani = MARIO_FIRE_ANI_WALK_RIGHT;
 			else
-			{
-				canFly = true;
 				ani = MARIO_FIRE_ANI_RUNNING_RIGHT;
-			}
 			break;
 
 		case MARIO_STATE_RUNNING_LEFT:
@@ -376,10 +389,7 @@ void CMario::Render()
 			if (vx < MARIO_RUNNING_SPEED)
 				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
 			else
-			{
-				canFly = true;
 				ani = MARIO_RACCOON_ANI_RUNNING_RIGHT;
-			}
 			break;
 
 		case MARIO_STATE_RUNNING_LEFT:
@@ -394,10 +404,30 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_FLYING:
-			if (vx > 0)
-				ani = MARIO_RACCOON_ANI_FLYING_RIGHT;
+			if (isWaggingTail)
+			{
+				if (nx > 0)
+					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT;
+				else
+					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_LEFT;
+			}
 			else
-				ani = MARIO_RACCOON_ANI_FLYING_LEFT;
+			{
+				if (vy < 0)
+				{
+					if (nx > 0)
+						ani = MARIO_RACCOON_ANI_FLYING_UP_RIGHT;
+					else
+						ani = MARIO_RACCOON_ANI_FLYING_UP_LEFT;
+				}
+				else
+				{
+					if (nx > 0)
+						ani = MARIO_RACCOON_ANI_FLYING_DOWN_RIGHT;
+					else
+						ani = MARIO_RACCOON_ANI_FLYING_DOWN_LEFT;
+				}
+			}
 			break;
 
 		case MARIO_STATE_ATTACK:
@@ -405,8 +435,6 @@ void CMario::Render()
 				ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT;
 			else
 				ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT;
-			/*ResetAni();
-			isWaitingForAni = true;*/
 			break;
 
 		case MARIO_STATE_JUMP_HIGH:
@@ -733,8 +761,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		DebugOut(L"set state run right\n");
 		vx += MARIO_RUNNING_ACCELERATION * dt;
-		if (vx > MARIO_RUNNING_SPEED)
+		if (vx >= MARIO_RUNNING_SPEED)
+		{
 			vx = MARIO_RUNNING_SPEED;
+			canFlyUpFromGround = true;
+		}
 		nx = 1;
 		last_vx = vx;
 		break;
@@ -742,8 +773,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_LEFT:
 		DebugOut(L"set state run left\n");
 		vx -= MARIO_RUNNING_ACCELERATION * dt;
-		if (vx < -MARIO_RUNNING_SPEED)
+		if (vx <= -MARIO_RUNNING_SPEED)
+		{
 			vx = -MARIO_RUNNING_SPEED;
+			canFlyUpFromGround = true;
+		}
 		nx = -1;
 		last_vx = vx;
 		break;
@@ -770,11 +804,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP_LOW:
 		if (isOnGround)
 		{
-			jump_start = GetTickCount();
+			jumpStartTime = GetTickCount();
 			vy = -MARIO_LOW_JUMP_SPEED_Y;
 			isOnGround = false;
 		}
-		if (GetTickCount() - jump_start >= 100 && !isFalling)
+		if (GetTickCount() - jumpStartTime >= 100 && !isFalling)
 			vy += MARIO_LOW_JUMP_GRAVITY * dt;
 		break;
 
@@ -993,6 +1027,7 @@ void CMario::Attack()
 	//DebugOut(L"vào attack\n");
 	//last_ani = ani;
 	SetState(MARIO_STATE_ATTACK);
+	attackStartTime = GetTickCount();
 	//specialAniCase = true;
 	
 }

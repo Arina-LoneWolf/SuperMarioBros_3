@@ -5,11 +5,11 @@
 #include "Floor.h"
 #include "ColorBox.h"
 
-#define MARIO_RUNNING_SPEED						0.3f
-#define MARIO_MAX_WALKING_SPEED					0.15f
+#define MARIO_RUNNING_SPEED						0.23f
+#define MARIO_MAX_WALKING_SPEED					0.12f
 #define MARIO_RUNNING_ACCELERATION				0.0002f
-#define MARIO_WALKING_ACCELERATION				0.0002f
-#define MARIO_SMALL_ACCELERATION_SUBTRAHEND		0.0003f
+#define MARIO_WALKING_ACCELERATION				0.00015f
+#define MARIO_SMALL_ACCELERATION_SUBTRAHEND		0.00025f
 #define MARIO_LARGE_ACCELERATION_SUBTRAHEND		0.0005f
 #define INITIAL_LAST_Y							134.0f
 
@@ -63,27 +63,31 @@
 #define MARIO_ANI_SMALL_JUMP_LEFT			22
 #define MARIO_ANI_SMALL_STOP_LEFT			23
 
-#define MARIO_RACCOON_ANI_IDLE_RIGHT				24
-#define MARIO_RACCOON_ANI_WALK_RIGHT				25
-#define MARIO_RACCOON_ANI_RUNNING_RIGHT				26
-#define MARIO_RACCOON_ANI_JUMP_RIGHT				27
-#define MARIO_RACCOON_ANI_STOP_RIGHT				28
-#define MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT		29
-#define MARIO_RACCOON_ANI_SITTING_RIGHT				30
-#define MARIO_RACCOON_ANI_FALLING_RIGHT				31
-#define MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT	32
-#define MARIO_RACCOON_ANI_FLYING_RIGHT				33
+#define MARIO_RACCOON_ANI_IDLE_RIGHT					24
+#define MARIO_RACCOON_ANI_WALK_RIGHT					25
+#define MARIO_RACCOON_ANI_RUNNING_RIGHT					26
+#define MARIO_RACCOON_ANI_JUMP_RIGHT					27
+#define MARIO_RACCOON_ANI_STOP_RIGHT					28
+#define MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT			29
+#define MARIO_RACCOON_ANI_SITTING_RIGHT					30
+#define MARIO_RACCOON_ANI_FALLING_RIGHT					31
+#define MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT		32
+#define MARIO_RACCOON_ANI_FLYING_UP_RIGHT				33
+#define MARIO_RACCOON_ANI_FLYING_DOWN_RIGHT				63
+#define MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT	64
 
-#define MARIO_RACCOON_ANI_IDLE_LEFT					34
-#define MARIO_RACCOON_ANI_WALK_LEFT					35
-#define MARIO_RACCOON_ANI_RUNNING_LEFT				36
-#define MARIO_RACCOON_ANI_JUMP_LEFT					37
-#define MARIO_RACCOON_ANI_STOP_LEFT					38
-#define MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT		39			
-#define MARIO_RACCOON_ANI_SITTING_LEFT				40
-#define MARIO_RACCOON_ANI_FALLING_LEFT				41
-#define MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT		42
-#define MARIO_RACCOON_ANI_FLYING_LEFT				43
+#define MARIO_RACCOON_ANI_IDLE_LEFT						34
+#define MARIO_RACCOON_ANI_WALK_LEFT						35
+#define MARIO_RACCOON_ANI_RUNNING_LEFT					36
+#define MARIO_RACCOON_ANI_JUMP_LEFT						37
+#define MARIO_RACCOON_ANI_STOP_LEFT						38
+#define MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT			39			
+#define MARIO_RACCOON_ANI_SITTING_LEFT					40
+#define MARIO_RACCOON_ANI_FALLING_LEFT					41
+#define MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT			42
+#define MARIO_RACCOON_ANI_FLYING_UP_LEFT				43
+#define MARIO_RACCOON_ANI_FLYING_DOWN_LEFT				65
+#define MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_LEFT	66
 
 #define MARIO_FIRE_ANI_IDLE_RIGHT							44
 #define MARIO_FIRE_ANI_WALK_RIGHT							45
@@ -146,17 +150,21 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 public: 
-	DWORD jump_start = 0;
-	//bool isJumping;
-	bool isRunning, isFalling, isSitting, isWaggingTail, canFly;
+	DWORD jumpStartTime;
+	DWORD attackStartTime;
+	DWORD waggingTailStartTime;
+	bool isSpeedingUp, isFalling, isSitting, isWaggingTail, isFlying;
+	bool canFlyUpFromGround;
 	bool isOnGround;
+
+	bool isWaitingForAni;
 	bool specialAniCase;
 	bool turnOn;
 	int last_nx;
 	int last_ani = -1;
+
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
-	bool isWaitingForAni;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);

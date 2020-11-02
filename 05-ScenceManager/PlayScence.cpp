@@ -338,16 +338,19 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S: // high jump
-		if (mario->canFly)
+		if (mario->canFlyUpFromGround)
 		{
 			if (mario->GetLevel() == MARIO_RACCOON)
 				mario->SetState(MARIO_STATE_FLYING);
+			mario->canFlyUpFromGround = false;
+			mario->isFlying = true;
 		}
 		else
 		{
 			if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
 				mario->isWaggingTail = true;
 			mario->SetState(MARIO_STATE_JUMP_HIGH);
+			mario->waggingTailStartTime = GetTickCount();
 		}
 		break;
 
@@ -383,12 +386,13 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		if (!(mario->isOnGround || mario->isFalling))
 		{
-			if (mario->y > 85) //define plz!!!
-				mario->vy += MARIO_GRAVITY * 17 * mario->dt;
-			else
-				mario->vy += MARIO_GRAVITY * 12 * mario->dt;
+			//if (mario->y > 130) //define plz!!!
+			//	mario->vy += MARIO_GRAVITY * 15 * mario->dt;
+			//else
+			//	mario->vy += MARIO_GRAVITY * 15 * mario->dt;
+			mario->vy += MARIO_GRAVITY * 15 * mario->dt;
 		}
-		mario->isWaggingTail = false;
+		//mario->isWaggingTail = false;
 		break;
 
 	case DIK_X:
@@ -396,7 +400,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		break;
 
 	case DIK_A:
-		mario->isRunning = false; // i don't know why Nam write this right here..
+		mario->isSpeedingUp = false; // i don't know why Nam write this right here..
 		break;
 
 	case DIK_DOWN:
@@ -423,33 +427,29 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_RIGHT))
 	{
-		//DebugOut(L"running right\n");
 		mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		//mario->isRunning = true;
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_LEFT))
 	{
-		//DebugOut(L"running left\n");
 		mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		//mario->isRunning = true;
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		//DebugOut(L"walking left\n");
 		if (mario->vx > 0 && mario->isOnGround)
 			mario->SetState(MARIO_STATE_STOP);
 		else
-		{// // why don't use ToLeft function right here?
+		{
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
 	}
 	else if (game->IsKeyDown(DIK_RIGHT))
 	{
-		//DebugOut(L"walking right\n");
 		if (mario->vx < 0 && mario->isOnGround)
 			mario->SetState(MARIO_STATE_STOP);
 		else
-		{// why don't use ToRight function right here?
+		{
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 	}
@@ -469,4 +469,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		if (mario->isOnGround)
 			mario->Idle();
 	}
-}
+} 
