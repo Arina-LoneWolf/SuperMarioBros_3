@@ -383,7 +383,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		if (!(mario->isOnGround || mario->isFalling))
 		{
-			if (mario->y > 85) //define plz!
+			if (mario->y > 85) //define plz!!!
 				mario->vy += MARIO_GRAVITY * 17 * mario->dt;
 			else
 				mario->vy += MARIO_GRAVITY * 12 * mario->dt;
@@ -396,7 +396,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		break;
 
 	case DIK_A:
-		//mario->isRunning = false; // i don't know why Nam write this right here..
+		mario->isRunning = false; // i don't know why Nam write this right here..
 		break;
 
 	case DIK_DOWN:
