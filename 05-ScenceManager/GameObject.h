@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx9.h>
@@ -6,7 +6,7 @@
 
 #include "Sprites.h"
 #include "Animations.h"
-
+#include "define.h"
 
 using namespace std;
 
@@ -54,7 +54,9 @@ public:
 	float vx;
 	float vy;
 
-	bool eaten;
+	bool isFinishedUsing;
+	Type type;
+	Category category;
 
 	int nx;	 
 

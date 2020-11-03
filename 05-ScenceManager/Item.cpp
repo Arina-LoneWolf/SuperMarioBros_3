@@ -15,7 +15,7 @@ CItem::CItem(float start_x, float start_y)
 void CItem::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 
-	if (!eaten)
+	if (!isFinishedUsing)
 	{
 		left = x;
 		top = y;
@@ -74,7 +74,7 @@ void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CItem::Render()
 {
-	if (!eaten)
+	if (!isFinishedUsing)
 		animation_set->at(state)->Render(x, y);
 	//RenderBoundingBox();
 }

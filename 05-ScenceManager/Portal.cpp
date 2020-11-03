@@ -3,6 +3,8 @@
 
 CPortal::CPortal(float l, float t, float r, float b, int scene_id )
 {
+	type = PORTAL;
+	category = SCENE;
 	this->scene_id = scene_id;
 	x = l; 
 	y = t;

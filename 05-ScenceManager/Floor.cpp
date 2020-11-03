@@ -2,6 +2,8 @@
 
 CFloor::CFloor(int width, int height)
 {
+	type = FLOOR;
+	category = MISC;
 	this->width = width;
 	this->height = height;
 }

@@ -8,6 +8,7 @@
 42	textures\fireball_right.png	0	255	255
 43	textures\fireball_left.png	0	255	255
 44	textures\fireball_bonus_left.png	0	255	255
+33	textures\effect.png	176	224	248
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -218,6 +219,10 @@
 37	4	19	12	27	43
 38	4	4	12	12	44
 
+#===============HIT EFFECT================
+1000	80	20	96	36	33
+1001	97	20	111	34	33
+1002	126	22	140	33	33
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -361,7 +366,7 @@
 323	10226	100
 # stop left
 324	10227	150
-# fshoot fireball left
+# shoot fireball left
 325	10228	100	10229	100	10220	100
 # shoot fireball while jumping left
 326	10230	100	10231	100	10232	100
@@ -386,7 +391,10 @@
 701	3	100
 
 # ==== FIREBALL =====
+# right
 890	31	80	32	80	33	80	34	80
+# left
+891	35	80	36	80	37	80	38	80
 
 # ====== GOOMBA  =========
 # walk
@@ -396,6 +404,9 @@
 
 # ====== QUESTION BRICK AFTER ======
 3	40005	100
+
+# ======= HIT EFFECT =======
+900	1000	50	1001	50	1002	50
 
 # id	ani1	ani2	ani3
 [ANIMATION_SETS]
@@ -412,7 +423,9 @@
 # GIANT PIRANHA
 100	201	202
 # FIREBALL
-9	890
+9	890	891
+# HIT EFFECT
+11	900
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type

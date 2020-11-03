@@ -1,6 +1,8 @@
 #include "Goomba.h"
 CGoomba::CGoomba()
 {
+	type = GOOMBA;
+	category = ENEMY;
 	SetState(GOOMBA_STATE_WALKING);
 }
 

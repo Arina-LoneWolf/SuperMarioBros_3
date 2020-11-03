@@ -1,5 +1,11 @@
 #include "Brick.h"
 
+CBrick::CBrick()
+{
+	type = BRICK;
+	category = MISC;
+}
+
 void CBrick::Render()
 {
 	animation_set->at(0)->Render(x, y);

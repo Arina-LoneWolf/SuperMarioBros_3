@@ -10,11 +10,12 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
+	type = MARIO;
+	category = PLAYER;
+
 	level = MARIO_LEVEL_SMALL;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
-	//isJumping = false;
-	isOnGround = true;
 
 	start_x = x;
 	start_y = y;
@@ -27,13 +28,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	if (attackStartTime && GetTickCount() - attackStartTime < 375)
+	// Simple fall down
+	vy += MARIO_GRAVITY * dt;
+
+	if (level == MARIO_RACCOON && attackStartTime
+		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
 		SetState(MARIO_STATE_ATTACK);
 	else
 		attackStartTime = 0;
 
 
-	if (waggingTailStartTime && GetTickCount() - waggingTailStartTime < 150)
+	if (level == MARIO_FIRE && attackStartTime
+		&& GetTickCount() - attackStartTime < MARIO_SHOOTING_FIREBALL_TIME)
+		SetState(MARIO_STATE_ATTACK);
+	else
+		attackStartTime = 0;
+
+
+	if (waggingTailStartTime
+		&& GetTickCount() - waggingTailStartTime < MARIO_WAGGING_TAIL_TIME)
 		SetState(MARIO_STATE_JUMP_HIGH);
 	else
 	{
@@ -41,8 +54,54 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isWaggingTail = false;
 	}
 
-	// Simple fall down
-	vy += MARIO_GRAVITY * dt;
+
+	if (isAttacking)
+	{
+		if (listWeapon.size() < 2)
+		{
+			if (nx > 0)
+				listWeapon.push_back(CreateFireball(x + 10, y + 6, nx));
+			else
+				listWeapon.push_back(CreateFireball(x - 6, y + 6, nx));
+		}
+		isAttacking = false;
+	}
+
+	// update listWeapon
+	for (int i = 0; i < listWeapon.size(); i++)
+	{
+		listWeapon[i]->Update(dt, coObjects);
+		if (listWeapon[i]->isFinishedUsing)
+		{
+			float bx, by;
+			listWeapon[i]->GetPosition(bx, by);
+			CHitEffect* effect = new CHitEffect({ bx, by });
+			listEffect.push_back(effect);
+		}
+	}
+
+	for (int i = 0; i < listEffect.size(); i++)
+	{
+		listEffect[i]->Update(dt, coObjects);
+	}
+
+	// remove weapons and effects have done
+	for (int i = 0; i < listWeapon.size(); i++)
+	{
+		if (listWeapon[i]->isFinishedUsing)
+		{
+			listWeapon.erase(listWeapon.begin() + i);
+		}
+	}
+
+	for (int i = 0; i < listEffect.size(); i++)
+	{
+		if (listEffect[i]->isFinishedUsing)
+		{
+			listEffect.erase(listEffect.begin() + i);
+		}
+	}
+
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -60,44 +119,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	if (isWaitingForAni && animation_set->at(ani)->IsOver())
+	/*if (isWaitingForAni && animation_set->at(ani)->IsOver())
 	{
 		isWaitingForAni = false;
-	}
-
-	/*if (specialAniCase && ani != last_ani)
-	{
-
-		ResetAni();
-		isWaitingForAni = true;
-		specialAniCase = false;
 	}*/
-
-	/*if (specialAniCase)
-	{
-		if (ani != last_ani)
-		{
-			turnOn = true;
-			specialAniCase = false;
-		}
-	}*/
-
-	/*if (IsSpecialAniCase())
-	{
-		if (!IsDrawnCompletely())
-		{
-			DebugOut(L"chưa vẽ xong và đợi\n");
-			isWaitingForAni = true;
-		}
-		else
-		{
-			DebugOut(L"đã vẽ xong\n");
-			isWaitingForAni = false;
-			turnOn = false;
-		}
-	}
-	else
-		isWaitingForAni = false;*/
 
 		// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -129,6 +154,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.1f;
+
 		//DebugOut(L"y = %f\n", y);
 		//DebugOut(L"vx = %f\n", vx);
 		if (nx != 0)
@@ -189,7 +215,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			} // if Goomba
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
-				if(e->nx!=0)
+				if (e->nx != 0)
 				{
 					x += dx;
 				}
@@ -213,7 +239,7 @@ void CMario::Render()
 	//DebugOut(L"ani id khi vừa vào render %d\n", ani);
 	/*if (isWaitingForAni)
 		goto RENDER;*/
-	// Fire
+		// Fire
 	if (level == MARIO_FIRE)
 	{
 		switch (state)
@@ -710,13 +736,22 @@ void CMario::Render()
 	}
 
 RENDER:
-	//DebugOut(L"ani id %d\n", ani);
-
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
 	//DebugOut(L"ani id %d\n", ani);
+	for (int i = 0; i < listWeapon.size(); i++)
+	{
+		//if (!listWeapon[i]->isFinishedUsing)
+			listWeapon[i]->Render();
+	}
+
+	for (int i = 0; i < listEffect.size(); i++)
+	{
+		//if (!listEffect[i]->isFinishedUsing)
+		listEffect[i]->Render();
+	}
 
 	RenderBoundingBox();
 }
@@ -1024,12 +1059,9 @@ void CMario::Fly()
 
 void CMario::Attack()
 {
-	//DebugOut(L"vào attack\n");
-	//last_ani = ani;
 	SetState(MARIO_STATE_ATTACK);
 	attackStartTime = GetTickCount();
-	//specialAniCase = true;
-	
+	isAttacking = true;
 }
 
 void CMario::Stop()
@@ -1048,67 +1080,74 @@ void CMario::Reset()
 	SetSpeed(0, 0);
 }
 
-bool CMario::IsSpecialAniCase()
+//bool CMario::IsSpecialAniCase()
+//{
+//	switch (ani)
+//	{
+//	case MARIO_ANI_BIG_IDLE_RIGHT:
+//	case MARIO_ANI_BIG_WALKING_RIGHT:
+//	case MARIO_ANI_BIG_RUNNING_RIGHT:
+//	case MARIO_ANI_BIG_JUMP_RIGHT:
+//	case MARIO_ANI_BIG_SITTING_RIGHT:
+//	case MARIO_ANI_BIG_STOP_RIGHT:
+//	case MARIO_ANI_BIG_FALLING_RIGHT:
+//	case MARIO_ANI_BIG_IDLE_LEFT:
+//	case MARIO_ANI_BIG_WALKING_LEFT:
+//	case MARIO_ANI_BIG_RUNNING_LEFT:
+//	case MARIO_ANI_BIG_JUMP_LEFT:
+//	case MARIO_ANI_BIG_SITTING_LEFT:
+//	case MARIO_ANI_BIG_STOP_LEFT:
+//	case MARIO_ANI_BIG_FALLING_LEFT:
+//
+//	case MARIO_ANI_SMALL_IDLE_RIGHT:
+//	case MARIO_ANI_SMALL_WALKING_RIGHT:
+//	case MARIO_ANI_SMALL_RUNNING_RIGHT:
+//	case MARIO_ANI_SMALL_JUMP_RIGHT:
+//	case MARIO_ANI_SMALL_STOP_RIGHT:
+//	case MARIO_ANI_SMALL_IDLE_LEFT:
+//	case MARIO_ANI_SMALL_WALKING_LEFT:
+//	case MARIO_ANI_SMALL_RUNNING_LEFT:
+//	case MARIO_ANI_SMALL_JUMP_LEFT:
+//	case MARIO_ANI_SMALL_STOP_LEFT:
+//
+//	case MARIO_RACCOON_ANI_IDLE_RIGHT:
+//	case MARIO_RACCOON_ANI_WALK_RIGHT:
+//	case MARIO_RACCOON_ANI_RUNNING_RIGHT:
+//	case MARIO_RACCOON_ANI_JUMP_RIGHT:
+//	case MARIO_RACCOON_ANI_STOP_RIGHT:
+//	case MARIO_RACCOON_ANI_SITTING_RIGHT:
+//	case MARIO_RACCOON_ANI_FALLING_RIGHT:
+//	case MARIO_RACCOON_ANI_IDLE_LEFT:
+//	case MARIO_RACCOON_ANI_WALK_LEFT:
+//	case MARIO_RACCOON_ANI_RUNNING_LEFT:
+//	case MARIO_RACCOON_ANI_JUMP_LEFT:
+//	case MARIO_RACCOON_ANI_STOP_LEFT:
+//	case MARIO_RACCOON_ANI_SITTING_LEFT:
+//	case MARIO_RACCOON_ANI_FALLING_LEFT:
+//
+//	case MARIO_FIRE_ANI_IDLE_RIGHT:
+//	case MARIO_FIRE_ANI_WALK_RIGHT:
+//	case MARIO_FIRE_ANI_RUNNING_RIGHT:
+//	case MARIO_FIRE_ANI_JUMP_RIGHT:
+//	case MARIO_FIRE_ANI_STOP_RIGHT:
+//	case MARIO_FIRE_ANI_SITTING_RIGHT:
+//	case MARIO_FIRE_ANI_FALLING_RIGHT:
+//	case MARIO_FIRE_ANI_IDLE_LEFT:
+//	case MARIO_FIRE_ANI_WALK_LEFT:
+//	case MARIO_FIRE_ANI_RUNNING_LEFT:
+//	case MARIO_FIRE_ANI_JUMP_LEFT:
+//	case MARIO_FIRE_ANI_STOP_LEFT:
+//	case MARIO_FIRE_ANI_SITTING_LEFT:
+//	case MARIO_FIRE_ANI_FALLING_LEFT:
+//		return false;
+//	}
+//	return true;
+//}
+
+CFireball* CMario::CreateFireball(float x, float y, int nx)
 {
-	switch (ani)
-	{
-	case MARIO_ANI_BIG_IDLE_RIGHT:
-	case MARIO_ANI_BIG_WALKING_RIGHT:
-	case MARIO_ANI_BIG_RUNNING_RIGHT:
-	case MARIO_ANI_BIG_JUMP_RIGHT:
-	case MARIO_ANI_BIG_SITTING_RIGHT:
-	case MARIO_ANI_BIG_STOP_RIGHT:
-	case MARIO_ANI_BIG_FALLING_RIGHT:
-	case MARIO_ANI_BIG_IDLE_LEFT:
-	case MARIO_ANI_BIG_WALKING_LEFT:
-	case MARIO_ANI_BIG_RUNNING_LEFT:
-	case MARIO_ANI_BIG_JUMP_LEFT:
-	case MARIO_ANI_BIG_SITTING_LEFT:
-	case MARIO_ANI_BIG_STOP_LEFT:
-	case MARIO_ANI_BIG_FALLING_LEFT:
-
-	case MARIO_ANI_SMALL_IDLE_RIGHT:
-	case MARIO_ANI_SMALL_WALKING_RIGHT:
-	case MARIO_ANI_SMALL_RUNNING_RIGHT:
-	case MARIO_ANI_SMALL_JUMP_RIGHT:
-	case MARIO_ANI_SMALL_STOP_RIGHT:
-	case MARIO_ANI_SMALL_IDLE_LEFT:
-	case MARIO_ANI_SMALL_WALKING_LEFT:
-	case MARIO_ANI_SMALL_RUNNING_LEFT:
-	case MARIO_ANI_SMALL_JUMP_LEFT:
-	case MARIO_ANI_SMALL_STOP_LEFT:
-
-	case MARIO_RACCOON_ANI_IDLE_RIGHT:
-	case MARIO_RACCOON_ANI_WALK_RIGHT:
-	case MARIO_RACCOON_ANI_RUNNING_RIGHT:
-	case MARIO_RACCOON_ANI_JUMP_RIGHT:
-	case MARIO_RACCOON_ANI_STOP_RIGHT:
-	case MARIO_RACCOON_ANI_SITTING_RIGHT:
-	case MARIO_RACCOON_ANI_FALLING_RIGHT:
-	case MARIO_RACCOON_ANI_IDLE_LEFT:
-	case MARIO_RACCOON_ANI_WALK_LEFT:
-	case MARIO_RACCOON_ANI_RUNNING_LEFT:
-	case MARIO_RACCOON_ANI_JUMP_LEFT:
-	case MARIO_RACCOON_ANI_STOP_LEFT:
-	case MARIO_RACCOON_ANI_SITTING_LEFT:
-	case MARIO_RACCOON_ANI_FALLING_LEFT:
-
-	case MARIO_FIRE_ANI_IDLE_RIGHT:
-	case MARIO_FIRE_ANI_WALK_RIGHT:
-	case MARIO_FIRE_ANI_RUNNING_RIGHT:
-	case MARIO_FIRE_ANI_JUMP_RIGHT:
-	case MARIO_FIRE_ANI_STOP_RIGHT:
-	case MARIO_FIRE_ANI_SITTING_RIGHT:
-	case MARIO_FIRE_ANI_FALLING_RIGHT:
-	case MARIO_FIRE_ANI_IDLE_LEFT:
-	case MARIO_FIRE_ANI_WALK_LEFT:
-	case MARIO_FIRE_ANI_RUNNING_LEFT:
-	case MARIO_FIRE_ANI_JUMP_LEFT:
-	case MARIO_FIRE_ANI_STOP_LEFT:
-	case MARIO_FIRE_ANI_SITTING_LEFT:
-	case MARIO_FIRE_ANI_FALLING_LEFT:
-		return false;
-	}
-	return true;
+	CFireball* fireball = new CFireball({ x, y }, nx);
+	return fireball;
 }
+
 
