@@ -442,7 +442,7 @@
 # ==== SUPER LEAF ====
 700	30	100
 
-# ==== FIRE FLOWER ====
+# ==== ICE FLOWER ====
 701	3	100
 
 # ==== FIREBALL =====
@@ -460,8 +460,40 @@
 704	30004	100
 
 # ====== RED KOOPA ======
+# move right
+710	30101	100	30102	100
+# move left
+711	30103	100	30104	100
+# lay prone
+712	30105	100
+# lay supine
+713	30106	100
+# vibrate prone
+714	30107	100
+# vibrate supine
+715	30111	100
+# spin and move prone
+716	30108	100	30109	100	30110	100	30105	100
+# spin and move supine
+717	30112	100	30113	100	30114	100	30106	100
 
 # ====== FIRE PIRANHA ======
+# face up left
+620	42001	80	42002	80
+# face down left
+621	42003	80	42004	80
+# face up right
+622	42005	80	42006	80
+# face down right
+623	42007	80	42008	80
+# attack up left
+624	42002	100
+# attack down left
+625	42004	100
+# attack up right
+626	42006	100
+# attack down right
+627	42008	100
 
 # ====== QUESTION BRICK AFTER ======
 3	40005	100
@@ -480,9 +512,13 @@
 # GOOMBA
 3	702	703	704
 # RED KOOPA
-4	710	711	712	713	714	715
+4	710	711	712	713	714	715	716	717
 # SUPER MUSHROOM
-8	888	700	701
+8	888
+# SUPER LEAF
+5	700
+# ICE FLOWER
+6	701
 # FIRE PIRANHA
 7	620	621	622	623	624	625	626	627
 # FIREBALL
