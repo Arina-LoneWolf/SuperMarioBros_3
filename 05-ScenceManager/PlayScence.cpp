@@ -316,10 +316,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S: // high jump
-		if (mario->canFlyUpFromGround)
+		if (mario->canFlyUpFromGround || mario->isFlying)
 		{
 			if (mario->GetLevel() == MARIO_RACCOON)
+			{
+				mario->isWaggingTail = true;
 				mario->SetState(MARIO_STATE_FLYING);
+			}
 			mario->canFlyUpFromGround = false;
 			mario->isFlying = true;
 		}

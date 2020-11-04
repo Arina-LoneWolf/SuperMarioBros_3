@@ -95,7 +95,7 @@ void CFireball::Render()
 		animation_set->at(FIREBALL_TO_RIGHT)->Render(x, y, alpha);
 	else
 		animation_set->at(FIREBALL_TO_LEFT)->Render(x, y, alpha);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 CFireball::~CFireball()

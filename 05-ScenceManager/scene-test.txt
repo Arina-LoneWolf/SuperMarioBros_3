@@ -9,6 +9,12 @@
 43	textures\fireball_left.png	0	255	255
 44	textures\fireball_bonus_left.png	0	255	255
 33	textures\effect.png	176	224	248
+50	textures\enemies_custom_2.png	255	255	255
+51	textures\enemies_custom.png	255	255	255
+52	textures\enemies-5.png	0	255	255
+53	textures\enemies-5_1.png	0	255	255
+54	textures\enemies-5_2.png	0	255	255
+55	textures\enemies-5_3.png	0	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -185,17 +191,66 @@
 # non question
 40005	235	188	251	204	20
 
-#==============ICE BRICK==================
+#===============ICE BRICK=================
 41001	274	167	290	183	20
 41002	293	167	309	183	20
 41003	312	167	328	183	20
 41004	331	167	347	183	20
 
+#==============FIRE PIRANHA===============
+# face up left
+42001	201	100	217	124	51
+42002	184	100	200	124	51
+# face down left
+42003	167	100	183	124	51
+42004	150	100	166	124	51
+# face up right
+42005	222	100	238	124	50
+42006	239	100	255	124	50
+# face down right
+42007	256	100	272	124	50
+42008	273	100	289	124	50
+
 #=================GOOMBA==================
-30001	5	14	21	29	10
-30002	25	14	41	29	10
-#die
-30003	45	21	61	29	10
+# move
+30001	32	11	48	27	52
+30002	9	11	27	27	52
+# die by crush
+30003	47	18	70	27	52
+# die by attack
+30004	299	341	315	357	54
+
+#================PARAGOOMBA===============
+
+#================RED KOOPA================
+# move right
+30101	280	67	296	93	53
+30102	261	66	277	93	53
+# move left
+30103	28	67	44	93	52
+30104	47	66	63	93	52
+# lay prone
+30105	29	97	45	113	52
+# lay supine
+30106	279	255	295	271	54
+# vibrate prone
+30107	71	75	89	91	52
+# vibrate supine
+30111	235	277	253	293	54
+# spin and move prone
+30108	50	96	66	112	52
+30109	71	96	87	112	52
+30110	258	96	274	112	53
+#30105	29	97	45	113	52
+# spin and move supine
+30112	50	256	66	272	55
+30113	237	256	253	272	54
+30114	258	256	274	272	54
+#30106	279	255	295	271	54
+
+#===============GREEN KOOPA===============
+
+#================PARAKOOPA================
 
 #=============SUPER MUSHROOM==============
 1	156	121	172	137	20
@@ -396,11 +451,17 @@
 # left
 891	35	80	36	80	37	80	38	80
 
-# ====== GOOMBA  =========
-# walk
+# ======= GOOMBA  =======
+# move
 702	30001	100	30002	100
-# die
+# die by crush
 703	30003	100
+# die by attack
+704	30004	100
+
+# ====== RED KOOPA ======
+
+# ====== FIRE PIRANHA ======
 
 # ====== QUESTION BRICK AFTER ======
 3	40005	100
@@ -417,11 +478,13 @@
 # ICE BRICK
 33	610
 # GOOMBA
-3	702	703
-# ITEM
+3	702	703	704
+# RED KOOPA
+4	710	711	712	713	714	715
+# SUPER MUSHROOM
 8	888	700	701
-# GIANT PIRANHA
-100	201	202
+# FIRE PIRANHA
+7	620	621	622	623	624	625	626	627
 # FIREBALL
 9	890	891
 # HIT EFFECT

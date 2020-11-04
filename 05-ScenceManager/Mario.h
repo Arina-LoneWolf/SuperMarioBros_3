@@ -63,25 +63,8 @@ public:
 	void DecelerateSharply();
 	void DecelerateSlightly();
 
-	void WaitForAni();
-
-	//void SetAniDie();
-	//void SetAniSit();
-	//void SetAniWalkRight();
-	//void SetAniWalkLeft();
-	//void SetAniJump();
-	//void SetAniRun();
-	//void SetAniFly();
-	//void SetAniIdle();
-	
-	void SetStateIdle();
-	void SetStateWalkRight();
-	void SetStateWalkLeft();
-
 	void JumpHigh();
 	void JumpLow();
-	void ToRight();
-	void ToLeft();
 	void Idle();
 	void Sit();
 	void Fly();

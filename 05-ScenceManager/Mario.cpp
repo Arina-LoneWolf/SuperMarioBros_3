@@ -743,17 +743,15 @@ RENDER:
 	//DebugOut(L"ani id %d\n", ani);
 	for (int i = 0; i < listWeapon.size(); i++)
 	{
-		//if (!listWeapon[i]->isFinishedUsing)
-			listWeapon[i]->Render();
+		listWeapon[i]->Render();
 	}
 
 	for (int i = 0; i < listEffect.size(); i++)
 	{
-		//if (!listEffect[i]->isFinishedUsing)
 		listEffect[i]->Render();
 	}
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMario::CollideWithItem(vector<LPGAMEOBJECT>* coObjects)
@@ -1030,14 +1028,6 @@ void CMario::JumpLow()
 {
 	//isOnGround = false;
 	SetState(MARIO_STATE_JUMP_LOW);
-}
-
-void CMario::ToRight()
-{
-}
-
-void CMario::ToLeft()
-{
 }
 
 void CMario::Idle()
