@@ -361,7 +361,7 @@
 # flying up right
 209	10115	50
 # flying down right
-210	10016	50
+210	10116	50
 # wag tail while flying right
 211	10117	50	10116	50	10115	50
 
@@ -403,7 +403,7 @@
 # stop right
 304	10207	150
 # shoot fireball right
-305	10208	100	10209	100	10200	100
+305	10209	100	10208	100	10200	100
 # shoot fireball while jumping right
 306	10210	100	10211	100	10212	100
 # sit down right
@@ -422,7 +422,7 @@
 # stop left
 324	10227	150
 # shoot fireball left
-325	10228	100	10229	100	10220	100
+325	10229	100	10228	100	10220	100
 # shoot fireball while jumping left
 326	10230	100	10231	100	10232	100
 # sit down left
@@ -532,10 +532,10 @@
 # MARIO
 0	17	100	1
 # GOOMBA
-#2	60	135	3
+2	250	399	3
 #Floor
 4	0	416	22	39	1
-4	624	400	22	29	1
+4	624	400	22	29	2
 4	1152	416	22	22	1
 4	1536	416	22	5	1
 4	1664	416	22	36	1

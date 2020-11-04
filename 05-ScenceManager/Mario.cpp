@@ -34,16 +34,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (level == MARIO_RACCOON && attackStartTime
 		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
 		SetState(MARIO_STATE_ATTACK);
-	else
-		attackStartTime = 0;
-
-
-	if (level == MARIO_FIRE && attackStartTime
+	else if (level == MARIO_FIRE && attackStartTime
 		&& GetTickCount() - attackStartTime < MARIO_SHOOTING_FIREBALL_TIME)
 		SetState(MARIO_STATE_ATTACK);
 	else
 		attackStartTime = 0;
-
 
 	if (waggingTailStartTime
 		&& GetTickCount() - waggingTailStartTime < MARIO_WAGGING_TAIL_TIME)
@@ -55,7 +50,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 
-	if (isAttacking)
+	if (level == MARIO_FIRE && isAttacking)
 	{
 		if (listWeapon.size() < 2)
 		{
@@ -124,7 +119,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isWaitingForAni = false;
 	}*/
 
-		// No collision occured, proceed normally
+	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -160,9 +155,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (nx != 0)
 		{
 			vx = last_vx;
-			if (isSpeedingUp) // ko co tac dung
-				vx = 0;
+			immovable = true;
 		}
+		else
+			immovable = false;
 
 		if (ny != 0)
 		{
@@ -190,9 +186,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					if (goomba->GetState() != ENEMY_STATE_DIE)
 					{
-						goomba->SetState(GOOMBA_STATE_DIE);
+						goomba->SetState(ENEMY_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -200,9 +196,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (untouchable == 0)
 					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						if (goomba->GetState() != ENEMY_STATE_DIE)
 						{
-							if (level > MARIO_LEVEL_SMALL)
+							if (level > MARIO_LEVEL_BIG)
+							{
+								level = MARIO_LEVEL_BIG;
+								StartUntouchable();
+							}
+							else if (level > MARIO_LEVEL_SMALL)
 							{
 								level = MARIO_LEVEL_SMALL;
 								StartUntouchable();
@@ -776,23 +777,29 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
-		vx += MARIO_WALKING_ACCELERATION * dt;
 		if (vx > MARIO_MAX_WALKING_SPEED)
-			vx = MARIO_MAX_WALKING_SPEED;
+		{
+			DecelerateSlightly();
+			/*if (vx > MARIO_MAX_WALKING_SPEED)
+				vx = MARIO_MAX_WALKING_SPEED;*/
+		}
+		vx += MARIO_WALKING_ACCELERATION * dt;
 		nx = 1;
 		last_vx = vx;
 		break;
 
 	case MARIO_STATE_WALKING_LEFT:
-		vx -= MARIO_WALKING_ACCELERATION * dt;
 		if (vx < -MARIO_MAX_WALKING_SPEED)
-			vx = -MARIO_MAX_WALKING_SPEED;
+		{
+			DecelerateSharply();
+			//vx = -MARIO_MAX_WALKING_SPEED;
+		}
+		vx -= MARIO_WALKING_ACCELERATION * dt;
 		nx = -1;
 		last_vx = vx;
 		break;
 
 	case MARIO_STATE_RUNNING_RIGHT:
-		DebugOut(L"set state run right\n");
 		vx += MARIO_RUNNING_ACCELERATION * dt;
 		if (vx >= MARIO_RUNNING_SPEED)
 		{
@@ -804,7 +811,6 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RUNNING_LEFT:
-		DebugOut(L"set state run left\n");
 		vx -= MARIO_RUNNING_ACCELERATION * dt;
 		if (vx <= -MARIO_RUNNING_SPEED)
 		{
@@ -1017,19 +1023,6 @@ void CMario::DecelerateSlightly()
 	}
 }
 
-void CMario::JumpHigh()
-{
-	//DebugOut(L"\nJUMP HIGH\n");
-	//isOnGround = false;
-	SetState(MARIO_STATE_JUMP_HIGH);
-}
-
-void CMario::JumpLow()
-{
-	//isOnGround = false;
-	SetState(MARIO_STATE_JUMP_LOW);
-}
-
 void CMario::Idle()
 {
 	//DebugOut(L"\nIDLE\n");
@@ -1049,14 +1042,12 @@ void CMario::Fly()
 
 void CMario::Attack()
 {
+	if (level == MARIO_FIRE && listWeapon.size() == 2)
+		return;
 	SetState(MARIO_STATE_ATTACK);
 	attackStartTime = GetTickCount();
-	isAttacking = true;
-}
-
-void CMario::Stop()
-{
-	SetState(MARIO_STATE_STOP);
+	if (level == MARIO_FIRE)
+		isAttacking = true; // mốt làm vũ khí Tail xong thì xài chung cái biến này cho con chồn lun
 }
 
 /*

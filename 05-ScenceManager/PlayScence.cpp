@@ -355,7 +355,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_SPACE: // reset the game starting as small mario
 		mario->Reset();
 		break;
-
 	}
 }
 
@@ -380,13 +379,10 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		mario->vy += MARIO_GRAVITY * 7 * mario->dt;
 		break;
 
-	case DIK_A:
-		mario->isSpeedingUp = false; // i don't know why Nam write this right here..
-		break;
-
 	case DIK_DOWN:
 		if (mario->isOnGround)
 			mario->isSitting = false;
+		break;
 	}
 }
 
@@ -408,13 +404,17 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_RIGHT))
 	{
-		mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-		//mario->isRunning = true;
+		if (!mario->immovable)
+			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		else
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_LEFT))
 	{
-		mario->SetState(MARIO_STATE_RUNNING_LEFT);
-		//mario->isRunning = true;
+		if (!mario->immovable)
+			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+		else
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{

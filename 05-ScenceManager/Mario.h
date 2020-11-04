@@ -27,6 +27,7 @@ public:
 	bool isSpeedingUp, isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
 	bool canFlyUpFromGround;
 	bool isOnGround;
+	bool immovable;
 
 	bool isWaitingForAni;
 	bool specialAniCase;
