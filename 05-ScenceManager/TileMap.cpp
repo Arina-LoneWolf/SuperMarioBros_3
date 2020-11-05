@@ -86,6 +86,7 @@ void TileMap::Load()
 
 void TileMap::Draw()
 {
+
 	int firstcol = (int)CGame::GetInstance()->GetCamPosX() / tileset_width;
 	int lastcol = firstcol + (SCREEN_WIDTH / tileset_width);
 

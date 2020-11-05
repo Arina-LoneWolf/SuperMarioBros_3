@@ -97,7 +97,7 @@ void CGoomba::Render()
 	if (vanish) return;
 
 	if (state == ENEMY_STATE_DIE)
-		ani = GOOMBA_ANI_DIE_BY_ATTACK;
+		ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
 	else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
 		ani = GOOMBA_ANI_DIE_BY_CRUSH;
 	else

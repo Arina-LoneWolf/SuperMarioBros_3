@@ -29,13 +29,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += MARIO_GRAVITY * dt;
+	if (canFly)
+		vy += MARIO_FLY_GRAVITY * dt;
+	else
+		vy += MARIO_GRAVITY * dt;
 
-	/*if (canFly && GetTickCount() - flyStartTime > 5000)
+	if (canFly && GetTickCount() - flyStartTime > 5000)
 	{
-		DebugOut(L"cannot fly\n");
+		DebugOut(L"CANNOT FLY\n");
 		canFly = false;
-	}*/
+	}
+	else
+	{
+		if (isOnGround)
+			canFly = false;
+	}
 
 	if (level == MARIO_RACCOON && attackStartTime
 		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
@@ -170,7 +178,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isFalling = false;
 				isOnGround = true;
-				canFly = false;
+				/*if (canFly)
+					canFly = false;*/
 			}
 			vy = 0;
 		}
@@ -396,6 +405,8 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_WALKING_RIGHT:
+			if (canFly && !isOnGround)
+				goto CASE_RACCOON_IS_FLYING;
 			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround)
@@ -404,6 +415,8 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_WALKING_LEFT:
+			if (canFly && !isOnGround)
+				goto CASE_RACCOON_IS_FLYING;
 			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround)
@@ -433,6 +446,7 @@ void CMario::Render()
 				ani = MARIO_RACCOON_ANI_RUNNING_LEFT;
 			break;
 
+		CASE_RACCOON_IS_FLYING:
 		case MARIO_STATE_FLYING:
 			if (isWaggingTail)
 			{
@@ -474,7 +488,6 @@ void CMario::Render()
 				goto CASE_RACCOON_IS_SITTING;
 			if (vy < 0)
 			{
-				DebugOut(L"JUMP: %f\n", vy);
 				if (nx > 0)
 					ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
 				else
@@ -482,7 +495,6 @@ void CMario::Render()
 			}
 			else
 			{
-				DebugOut(L"FALL: %f\n", vy);
 				if (isWaggingTail)
 				{
 					if (nx > 0)
@@ -786,8 +798,6 @@ void CMario::SetState(int state)
 		if (vx > MARIO_MAX_WALKING_SPEED)
 		{
 			DecelerateSlightly();
-			/*if (vx > MARIO_MAX_WALKING_SPEED)
-				vx = MARIO_MAX_WALKING_SPEED;*/
 		}
 		vx += MARIO_WALKING_ACCELERATION * dt;
 		nx = 1;
@@ -798,7 +808,6 @@ void CMario::SetState(int state)
 		if (vx < -MARIO_MAX_WALKING_SPEED)
 		{
 			DecelerateSharply();
-			//vx = -MARIO_MAX_WALKING_SPEED;
 		}
 		vx -= MARIO_WALKING_ACCELERATION * dt;
 		nx = -1;
@@ -817,6 +826,7 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RUNNING_LEFT:
+		DebugOut(L"state run left\n");
 		vx -= MARIO_RUNNING_ACCELERATION * dt;
 		if (vx <= -MARIO_RUNNING_SPEED)
 		{
@@ -832,12 +842,27 @@ void CMario::SetState(int state)
 		{
 			//if (flyHigher)
 			//{
-				vy = -0.2f;
-				flyHigher = false;
+			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
+				//flyHigher = false;
 			//}
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
 				vx = MARIO_MAX_WALKING_SPEED;
+			if (vy <= -0.1)
+			{
+				vy = -0.1;
+			}
+		}
+		else
+		{
+			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
+			vx -= MARIO_WALKING_ACCELERATION * dt;
+			if (vx < -MARIO_MAX_WALKING_SPEED)
+				vx = -MARIO_MAX_WALKING_SPEED;
+			if (vy <= -0.1)
+			{
+				vy = -0.1;
+			}
 		}
 
 		/*if (vx > 0)
@@ -1045,7 +1070,6 @@ void CMario::DecelerateSlightly()
 
 void CMario::Idle()
 {
-	//DebugOut(L"\nIDLE\n");
 	SetState(MARIO_STATE_IDLE);
 	isSitting = false;
 }
@@ -1058,6 +1082,12 @@ void CMario::Sit()
 
 void CMario::Fly()
 {
+	isWaggingTail = true;
+	//mario->flyHigher = true;
+	if (isOnGround)
+		flyStartTime = GetTickCount();
+	SetState(MARIO_STATE_FLYING);
+	waggingTailStartTime = GetTickCount();
 }
 
 void CMario::Attack()
@@ -1079,71 +1109,9 @@ void CMario::Reset()
 	SetState(MARIO_STATE_IDLE);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
+	CGame::GetInstance()->cam_x = 0;
+	CGame::GetInstance()->cam_y = 200;
 }
-
-//bool CMario::IsSpecialAniCase()
-//{
-//	switch (ani)
-//	{
-//	case MARIO_ANI_BIG_IDLE_RIGHT:
-//	case MARIO_ANI_BIG_WALKING_RIGHT:
-//	case MARIO_ANI_BIG_RUNNING_RIGHT:
-//	case MARIO_ANI_BIG_JUMP_RIGHT:
-//	case MARIO_ANI_BIG_SITTING_RIGHT:
-//	case MARIO_ANI_BIG_STOP_RIGHT:
-//	case MARIO_ANI_BIG_FALLING_RIGHT:
-//	case MARIO_ANI_BIG_IDLE_LEFT:
-//	case MARIO_ANI_BIG_WALKING_LEFT:
-//	case MARIO_ANI_BIG_RUNNING_LEFT:
-//	case MARIO_ANI_BIG_JUMP_LEFT:
-//	case MARIO_ANI_BIG_SITTING_LEFT:
-//	case MARIO_ANI_BIG_STOP_LEFT:
-//	case MARIO_ANI_BIG_FALLING_LEFT:
-//
-//	case MARIO_ANI_SMALL_IDLE_RIGHT:
-//	case MARIO_ANI_SMALL_WALKING_RIGHT:
-//	case MARIO_ANI_SMALL_RUNNING_RIGHT:
-//	case MARIO_ANI_SMALL_JUMP_RIGHT:
-//	case MARIO_ANI_SMALL_STOP_RIGHT:
-//	case MARIO_ANI_SMALL_IDLE_LEFT:
-//	case MARIO_ANI_SMALL_WALKING_LEFT:
-//	case MARIO_ANI_SMALL_RUNNING_LEFT:
-//	case MARIO_ANI_SMALL_JUMP_LEFT:
-//	case MARIO_ANI_SMALL_STOP_LEFT:
-//
-//	case MARIO_RACCOON_ANI_IDLE_RIGHT:
-//	case MARIO_RACCOON_ANI_WALK_RIGHT:
-//	case MARIO_RACCOON_ANI_RUNNING_RIGHT:
-//	case MARIO_RACCOON_ANI_JUMP_RIGHT:
-//	case MARIO_RACCOON_ANI_STOP_RIGHT:
-//	case MARIO_RACCOON_ANI_SITTING_RIGHT:
-//	case MARIO_RACCOON_ANI_FALLING_RIGHT:
-//	case MARIO_RACCOON_ANI_IDLE_LEFT:
-//	case MARIO_RACCOON_ANI_WALK_LEFT:
-//	case MARIO_RACCOON_ANI_RUNNING_LEFT:
-//	case MARIO_RACCOON_ANI_JUMP_LEFT:
-//	case MARIO_RACCOON_ANI_STOP_LEFT:
-//	case MARIO_RACCOON_ANI_SITTING_LEFT:
-//	case MARIO_RACCOON_ANI_FALLING_LEFT:
-//
-//	case MARIO_FIRE_ANI_IDLE_RIGHT:
-//	case MARIO_FIRE_ANI_WALK_RIGHT:
-//	case MARIO_FIRE_ANI_RUNNING_RIGHT:
-//	case MARIO_FIRE_ANI_JUMP_RIGHT:
-//	case MARIO_FIRE_ANI_STOP_RIGHT:
-//	case MARIO_FIRE_ANI_SITTING_RIGHT:
-//	case MARIO_FIRE_ANI_FALLING_RIGHT:
-//	case MARIO_FIRE_ANI_IDLE_LEFT:
-//	case MARIO_FIRE_ANI_WALK_LEFT:
-//	case MARIO_FIRE_ANI_RUNNING_LEFT:
-//	case MARIO_FIRE_ANI_JUMP_LEFT:
-//	case MARIO_FIRE_ANI_STOP_LEFT:
-//	case MARIO_FIRE_ANI_SITTING_LEFT:
-//	case MARIO_FIRE_ANI_FALLING_LEFT:
-//		return false;
-//	}
-//	return true;
-//}
 
 CFireball* CMario::CreateFireball(float x, float y, int nx)
 {

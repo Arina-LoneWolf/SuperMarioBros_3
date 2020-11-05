@@ -1,4 +1,5 @@
 #include "Fireball.h"
+#include "Game.h"
 
 CFireball::CFireball(D3DXVECTOR2 position, int nx)
 {
@@ -13,6 +14,9 @@ CFireball::CFireball(D3DXVECTOR2 position, int nx)
 void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
+
+	if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 || x < CGame::GetInstance()->GetCamPosX())
+		isFinishedUsing = true;
 
 	if (!isFinishedUsing)
 	{

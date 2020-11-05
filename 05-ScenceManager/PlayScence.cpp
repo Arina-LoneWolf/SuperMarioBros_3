@@ -272,14 +272,8 @@ void CPlayScene::Update(DWORD dt)
 
 	// Update camera to follow mario
 	float cx, cy;
-	//player->GetPosition(cx, cy);
 
-	//CGame* game = CGame::GetInstance();
-	//cx -= game->GetScreenWidth() / 2;
-	//cy -= game->GetScreenHeight() / 2;
-
-	//CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
-	CGame::GetInstance()->cam_y = 250;
+	CGame::GetInstance()->cam_y = 200;
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);
@@ -316,37 +310,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S: // high jump
-		//if (mario->canFly)
-		//{
-		//	DebugOut(L"can fly\n");
-		//	if (mario->GetLevel() == MARIO_RACCOON)
-		//	{
-		//		mario->isWaggingTail = true;
-		//		//mario->flyHigher = true;
-		//		mario->SetState(MARIO_STATE_FLYING);
-		//		mario->waggingTailStartTime = GetTickCount();
-		//		if (mario->isOnGround)
-		//			mario->flyStartTime = GetTickCount();
-		//	}
-		//	//mario->canFlyUpFromGround = false;
-		//	//mario->isFlying = true;
-		//}
-		//else
-		//{
-			/*if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
-				mario->isWaggingTail = true;
-			mario->
-			;
-			mario->waggingTailStartTime = GetTickCount();*/
-		//}
-		//if (mario->canFlyUpFromGround)
-		//{
-		//	if (mario->GetLevel() == MARIO_RACCOON)
-		//		mario->SetState(MARIO_STATE_FLYING);
-		//	mario->canFlyUpFromGround = false;
-		//	mario->isFlying = true;
-		//}
-		//else
+		if (mario->canFly)
+		{
+			DebugOut(L"can fly\n");
+			if (mario->GetLevel() == MARIO_RACCOON)
+			{
+				mario->Fly();
+			}
+		}
+		else
 		{
 			if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
 				mario->isWaggingTail = true;
@@ -384,17 +356,15 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S:
-		/*if (mario->canFly)
-			return;*/
+		if (mario->canFly)
+			return;
 		if (!(mario->isOnGround || mario->isFalling))
 		{
-			//if (mario->y > 130) //define plz!!!
-			//	mario->vy += MARIO_GRAVITY * 15 * mario->dt;
-			//else
-			//	mario->vy += MARIO_GRAVITY * 15 * mario->dt;
-			mario->vy += MARIO_GRAVITY * 15 * mario->dt;
+			if (mario->y > 130) //define plz!!!
+				mario->vy += MARIO_GRAVITY * 15 * mario->dt;
+			else
+				mario->vy += MARIO_GRAVITY * 11 * mario->dt;
 		}
-		//mario->isWaggingTail = false;
 		break;
 
 	case DIK_X:
@@ -418,8 +388,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		return;
 	if (mario->isWaitingForAni)
 		return;
-	if (mario->canFly && !mario->isOnGround)
-		return;
+	/*if (mario->canFly && !mario->isOnGround)
+		return;*/
 	else if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))
 	{
