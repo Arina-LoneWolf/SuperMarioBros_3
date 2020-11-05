@@ -8,6 +8,7 @@ class CGoomba : public CGameObject
 	virtual void Render();
 	DWORD dieTime;
 public: 
+	bool vanish;
 	CGoomba();
 	virtual void SetState(int state);
 	~CGoomba();

@@ -31,7 +31,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += MARIO_GRAVITY * dt;
 
 	if (dieTime && GetTickCount() - dieTime >= 250)
+	{
 		isFinishedUsing = true;
+		vanish = true;
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -91,6 +94,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGoomba::Render()
 {
+	if (vanish) return;
+
 	if (state == ENEMY_STATE_DIE)
 		ani = GOOMBA_ANI_DIE_BY_ATTACK;
 	else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
@@ -98,8 +103,7 @@ void CGoomba::Render()
 	else
 		ani = GOOMBA_ANI_MOVE;
 
-	//if (!isFinishedUsing)
-		animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, y);
 
 	//RenderBoundingBox();
 }
