@@ -191,7 +191,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (goomba->GetState() != ENEMY_STATE_DIE)
 					{
-						goomba->SetState(ENEMY_STATE_DIE);
+						goomba->SetState(GOOMBA_STATE_DIE_BY_CRUSH);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -216,7 +216,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 				}
-			} // if Goomba
+			} 
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
 				if (e->nx != 0)

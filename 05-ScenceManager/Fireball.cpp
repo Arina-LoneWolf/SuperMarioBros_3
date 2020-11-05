@@ -71,6 +71,7 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (e->obj->category == Category::ENEMY)
 			{
+				e->obj->attack_tool_nx = this->nx;
 				e->obj->SetState(ENEMY_STATE_DIE);
 				isFinishedUsing = true;
 			}

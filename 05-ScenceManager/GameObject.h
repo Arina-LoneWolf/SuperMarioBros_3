@@ -57,6 +57,7 @@ public:
 	bool isFinishedUsing;
 	Type type;
 	Category category;
+	int attack_tool_nx;
 
 	int nx;	 
 
