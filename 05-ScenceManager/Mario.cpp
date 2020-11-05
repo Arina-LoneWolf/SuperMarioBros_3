@@ -31,6 +31,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
+	/*if (canFly && GetTickCount() - flyStartTime > 5000)
+	{
+		DebugOut(L"cannot fly\n");
+		canFly = false;
+	}*/
+
 	if (level == MARIO_RACCOON && attackStartTime
 		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
 		SetState(MARIO_STATE_ATTACK);
@@ -40,10 +46,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 		attackStartTime = 0;
 
-	if (waggingTailStartTime
-		&& GetTickCount() - waggingTailStartTime < MARIO_WAGGING_TAIL_TIME)
-		SetState(MARIO_STATE_JUMP_HIGH);
-	else
+	if (!waggingTailStartTime
+		|| GetTickCount() - waggingTailStartTime >= MARIO_WAGGING_TAIL_TIME)
 	{
 		waggingTailStartTime = 0;
 		isWaggingTail = false;
@@ -166,8 +170,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isFalling = false;
 				isOnGround = true;
-				/*if (canFlyUpFromGround)
-					canFlyUpFromGround = false;*/
+				canFly = false;
 			}
 			vy = 0;
 		}
@@ -433,6 +436,7 @@ void CMario::Render()
 		case MARIO_STATE_FLYING:
 			if (isWaggingTail)
 			{
+				DebugOut(L"ani = wagging\n");
 				if (nx > 0)
 					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT;
 				else
@@ -470,6 +474,7 @@ void CMario::Render()
 				goto CASE_RACCOON_IS_SITTING;
 			if (vy < 0)
 			{
+				DebugOut(L"JUMP: %f\n", vy);
 				if (nx > 0)
 					ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
 				else
@@ -477,6 +482,7 @@ void CMario::Render()
 			}
 			else
 			{
+				DebugOut(L"FALL: %f\n", vy);
 				if (isWaggingTail)
 				{
 					if (nx > 0)
@@ -804,7 +810,7 @@ void CMario::SetState(int state)
 		if (vx >= MARIO_RUNNING_SPEED)
 		{
 			vx = MARIO_RUNNING_SPEED;
-			canFlyUpFromGround = true;
+			canFly = true;
 		}
 		nx = 1;
 		last_vx = vx;
@@ -815,13 +821,26 @@ void CMario::SetState(int state)
 		if (vx <= -MARIO_RUNNING_SPEED)
 		{
 			vx = -MARIO_RUNNING_SPEED;
-			canFlyUpFromGround = true;
+			canFly = true;
 		}
 		nx = -1;
 		last_vx = vx;
 		break;
+
 	case MARIO_STATE_FLYING:
 		if (vx > 0)
+		{
+			//if (flyHigher)
+			//{
+				vy = -0.2f;
+				flyHigher = false;
+			//}
+			vx += MARIO_WALKING_ACCELERATION * dt;
+			if (vx > MARIO_MAX_WALKING_SPEED)
+				vx = MARIO_MAX_WALKING_SPEED;
+		}
+
+		/*if (vx > 0)
 		{
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
@@ -831,7 +850,8 @@ void CMario::SetState(int state)
 			{
 				vy = -0.1;
 			}
-		}
+		}*/
+
 		//if (vx > 0)
 		//	vx = MARIO_WALKING_SPEED;
 		//else

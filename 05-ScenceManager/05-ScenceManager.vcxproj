@@ -132,7 +132,6 @@
     <ClCompile Include="Fireball.cpp" />
     <ClCompile Include="FirePiranha.cpp" />
     <ClCompile Include="Floor.cpp" />
-    <ClCompile Include="GroundTile.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Koopa.cpp" />
@@ -158,7 +157,6 @@
     <ClInclude Include="Fireball.h" />
     <ClInclude Include="FirePiranha.h" />
     <ClInclude Include="Floor.h" />
-    <ClInclude Include="GroundTile.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Koopa.h" />

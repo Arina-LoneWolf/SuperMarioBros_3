@@ -7,7 +7,6 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopa.h"
-#include "GroundTile.h"
 #include "TileMap.h"
 #include "Floor.h"
 

@@ -24,16 +24,17 @@ public:
 	DWORD jumpStartTime;
 	DWORD attackStartTime;
 	DWORD waggingTailStartTime;
-	bool isSpeedingUp, isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
+	DWORD flyStartTime;
+	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
 	bool canFlyUpFromGround;
+	bool canFly;
 	bool isOnGround;
 	bool immovable;
-
+	bool flyHigher;
 	bool isWaitingForAni;
-	bool specialAniCase;
-	bool turnOn;
-	int last_nx;
-	int last_ani = -1;
+	//bool specialAniCase;
+	//int last_nx;
+	//int last_ani = -1;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;

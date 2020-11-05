@@ -316,17 +316,37 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S: // high jump
-		if (mario->canFlyUpFromGround || mario->isFlying)
-		{
-			if (mario->GetLevel() == MARIO_RACCOON)
-			{
+		//if (mario->canFly)
+		//{
+		//	DebugOut(L"can fly\n");
+		//	if (mario->GetLevel() == MARIO_RACCOON)
+		//	{
+		//		mario->isWaggingTail = true;
+		//		//mario->flyHigher = true;
+		//		mario->SetState(MARIO_STATE_FLYING);
+		//		mario->waggingTailStartTime = GetTickCount();
+		//		if (mario->isOnGround)
+		//			mario->flyStartTime = GetTickCount();
+		//	}
+		//	//mario->canFlyUpFromGround = false;
+		//	//mario->isFlying = true;
+		//}
+		//else
+		//{
+			/*if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
 				mario->isWaggingTail = true;
-				mario->SetState(MARIO_STATE_FLYING);
-			}
-			mario->canFlyUpFromGround = false;
-			mario->isFlying = true;
-		}
-		else
+			mario->
+			;
+			mario->waggingTailStartTime = GetTickCount();*/
+		//}
+		//if (mario->canFlyUpFromGround)
+		//{
+		//	if (mario->GetLevel() == MARIO_RACCOON)
+		//		mario->SetState(MARIO_STATE_FLYING);
+		//	mario->canFlyUpFromGround = false;
+		//	mario->isFlying = true;
+		//}
+		//else
 		{
 			if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
 				mario->isWaggingTail = true;
@@ -364,6 +384,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S:
+		/*if (mario->canFly)
+			return;*/
 		if (!(mario->isOnGround || mario->isFalling))
 		{
 			//if (mario->y > 130) //define plz!!!
@@ -396,8 +418,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		return;
 	if (mario->isWaitingForAni)
 		return;
-
-	if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
+	if (mario->canFly && !mario->isOnGround)
+		return;
+	else if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))
 	{
 		mario->Idle();
