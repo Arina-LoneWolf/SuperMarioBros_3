@@ -610,7 +610,7 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_LOW:
 			if (isSitting)
 				goto CASE_BIG_IS_SITTING;
-			if (isOnGround) // ko có tác dụng
+			if (isOnGround) // no working
 				goto CASE_BIG_IS_IDLING;
 			if (vy < 0)
 			{
@@ -791,7 +791,6 @@ void CMario::CollideWithItem(vector<LPGAMEOBJECT>* coObjects)
 void CMario::SetState(int state)
 {
 	CGameObject::SetState(state);
-	//DebugOut(L"vào set state, current state = %d\n", this->state);
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
@@ -840,11 +839,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLYING:
 		if (vx > 0)
 		{
-			//if (flyHigher)
-			//{
 			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
-				//flyHigher = false;
-			//}
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
 				vx = MARIO_MAX_WALKING_SPEED;
@@ -864,26 +859,6 @@ void CMario::SetState(int state)
 				vy = -0.1;
 			}
 		}
-
-		/*if (vx > 0)
-		{
-			vx += MARIO_WALKING_ACCELERATION * dt;
-			if (vx > MARIO_MAX_WALKING_SPEED)
-				vx = MARIO_MAX_WALKING_SPEED;
-			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
-			if (vy <= -0.1)
-			{
-				vy = -0.1;
-			}
-		}*/
-
-		//if (vx > 0)
-		//	vx = MARIO_WALKING_SPEED;
-		//else
-		//	vx = -MARIO_WALKING_SPEED;
-		//vy = -MARIO_JUMP_SPEED_Y;
-		////y -= 5;
-		//break;
 
 	case MARIO_STATE_JUMP_LOW:
 		if (isOnGround)
@@ -1083,7 +1058,6 @@ void CMario::Sit()
 void CMario::Fly()
 {
 	isWaggingTail = true;
-	//mario->flyHigher = true;
 	if (isOnGround)
 		flyStartTime = GetTickCount();
 	SetState(MARIO_STATE_FLYING);

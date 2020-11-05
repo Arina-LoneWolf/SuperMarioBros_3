@@ -30,11 +30,7 @@ public:
 	bool canFly;
 	bool isOnGround;
 	bool immovable;
-	bool flyHigher;
 	bool isWaitingForAni;
-	//bool specialAniCase;
-	//int last_nx;
-	//int last_ani = -1;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
@@ -65,11 +61,8 @@ public:
 	void DecelerateSharply();
 	void DecelerateSlightly();
 
-	void JumpHigh();
-	void JumpLow();
 	void Idle();
 	void Sit();
 	void Fly();
 	void Attack();
-	void Stop();
 };
