@@ -1,12 +1,7 @@
 ﻿#include <algorithm>
 #include <assert.h>
-#include "Utils.h"
 
 #include "Mario.h"
-#include "Game.h"
-
-#include "Goomba.h"
-#include "Portal.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -60,6 +55,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		waggingTailStartTime = 0;
 		isWaggingTail = false;
 	}
+
+	if (kickStartTime
+		&& GetTickCount() - kickStartTime >= MARIO_KICK_TIME)
+	{
+		//DebugOut(L"time up\n");
+		kickStartTime = 0;
+		kickShell = false;
+	}
+	/*else if (kickStartTime
+		&& GetTickCount() - kickStartTime < MARIO_KICK_TIME)
+	{
+		DebugOut(L"in time\n");
+	}*/
+	//else if (!kickStartTime)
+		//DebugOut(L"kick time = 0\n");
 
 
 	if (level == MARIO_FIRE && isAttacking)
@@ -225,7 +235,54 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 				}
-			} 
+			}
+			else if (dynamic_cast<CKoopa*>(e->obj))
+			{
+				CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+				if (e->ny < 0)
+				{
+					if (koopa->GetState() != ENEMY_STATE_DIE)
+					{
+						if (koopa->GetState() == ENEMY_STATE_IDLE)
+						{
+							koopa->object_colliding_nx = this->nx;
+							koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
+						}
+						else
+							koopa->SetState(ENEMY_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (koopa->GetState() != ENEMY_STATE_IDLE)
+						{
+							if (level > MARIO_LEVEL_BIG)
+							{
+								level = MARIO_LEVEL_BIG;
+								StartUntouchable();
+							}
+							else if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else
+								SetState(MARIO_STATE_DIE);
+						}
+						else
+						{
+							koopa->object_colliding_nx = this->nx;
+							kickShell = true;
+							kickStartTime = GetTickCount();
+							koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
+						}
+					}
+				}
+			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
 				if (e->nx != 0)
@@ -275,6 +332,8 @@ void CMario::Render()
 				goto CASE_FIRE_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_FIRE_IS_FALLING;
+			if (kickShell)
+				goto CASE_FIRE_IS_KICKING;
 			ani = MARIO_FIRE_ANI_WALK_RIGHT;
 			break;
 
@@ -283,6 +342,8 @@ void CMario::Render()
 				goto CASE_FIRE_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_FIRE_IS_FALLING;
+			if (kickShell)
+				goto CASE_FIRE_IS_KICKING;
 			ani = MARIO_FIRE_ANI_WALK_LEFT;
 			break;
 
@@ -356,16 +417,14 @@ void CMario::Render()
 		case MARIO_STATE_IDLE:
 			if (!isOnGround)
 				goto CASE_FIRE_IS_FALLING;
+			if (kickShell)
+				goto CASE_FIRE_IS_KICKING;
 			else
 			{
 				if (vx > 0)
-				{
 					ani = MARIO_FIRE_ANI_WALK_RIGHT;
-				}
 				else if (vx < 0)
-				{
 					ani = MARIO_FIRE_ANI_WALK_LEFT;
-				}
 				else
 				{
 					if (nx > 0)
@@ -374,6 +433,14 @@ void CMario::Render()
 						ani = MARIO_FIRE_ANI_IDLE_LEFT;
 				}
 			}
+			break;
+
+		CASE_FIRE_IS_KICKING:
+		case MARIO_STATE_KICK:
+			if (nx > 0)
+				ani = MARIO_FIRE_ANI_KICK_RIGHT;
+			else
+				ani = MARIO_FIRE_ANI_KICK_LEFT;
 			break;
 
 		CASE_FIRE_IS_FALLING:
@@ -411,6 +478,8 @@ void CMario::Render()
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_RACCOON_IS_FALLING;
+			if (kickShell)
+				goto CASE_RACCOON_IS_KICKING;
 			ani = MARIO_RACCOON_ANI_WALK_RIGHT;
 			break;
 
@@ -421,6 +490,8 @@ void CMario::Render()
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_RACCOON_IS_FALLING;
+			if (kickShell)
+				goto CASE_RACCOON_IS_KICKING;
 			ani = MARIO_RACCOON_ANI_WALK_LEFT;
 			break;
 
@@ -523,14 +594,12 @@ void CMario::Render()
 		case MARIO_STATE_IDLE:
 			if (!isOnGround)
 				goto CASE_RACCOON_IS_FALLING;
+			if (kickShell)
+				goto CASE_RACCOON_IS_KICKING;
 			if (vx > 0)
-			{
 				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
-			}
 			else if (vx < 0)
-			{
 				ani = MARIO_RACCOON_ANI_WALK_LEFT;
-			}
 			else
 			{
 				if (nx > 0)
@@ -538,6 +607,14 @@ void CMario::Render()
 				else
 					ani = MARIO_RACCOON_ANI_IDLE_LEFT;
 			}
+			break;
+
+		CASE_RACCOON_IS_KICKING:
+		case MARIO_STATE_KICK:
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_KICK_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_KICK_LEFT;
 			break;
 
 		CASE_RACCOON_IS_FALLING:
@@ -573,6 +650,8 @@ void CMario::Render()
 				goto CASE_BIG_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_BIG_IS_FALLING;
+			if (kickShell)
+				goto CASE_BIG_IS_KICKING;
 			ani = MARIO_ANI_BIG_WALKING_RIGHT;
 			break;
 
@@ -581,6 +660,8 @@ void CMario::Render()
 				goto CASE_BIG_IS_SITTING;
 			if (!isOnGround)
 				goto CASE_BIG_IS_FALLING;
+			if (kickShell)
+				goto CASE_BIG_IS_KICKING;
 			ani = MARIO_ANI_BIG_WALKING_LEFT;
 			break;
 
@@ -640,14 +721,12 @@ void CMario::Render()
 		case MARIO_STATE_IDLE:
 			if (!isOnGround)
 				goto CASE_BIG_IS_FALLING;
+			if (kickShell)
+				goto CASE_BIG_IS_KICKING;
 			if (vx > 0)
-			{
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			}
 			else if (vx < 0)
-			{
 				ani = MARIO_ANI_BIG_WALKING_LEFT;
-			}
 			else
 			{
 				if (nx > 0)
@@ -655,6 +734,14 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_BIG_IDLE_LEFT;
 			}
+			break;
+
+		CASE_BIG_IS_KICKING:
+		case MARIO_STATE_KICK:
+			if (nx > 0)
+				ani = MARIO_ANI_BIG_KICK_RIGHT;
+			else
+				ani = MARIO_ANI_BIG_KICK_RIGHT;
 			break;
 
 		CASE_BIG_IS_FALLING:
@@ -687,12 +774,16 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_RIGHT:
 			if (!isOnGround)
 				goto CASE_SMALL_IS_FALLING;
+			if (kickShell)
+				goto CASE_SMALL_IS_KICKING;
 			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 			break;
 
 		case MARIO_STATE_WALKING_LEFT:
 			if (!isOnGround)
 				goto CASE_SMALL_IS_FALLING;
+			if (kickShell)
+				goto CASE_SMALL_IS_KICKING;
 			ani = MARIO_ANI_SMALL_WALKING_LEFT;
 			break;
 
@@ -725,16 +816,14 @@ void CMario::Render()
 		case MARIO_STATE_IDLE:
 			if (!isOnGround)
 				goto CASE_SMALL_IS_FALLING;
+			if (kickShell)
+				goto CASE_SMALL_IS_KICKING;
 			else
 			{
 				if (vx > 0)
-				{
 					ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-				}
 				else if (vx < 0)
-				{
 					ani = MARIO_ANI_SMALL_WALKING_LEFT;
-				}
 				else
 				{
 					if (nx > 0)
@@ -743,6 +832,14 @@ void CMario::Render()
 						ani = MARIO_ANI_SMALL_IDLE_LEFT;
 				}
 			}
+			break;
+
+		CASE_SMALL_IS_KICKING:
+		case MARIO_STATE_KICK:
+			if (nx > 0)
+				ani = MARIO_ANI_SMALL_KICK_RIGHT;
+			else
+				ani = MARIO_ANI_SMALL_KICK_LEFT;
 			break;
 
 		CASE_SMALL_IS_FALLING:

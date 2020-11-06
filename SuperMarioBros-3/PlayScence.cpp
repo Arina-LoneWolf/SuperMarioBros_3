@@ -137,17 +137,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case Type::GOOMBA: obj = new CGoomba(); break;
-	case Type::BRICK: obj = new CBrick(); break;
-	case Type::KOOPA: obj = new CKoopa(); break;
+
 	case Type::PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
+
 	case Type::FLOOR:
 	{
 		float width = atof(tokens[4].c_str());
@@ -155,6 +154,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CFloor(width, height);
 		break;
 	}
+
 	case Type::COLOR_BOX:
 	{
 		float width = atof(tokens[4].c_str());
@@ -162,6 +162,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CColorBox(width, height);
 		break;
 	}
+
+	case Type::BRICK: obj = new CBrick(); break;
+	case Type::GOOMBA: obj = new CGoomba(); break;
+	case Type::KOOPA: obj = new CKoopa(); break;
+
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -332,6 +337,13 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->Attack();
 		break;
 
+	case DIK_X:
+		if (mario->canFly)
+		{
+			if (mario->GetLevel() == MARIO_RACCOON)
+				mario->Fly();
+		}
+
 	case DIK_R: // turn into raccoon mario
 		mario->TurnIntoRaccoon();
 		break;
@@ -360,7 +372,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 			return;
 		if (!(mario->isOnGround || mario->isFalling))
 		{
-			if (mario->y > 130) //define plz!!!
+			if (mario->y > MARIO_TOO_HIGH_ABOVE)
 				mario->vy += MARIO_GRAVITY * 15 * mario->dt;
 			else
 				mario->vy += MARIO_GRAVITY * 11 * mario->dt;
@@ -383,13 +395,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 
-	// chưa có state fly
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;
 	if (mario->isWaitingForAni)
 		return;
-	/*if (mario->canFly && !mario->isOnGround)
-		return;*/
+
 	else if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))
 	{

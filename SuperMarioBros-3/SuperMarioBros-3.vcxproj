@@ -135,7 +135,9 @@
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Koopa.cpp" />
+    <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="Tail.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -160,7 +162,9 @@
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Koopa.h" />
+    <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="Tail.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

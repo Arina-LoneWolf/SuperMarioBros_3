@@ -3,11 +3,8 @@
 
 class CColorBox : public CGameObject
 {
-	int height;
-	int width;
 public:
-	CColorBox(int width, int height);
+	CColorBox(int width_in_units, int height_in_units);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-
 };

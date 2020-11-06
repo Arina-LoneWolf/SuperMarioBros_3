@@ -6,7 +6,9 @@
 #include "ColorBox.h"
 #include "Fireball.h"
 #include "HitEffect.h"
-
+#include "Goomba.h"
+#include "Koopa.h"
+#include "Portal.h"
 
 
 class CMario : public CGameObject
@@ -25,8 +27,10 @@ public:
 	DWORD attackStartTime;
 	DWORD waggingTailStartTime;
 	DWORD flyStartTime;
+	DWORD kickStartTime;
+
 	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
-	bool canFlyUpFromGround;
+	bool kickShell;
 	bool canFly;
 	bool isOnGround;
 	bool immovable;
@@ -48,7 +52,6 @@ public:
 
 	void Reset();
 	int GetAni() { return ani; }
-	//bool IsSpecialAniCase();
 
 	CFireball* CreateFireball(float x, float y, int nx);
 

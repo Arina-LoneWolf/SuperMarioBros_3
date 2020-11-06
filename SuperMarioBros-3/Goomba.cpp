@@ -3,7 +3,7 @@ CGoomba::CGoomba()
 {
 	type = GOOMBA;
 	category = ENEMY;
-	SetState(ENEMY_STATE_MOVE); \
+	SetState(ENEMY_STATE_MOVE); 
 }
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -114,7 +114,7 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 	case ENEMY_STATE_DIE:
-		vx = GOOMBA_DEFLECT_SPEED_X * attack_tool_nx;
+		vx = GOOMBA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -GOOMBA_DEFLECT_SPEED_Y;
 		isFinishedUsing = true;
 		break;

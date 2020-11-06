@@ -57,7 +57,9 @@ public:
 	bool isFinishedUsing;
 	Type type;
 	Category category;
-	int attack_tool_nx;
+	int object_colliding_nx;
+	int width;
+	int height;
 
 	int nx;	 
 

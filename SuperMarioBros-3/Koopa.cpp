@@ -9,14 +9,16 @@ CKoopa::CKoopa()
 
 void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
+	if (isFinishedUsing)
+		return;
 	left = x;
-	top = y;
-	right = x + KOOPAS_BBOX_WIDTH;
+	right = x + KOOPA_BBOX_WIDTH;
+	bottom = y + KOOPA_BBOX_HEIGHT;
 
-	if (state == KOOPAS_STATE_DIE)
-		bottom = y + KOOPAS_BBOX_HEIGHT_DIE;
+	if (state == ENEMY_STATE_MOVE)
+		top = y;
 	else
-		bottom = y + KOOPAS_BBOX_HEIGHT;
+		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
 void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -59,20 +61,20 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (state == ENEMY_STATE_MOVE)
+			if (state == ENEMY_STATE_MOVE || state == KOOPA_STATE_SPIN_AND_MOVE)
 			{
 				if (e->obj->type == Type::COLOR_BOX)
 				{
 					if (e->nx != 0)
 						x += dx;
 				}
-				else if (e->obj->category == Category::MISC)
+				if (e->obj->category == Category::MISC)
 				{
-					if (e->nx != 0)
+					if (e->nx != 0 && e->obj->type != Type::COLOR_BOX)
 					{
 						vx = -vx;
 					}
-					else if (e->ny != 0 && (x <= e->obj->x || x >= e->obj->x + e->obj->width))
+					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (x <= e->obj->x || x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH))
 					{
 						vx = -vx;
 					}
@@ -88,11 +90,21 @@ void CKoopa::Render()
 {
 	if (state == ENEMY_STATE_DIE)
 		ani = KOOPA_ANI_LAY_SUPINE;
-	//else if...
+	else if (state == KOOPA_STATE_SPIN_AND_MOVE)
+		ani = KOOPA_ANI_SPIN_AND_MOVE_PRONE;
+	else if (state == ENEMY_STATE_IDLE)
+		ani = KOOPA_ANI_LAY_PRONE;
+	else if (state == ENEMY_STATE_MOVE)
+	{
+		if (vx > 0)
+			ani = KOOPA_ANI_MOVE_RIGHT;
+		else
+			ani = KOOPA_ANI_MOVE_LEFT;
+	}
 
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)
@@ -101,19 +113,24 @@ void CKoopa::SetState(int state)
 	switch (state)
 	{
 	case ENEMY_STATE_DIE:
-		vx = KOOPA_DEFLECT_SPEED_X * attack_tool_nx;
+		vx = KOOPA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -KOOPA_DEFLECT_SPEED_Y;
 		isFinishedUsing = true;
 		break;
 	case ENEMY_STATE_MOVE:
-		vx = KOOPA_MOVE_SPEED_X; // nhân thêm với nx của..?
+		DebugOut(L"koopa state move\n");
+		vx = -KOOPA_MOVE_SPEED_X;
+		break;
 	case ENEMY_STATE_IDLE:
+		DebugOut(L"koopa state idle");
 		vx = 0;
 		vy = 0;
+		break;
 	case KOOPA_STATE_SPIN_AND_MOVE:
-		vx = KOOPA_SPIN_AND_MOVE_SPEED_X;
+		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
+		//vx = 0.05f * object_colliding_nx;
+		break;
 	}
-
 }
 
 CKoopa::~CKoopa()
