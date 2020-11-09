@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Utils.h"
 
 class CKoopa : public CGameObject
 {

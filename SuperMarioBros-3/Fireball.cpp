@@ -1,5 +1,4 @@
 #include "Fireball.h"
-#include "Game.h"
 
 CFireball::CFireball(D3DXVECTOR2 position, int nx)
 {
@@ -76,7 +75,7 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (e->obj->category == Category::ENEMY)
 			{
 				e->obj->object_colliding_nx = this->nx;
-				e->obj->SetState(ENEMY_STATE_DIE);
+				e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
 				isFinishedUsing = true;
 			}
 		}

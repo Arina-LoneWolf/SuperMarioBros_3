@@ -1,6 +1,9 @@
 ﻿#pragma once
-//Tileset
-#define TILESET_BBOX_SIDE	16
+// Tileset
+#define TILESET_BBOX_SIDE_LENGTH	16
+
+// Brick
+#define BRICK_BBOX_SIDE_LENGTH	16
 
 // Effect
 //#define STATE_DESTROYED	99
@@ -13,6 +16,9 @@
 #define FIREBALL_SPEED			0.15f
 #define FIREBALL_TO_RIGHT		0
 #define FIREBALL_TO_LEFT		1
+
+#define TAIL_BBOX_WIDTH			9
+#define TAIL_BBOX_HEIGHT		6
 
 // Mario
 #define MARIO_RUNNING_SPEED						0.23f
@@ -170,21 +176,24 @@
 
 // ENEMIES
 // cho enemies xài chung deflect speed x và y?
-#define ENEMY_STATE_DIE		199
-#define ENEMY_STATE_MOVE	200
-#define ENEMY_STATE_IDLE	201
+#define ENEMY_STATE_ATTACKED_BY_TAIL			188  // lead to die or sleep
+#define ENEMY_STATE_DIE_BY_WEAPON				199
+#define ENEMY_STATE_MOVE						200
+#define ENEMY_STATE_IDLE						201
+#define ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL		0.035f
+#define ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL		0.28f
 
 // Goomba
-#define GOOMBA_MOVE_SPEED_X				0.035f
-#define GOOMBA_DEFLECT_SPEED_Y			0.15f
-#define GOOMBA_DEFLECT_SPEED_X			0.03f
-#define GOOMBA_BBOX_WIDTH				16
-#define GOOMBA_BBOX_HEIGHT				16
-#define GOOMBA_BBOX_HEIGHT_DIE_BY_CRUSH	9
-#define GOOMBA_ANI_MOVE					0
-#define GOOMBA_ANI_DIE_BY_CRUSH			1
-#define GOOMBA_ANI_DIE_BY_ATTACK_TOOL	2
-#define GOOMBA_STATE_DIE_BY_CRUSH		299
+#define GOOMBA_MOVE_SPEED_X					0.035f
+#define GOOMBA_DEFLECT_SPEED_Y				0.15f
+#define GOOMBA_DEFLECT_SPEED_X				0.03f
+#define GOOMBA_BBOX_WIDTH					16
+#define GOOMBA_BBOX_HEIGHT					16
+#define GOOMBA_BBOX_HEIGHT_DIE_BY_CRUSH		9
+#define GOOMBA_ANI_MOVE						0
+#define GOOMBA_ANI_DIE_BY_CRUSH				1
+#define GOOMBA_ANI_DIE_BY_ATTACK_TOOL		2
+#define GOOMBA_STATE_DIE_BY_CRUSH			299
 
 // Koopa
 #define KOOPA_MOVE_SPEED_X					0.025f
@@ -197,7 +206,7 @@
 #define KOOPA_BBOX_WIDTH_VIBRATE			18
 #define KOOPA_ANI_MOVE_RIGHT				0
 #define KOOPA_ANI_MOVE_LEFT					1
-#define KOOPA_ANI_LAY_PRONE				2
+#define KOOPA_ANI_LAY_PRONE					2
 #define KOOPA_ANI_LAY_SUPINE				3
 #define KOOPA_ANI_VIBRATE_PRONE				4
 #define KOOPA_ANI_VIBRATE_SUPINE			5
@@ -205,7 +214,7 @@
 #define KOOPA_ANI_SPIN_AND_MOVE_SUPINE		7
 #define KOOPA_STATE_SPIN_AND_MOVE			80
 
-// Fire Piranha
+// Red Fire Piranha
 #define FIRE_PIRANHA_MOVE_SPEED				0.03f
 #define FIRE_PIRANHA_BBOX_WIDTH				16
 #define FIRE_PIRANHA_BBOX_HEIGHT			24
@@ -234,7 +243,7 @@ enum Type
 {
 	PORTAL = 55,
 	MARIO = 0,
-	BRICK = 1,
+	QUESTION_BRICK = 1,
 	GOOMBA = 2,
 	KOOPA = 3,
 	FLOOR = 4,

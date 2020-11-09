@@ -163,7 +163,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case Type::BRICK: obj = new CBrick(); break;
+	case Type::QUESTION_BRICK: obj = new CQuestionBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
 	case Type::KOOPA: obj = new CKoopa(); break;
 
@@ -337,12 +337,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->Attack();
 		break;
 
-	case DIK_X:
+	/*case DIK_X:
 		if (mario->canFly)
 		{
 			if (mario->GetLevel() == MARIO_RACCOON)
 				mario->Fly();
-		}
+		}*/
 
 	case DIK_R: // turn into raccoon mario
 		mario->TurnIntoRaccoon();

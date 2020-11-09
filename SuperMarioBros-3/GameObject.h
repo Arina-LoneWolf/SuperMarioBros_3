@@ -7,6 +7,10 @@
 #include "Sprites.h"
 #include "Animations.h"
 #include "define.h"
+#include "Utils.h"
+#include "Textures.h"
+#include "Game.h"
+#include "Sprites.h"
 
 using namespace std;
 

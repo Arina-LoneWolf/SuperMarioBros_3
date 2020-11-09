@@ -1,12 +1,6 @@
 #include <d3dx9.h>
 #include <algorithm>
-
-
-#include "Utils.h"
-#include "Textures.h"
-#include "Game.h"
 #include "GameObject.h"
-#include "Sprites.h"
 
 CGameObject::CGameObject()
 {
@@ -129,7 +123,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(l, t, bbox, rect.left, rect.top, rect.right, rect.bottom, 100); //32
+	CGame::GetInstance()->Draw(l, t, bbox, rect.left, rect.top, rect.right, rect.bottom, 200); //32
 }
 
 

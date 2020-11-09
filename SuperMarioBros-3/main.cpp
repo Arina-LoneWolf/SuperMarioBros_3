@@ -19,11 +19,6 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
-
-#include "Mario.h"
-#include "Brick.h"
-#include "Goomba.h"
-
 #include "PlayScence.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"

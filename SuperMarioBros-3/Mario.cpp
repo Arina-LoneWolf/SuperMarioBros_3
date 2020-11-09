@@ -28,6 +28,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_FLY_GRAVITY * dt;
 	else
 		vy += MARIO_GRAVITY * dt;
+	
+	#pragma region Wait for animation
 
 	if (canFly && GetTickCount() - flyStartTime > 5000)
 	{
@@ -70,7 +72,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}*/
 	//else if (!kickStartTime)
 		//DebugOut(L"kick time = 0\n");
-
+	#pragma endregion
 
 	if (level == MARIO_FIRE && isAttacking)
 	{
@@ -84,6 +86,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isAttacking = false;
 	}
 
+	#pragma region Update weapon and effect
 	// update listWeapon
 	for (int i = 0; i < listWeapon.size(); i++)
 	{
@@ -102,6 +105,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		listEffect[i]->Update(dt, coObjects);
 	}
 
+	tail->Update(dt, coObjects);
+
 	// remove weapons and effects have done
 	for (int i = 0; i < listWeapon.size(); i++)
 	{
@@ -118,7 +123,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			listEffect.erase(listEffect.begin() + i);
 		}
 	}
-
+	#pragma endregion
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -208,7 +213,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (goomba->GetState() != ENEMY_STATE_DIE)
+					if (goomba->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE_BY_CRUSH);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -218,7 +223,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (untouchable == 0)
 					{
-						if (goomba->GetState() != ENEMY_STATE_DIE)
+						if (goomba->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 						{
 							if (level > MARIO_LEVEL_BIG)
 							{
@@ -242,7 +247,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (e->ny < 0)
 				{
-					if (koopa->GetState() != ENEMY_STATE_DIE)
+					if (koopa->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 					{
 						if (koopa->GetState() == ENEMY_STATE_IDLE)
 						{
@@ -691,8 +696,8 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_LOW:
 			if (isSitting)
 				goto CASE_BIG_IS_SITTING;
-			if (isOnGround) // no working
-				goto CASE_BIG_IS_IDLING;
+			//if (isOnGround) // no working
+			//	goto CASE_BIG_IS_IDLING;
 			if (vy < 0)
 			{
 				if (nx > 0)
@@ -741,7 +746,7 @@ void CMario::Render()
 			if (nx > 0)
 				ani = MARIO_ANI_BIG_KICK_RIGHT;
 			else
-				ani = MARIO_ANI_BIG_KICK_RIGHT;
+				ani = MARIO_ANI_BIG_KICK_LEFT;
 			break;
 
 		CASE_BIG_IS_FALLING:
@@ -867,6 +872,8 @@ RENDER:
 		listEffect[i]->Render();
 	}
 
+	tail->Render();
+
 	//RenderBoundingBox();
 }
 
@@ -922,7 +929,6 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_RUNNING_LEFT:
-		DebugOut(L"state run left\n");
 		vx -= MARIO_RUNNING_ACCELERATION * dt;
 		if (vx <= -MARIO_RUNNING_SPEED)
 		{
@@ -999,6 +1005,49 @@ void CMario::SetState(int state)
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
+
+	#pragma region Spin tail to attack
+	if (GetAni() == MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT
+		|| GetAni() == MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT)
+	{
+		LPANIMATION current_ani = animation_set->at(ani);
+		switch (current_ani->GetCurrentFrame())
+		{
+		case 0:
+		case 4:
+			if (nx > 0)
+			{
+				tail->SetPosition(x + 2, y + 18);
+				tail->nx = -1;
+			}
+			else
+			{
+				tail->SetPosition(x + 21, y + 18);
+				tail->nx = 1;
+			}
+			tail->appear = true;
+			break;
+		case 2:
+			if (nx > 0)
+			{
+				tail->SetPosition(x + 23, y + 18);
+				tail->nx = 1;
+			}
+			else
+			{
+				tail->SetPosition(x, y + 18);
+				tail->nx = -1;
+			}
+			tail->appear = true;
+			break;
+		default:
+			tail->appear = false;
+		}
+	}
+	else
+		tail->appear = false;
+	#pragma endregion
+
 }
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -1168,7 +1217,7 @@ void CMario::Attack()
 	SetState(MARIO_STATE_ATTACK);
 	attackStartTime = GetTickCount();
 	if (level == MARIO_FIRE)
-		isAttacking = true; // mốt làm vũ khí Tail xong thì xài chung cái biến này cho con chồn lun
+		isAttacking = true; // use also for Tail
 }
 
 /*

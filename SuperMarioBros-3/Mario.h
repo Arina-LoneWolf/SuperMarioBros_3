@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObject.h"
-#include "Utils.h"
 #include "Game.h"
 #include "Floor.h"
 #include "ColorBox.h"
 #include "Fireball.h"
+#include "Tail.h"
 #include "HitEffect.h"
 #include "Goomba.h"
 #include "Koopa.h"
@@ -22,6 +22,8 @@ class CMario : public CGameObject
 public: 
 	vector<LPGAMEOBJECT> listWeapon;
 	vector<LPGAMEOBJECT> listEffect;
+
+	CTail* tail = new CTail();
 
 	DWORD jumpStartTime;
 	DWORD attackStartTime;

@@ -88,7 +88,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CKoopa::Render()
 {
-	if (state == ENEMY_STATE_DIE)
+	if (state == ENEMY_STATE_DIE_BY_WEAPON)
 		ani = KOOPA_ANI_LAY_SUPINE;
 	else if (state == KOOPA_STATE_SPIN_AND_MOVE)
 		ani = KOOPA_ANI_SPIN_AND_MOVE_PRONE;
@@ -112,17 +112,15 @@ void CKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case ENEMY_STATE_DIE:
+	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = KOOPA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -KOOPA_DEFLECT_SPEED_Y;
 		isFinishedUsing = true;
 		break;
 	case ENEMY_STATE_MOVE:
-		DebugOut(L"koopa state move\n");
 		vx = -KOOPA_MOVE_SPEED_X;
 		break;
 	case ENEMY_STATE_IDLE:
-		DebugOut(L"koopa state idle");
 		vx = 0;
 		vy = 0;
 		break;

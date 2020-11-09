@@ -1,4 +1,5 @@
 ﻿#include "Goomba.h"
+
 CGoomba::CGoomba()
 {
 	type = GOOMBA;
@@ -96,7 +97,7 @@ void CGoomba::Render()
 {
 	if (vanish) return;
 
-	if (state == ENEMY_STATE_DIE)
+	if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
 		ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
 	else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
 		ani = GOOMBA_ANI_DIE_BY_CRUSH;
@@ -113,9 +114,14 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case ENEMY_STATE_DIE:
+	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = GOOMBA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -GOOMBA_DEFLECT_SPEED_Y;
+		isFinishedUsing = true;
+		break;
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
+		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
+		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
 		isFinishedUsing = true;
 		break;
 	case ENEMY_STATE_MOVE:

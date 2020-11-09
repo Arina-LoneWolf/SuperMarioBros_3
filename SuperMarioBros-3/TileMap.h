@@ -1,11 +1,11 @@
-#include"Sprites.h"
-#include"Textures.h"
-#include"Utils.h"
+#include "Sprites.h"
+#include "Textures.h"
+#include "Utils.h"
 #include <iostream>
 #include <fstream>
-#include<string>
+#include <string>
 #include <sstream>
-#include"Game.h"
+#include "Game.h"
 
 class TileMap
 {
@@ -15,14 +15,14 @@ class TileMap
 
 	int id;
 	int num_row_on_tilemap, num_col_on_tilemap;
-	int num_row_on_texture, num_col_on_textture;
+	int num_row_on_texture, num_col_on_texture;
 	int tileset_width, tileset_height;
 
 	//vector<vector<LPSPRITE>> tilemap;
 	int tilemap[300][300];
 
 public:
-	TileMap(int ID, LPCWSTR filePath_texture, LPCWSTR filePath_data, int num_row_on_texture, int num_col_on_textture, int num_row_on_tilemap, int num_col_on_tilemap, int tileset_width, int tileset_height);
+	TileMap(int ID, LPCWSTR filePath_texture, LPCWSTR filePath_data, int num_row_on_texture, int num_col_on_texture, int num_row_on_tilemap, int num_col_on_tilemap, int tileset_width, int tileset_height);
 	~TileMap();
 	int GetWidthTileMap();
 	void Load();

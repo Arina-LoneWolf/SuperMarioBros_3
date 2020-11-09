@@ -5,8 +5,8 @@ CColorBox::CColorBox(int width_in_units, int height_in_units) : CGameObject::CGa
 {
 	type = COLOR_BOX;
 	category = MISC;
-	this->width = width_in_units * TILESET_BBOX_SIDE;
-	this->height = height_in_units * TILESET_BBOX_SIDE;
+	this->width = width_in_units * TILESET_BBOX_SIDE_LENGTH;
+	this->height = height_in_units * TILESET_BBOX_SIDE_LENGTH;
 }
 
 void CColorBox::Render()
