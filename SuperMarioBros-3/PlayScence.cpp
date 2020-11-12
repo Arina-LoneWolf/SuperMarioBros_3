@@ -164,6 +164,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case Type::QUESTION_BRICK: obj = new CQuestionBrick(); break;
+	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
 	case Type::KOOPA: obj = new CKoopa(); break;
 
