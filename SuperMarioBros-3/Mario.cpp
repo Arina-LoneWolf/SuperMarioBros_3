@@ -36,11 +36,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		DebugOut(L"CANNOT FLY\n");
 		canFly = false;
 	}
-	else
-	{
-		if (isOnGround)
-			canFly = false;
-	}
 
 	if (level == MARIO_RACCOON && attackStartTime
 		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
@@ -241,9 +236,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			else if (dynamic_cast<CKoopa*>(e->obj))
+			else if (dynamic_cast<CRedKoopa*>(e->obj))
 			{
-				CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
 
 				if (e->ny < 0)
 				{
@@ -441,7 +436,7 @@ void CMario::Render()
 			break;
 
 		CASE_FIRE_IS_KICKING:
-		case MARIO_STATE_KICK:
+		case MARIO_KICK:
 			if (nx > 0)
 				ani = MARIO_FIRE_ANI_KICK_RIGHT;
 			else
@@ -493,6 +488,8 @@ void CMario::Render()
 				goto CASE_RACCOON_IS_FLYING;
 			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
+			/*if (isWaggingTail)
+				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;*/
 			if (!isOnGround)
 				goto CASE_RACCOON_IS_FALLING;
 			if (kickShell)
@@ -615,11 +612,19 @@ void CMario::Render()
 			break;
 
 		CASE_RACCOON_IS_KICKING:
-		case MARIO_STATE_KICK:
+		case MARIO_KICK:
 			if (nx > 0)
 				ani = MARIO_RACCOON_ANI_KICK_RIGHT;
 			else
 				ani = MARIO_RACCOON_ANI_KICK_LEFT;
+			break;
+
+		CASE_RACCOON_WAG_TAIL_WHILE_FALLING:
+		case MARIO_WAG_TAIL_WHILE_FALLING:
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT;
 			break;
 
 		CASE_RACCOON_IS_FALLING:
@@ -742,7 +747,7 @@ void CMario::Render()
 			break;
 
 		CASE_BIG_IS_KICKING:
-		case MARIO_STATE_KICK:
+		case MARIO_KICK:
 			if (nx > 0)
 				ani = MARIO_ANI_BIG_KICK_RIGHT;
 			else
@@ -840,7 +845,7 @@ void CMario::Render()
 			break;
 
 		CASE_SMALL_IS_KICKING:
-		case MARIO_STATE_KICK:
+		case MARIO_KICK:
 			if (nx > 0)
 				ani = MARIO_ANI_SMALL_KICK_RIGHT;
 			else

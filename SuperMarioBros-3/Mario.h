@@ -7,7 +7,7 @@
 #include "Tail.h"
 #include "HitEffect.h"
 #include "Goomba.h"
-#include "Koopa.h"
+#include "RedKoopa.h"
 #include "Portal.h"
 
 

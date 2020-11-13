@@ -90,6 +90,15 @@
     <ClCompile Include="BronzeBrick.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BrokenBrickPiece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenKoopa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -143,9 +152,6 @@
     <ClInclude Include="define.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Koopa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Fireball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -168,6 +174,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BronzeBrick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BrokenBrickPiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RedKoopa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenKoopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

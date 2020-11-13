@@ -7,7 +7,7 @@
 #include "BronzeBrick.h"
 #include "Mario.h"
 #include "Goomba.h"
-#include "Koopa.h"
+#include "RedKoopa.h"
 #include "TileMap.h"
 #include "Floor.h"
 

@@ -166,7 +166,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::QUESTION_BRICK: obj = new CQuestionBrick(); break;
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
-	case Type::KOOPA: obj = new CKoopa(); break;
+	case Type::KOOPA: obj = new CRedKoopa(); break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -271,6 +271,13 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
+	}
+
+	// remove
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->isFinishedUsing)
+			objects.erase(objects.begin() + i);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

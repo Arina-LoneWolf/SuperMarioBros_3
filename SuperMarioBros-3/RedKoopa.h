@@ -1,14 +1,14 @@
 #pragma once
 #include "GameObject.h"
 
-class CKoopa : public CGameObject
+class CRedKoopa : public CGameObject
 {
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
 public:
-	CKoopa();
+	CRedKoopa();
 	virtual void SetState(int state);
-	~CKoopa();
+	~CRedKoopa();
 };

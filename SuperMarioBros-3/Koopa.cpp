@@ -1,13 +1,13 @@
-﻿#include "Koopa.h"
+﻿#include "RedKoopa.h"
 
-CKoopa::CKoopa()
+CRedKoopa::CRedKoopa()
 {
 	type = KOOPA;
 	category = ENEMY;
 	SetState(ENEMY_STATE_MOVE);
 }
 
-void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	if (isFinishedUsing)
 		return;
@@ -21,7 +21,7 @@ void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
-void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vy += MARIO_GRAVITY * dt;
@@ -86,7 +86,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CKoopa::Render()
+void CRedKoopa::Render()
 {
 	if (state == ENEMY_STATE_DIE_BY_WEAPON)
 		ani = KOOPA_ANI_LAY_SUPINE;
@@ -107,7 +107,7 @@ void CKoopa::Render()
 	//RenderBoundingBox();
 }
 
-void CKoopa::SetState(int state)
+void CRedKoopa::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
@@ -126,11 +126,10 @@ void CKoopa::SetState(int state)
 		break;
 	case KOOPA_STATE_SPIN_AND_MOVE:
 		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
-		//vx = 0.05f * object_colliding_nx;
 		break;
 	}
 }
 
-CKoopa::~CKoopa()
+CRedKoopa::~CRedKoopa()
 {
 }
