@@ -1,11 +1,11 @@
 #include "BrokenBrickPiece.h"
 
-CBrokenBrickPiece::CBrokenBrickPiece(D3DXVECTOR2 position, int nx)
+CBrokenBrickPiece::CBrokenBrickPiece(D3DXVECTOR2 position, int nx, int deflectFactorY)
 {
 	x = position.x;
 	y = position.y;
 	vx = BROKEN_BRICK_PIECE_DEFLECT_SPEED_X * nx;
-	vy = -BROKEN_BRICK_PIECE_DEFLECT_SPEED_Y;
+	vy = -BROKEN_BRICK_PIECE_DEFLECT_SPEED_Y * deflectFactorY;
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(12));
 }
 

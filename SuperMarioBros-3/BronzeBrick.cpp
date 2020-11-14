@@ -48,8 +48,8 @@ void CBronzeBrick::SetState(int state)
 
 	if (state == STATE_DESTROYED)
 	{
-		CBrokenBrickPiece* topLeftPiece = new CBrokenBrickPiece({ x - 1, y - 2 }, -1);
-		CBrokenBrickPiece* topRightPiece = new CBrokenBrickPiece({ x + BRICK_BBOX_SIDE_LENGTH - BROKEN_BRICK_PIECE_WIDTH + 1, y - 2 }, 1);
+		CBrokenBrickPiece* topLeftPiece = new CBrokenBrickPiece({ x - 1, y - 2 }, -1, 2);
+		CBrokenBrickPiece* topRightPiece = new CBrokenBrickPiece({ x + BRICK_BBOX_SIDE_LENGTH - BROKEN_BRICK_PIECE_WIDTH + 1, y - 2 }, 1, 2);
 		CBrokenBrickPiece* bottomLeftPiece = new CBrokenBrickPiece({ x - 1, y + BRICK_BBOX_SIDE_LENGTH - BROKEN_BRICK_PIECE_HEIGHT }, -1);
 		CBrokenBrickPiece* bottomRightPiece = new CBrokenBrickPiece({ x + BRICK_BBOX_SIDE_LENGTH - BROKEN_BRICK_PIECE_WIDTH + 1, y + BRICK_BBOX_SIDE_LENGTH - BROKEN_BRICK_PIECE_HEIGHT }, 1);
 
