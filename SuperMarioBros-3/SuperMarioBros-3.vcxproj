@@ -130,7 +130,7 @@
     <ClCompile Include="BronzeBrick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="GreenKoopa.cpp" />
-    <ClCompile Include="QuestionBrick.cpp" />
+    <ClCompile Include="BrickContainsItem.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="Effect.cpp" />
     <ClCompile Include="Fireball.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="BronzeBrick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="GreenKoopa.h" />
-    <ClInclude Include="QuestionBrick.h" />
+    <ClInclude Include="BrickContainsItem.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="Effect.h" />

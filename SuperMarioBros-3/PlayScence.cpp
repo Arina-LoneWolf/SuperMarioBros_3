@@ -163,7 +163,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case Type::QUESTION_BRICK: obj = new CQuestionBrick(); break;
+	case Type::BRICK_CONTAINS_ITEM:
+	{
+		int brickType = atof(tokens[4].c_str());
+		int itemType = atof(tokens[5].c_str());
+		obj = new CBrickContainsItem(brickType, itemType);
+		break;
+	}
+
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
 	case Type::KOOPA: obj = new CRedKoopa(); break;
@@ -345,12 +352,12 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			mario->Attack();
 		break;
 
-	/*case DIK_X:
-		if (mario->canFly)
-		{
-			if (mario->GetLevel() == MARIO_RACCOON)
-				mario->Fly();
-		}*/
+		/*case DIK_X:
+			if (mario->canFly)
+			{
+				if (mario->GetLevel() == MARIO_RACCOON)
+					mario->Fly();
+			}*/
 
 	case DIK_R: // turn into raccoon mario
 		mario->TurnIntoRaccoon();
@@ -461,4 +468,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		if (mario->isOnGround)
 			mario->Idle();
 	}
-} 
+}

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "BronzeBrick.h"
 
 class CTail : public CGameObject
 {

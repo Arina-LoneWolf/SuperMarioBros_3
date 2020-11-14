@@ -3,7 +3,7 @@
 #include "Textures.h"
 #include "Scence.h"
 #include "GameObject.h"
-#include "QuestionBrick.h"
+#include "BrickContainsItem.h"
 #include "BronzeBrick.h"
 #include "Mario.h"
 #include "Goomba.h"

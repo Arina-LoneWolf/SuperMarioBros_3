@@ -5,6 +5,29 @@
 // Brick
 #define BRICK_BBOX_SIDE_LENGTH	16
 
+// Brick contains item
+#define QUESTION_BRICK_ANI			0
+#define NORMAL_BRICK_ANI			1
+#define	DISGUISED_BRONZE_BRICK_ANI	2
+#define	STATE_RAMMED				101
+
+enum ItemOfBrick
+{
+	ITEM_RANDOM = 0,
+	ITEM_MONEY = 1,
+	ITEM_SUPER_MUSHROOM = 2,
+	ITEM_SUPER_LEAF = 3,
+	ITEM_FIRE_FLOWER = 4,
+	ITEM_UP_MUSHROOM = 5,
+	ITEM_P_SWITCH = 6,
+};
+
+enum TypeOfBrickContainsItem
+{
+	QUESTION_BRICK = 1,
+	DISGUISED_BRONZE_BRICK = 2,
+};
+
 // Effect
 #define STATE_DESTROYED	99
 
@@ -39,7 +62,7 @@
 #define	MARIO_WAGGING_TAIL_TIME			150
 #define	MARIO_SPINNING_TAIL_TIME		375
 #define	MARIO_SHOOTING_FIREBALL_TIME	300
-#define MARIO_FLYING_TIME				4000//7000
+#define MARIO_FLYING_TIME				4000
 #define MARIO_KICK_TIME					200
 
 #define MARIO_HIGH_JUMP_SPEED_Y		0.275f
@@ -264,7 +287,7 @@ enum Type
 {
 	PORTAL = 55,
 	MARIO = 0,
-	QUESTION_BRICK = 1,
+	BRICK_CONTAINS_ITEM = 1,
 	GOOMBA = 2,
 	KOOPA = 3,
 	FLOOR = 4,
@@ -275,7 +298,6 @@ enum Type
 	FIREBALL = 9,
 	TAIL = 10,
 	BRONZE_BRICK = 11,
-	HAMMER = 12,
 };
 
 enum Category
