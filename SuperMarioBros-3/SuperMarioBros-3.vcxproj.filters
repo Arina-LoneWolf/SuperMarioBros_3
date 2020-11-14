@@ -99,6 +99,9 @@
     <ClCompile Include="BrickContainsItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TailHitEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -186,6 +189,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BrickContainsItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TailHitEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

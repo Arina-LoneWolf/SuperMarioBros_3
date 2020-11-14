@@ -332,6 +332,16 @@
 1001	97	20	111	34	33
 1002	126	22	140	33	33
 
+#=============TAIL HIT EFFECT=============
+# right pink
+1005	72	67	88	83	33
+# right white
+1006	13	299	29	315	33
+# left pink
+1007	40	299	56	315	33
+# left white
+1008	68	299	84	315	33
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # =========================== MARIO ============================
@@ -571,6 +581,9 @@
 # ======= HIT EFFECT =======
 900	1000	50	1001	50	1002	50
 
+# ====== TAIL HIT EFFECT ======
+902	1005	10	1006	10	1007	10	1008	10	1006	10	1005	10	1006	10	1007	10	1008	10	1005	10
+
 # ===== BROKEN BRICK EFFECT =====
 901	61	30	62	30
 
@@ -602,14 +615,16 @@
 11	900
 # BROKEN BRICK EFFECT
 12	901
+# TAIL HIT EFFECT
+13	902
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-#0	17	100	1
+0	17	100	1
 # start at bronze brick position
-0	1912	100	1
+#0	1912	100	1
 # start at koopa position
 #0	465	100	1
 

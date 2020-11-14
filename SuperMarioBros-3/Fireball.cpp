@@ -4,8 +4,18 @@ CFireball::CFireball(D3DXVECTOR2 position, int nx)
 {
 	type = FIREBALL;
 	category = WEAPON;
-	x = position.x;
-	y = position.y;
+
+	if (nx > 0)
+	{
+		x = position.x + 10;
+		y = position.y + 6;
+	}
+	else
+	{
+		x = position.x - 6;
+		y = position.y + 6;
+	}
+
 	this->nx = nx;
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
 }

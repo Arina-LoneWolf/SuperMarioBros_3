@@ -55,7 +55,7 @@ public:
 	void Reset();
 	int GetAni() { return ani; }
 
-	CFireball* CreateFireball(float x, float y, int nx);
+	void CreateFireball();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

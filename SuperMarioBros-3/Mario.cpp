@@ -60,23 +60,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		kickStartTime = 0;
 		kickShell = false;
 	}
-	/*else if (kickStartTime
-		&& GetTickCount() - kickStartTime < MARIO_KICK_TIME)
-	{
-		DebugOut(L"in time\n");
-	}*/
-	//else if (!kickStartTime)
-		//DebugOut(L"kick time = 0\n");
 	#pragma endregion
 
 	if (level == MARIO_FIRE && isAttacking)
 	{
 		if (listWeapon.size() < 2)
 		{
-			if (nx > 0)
-				listWeapon.push_back(CreateFireball(x + 10, y + 6, nx));
-			else
-				listWeapon.push_back(CreateFireball(x - 6, y + 6, nx));
+			CreateFireball();
 		}
 		isAttacking = false;
 	}
@@ -88,9 +78,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		listWeapon[i]->Update(dt, coObjects);
 		if (listWeapon[i]->isFinishedUsing)
 		{
-			float bx, by;
-			listWeapon[i]->GetPosition(bx, by);
-			CHitEffect* effect = new CHitEffect({ bx, by });
+			float ax, ay; // accord (a)
+			listWeapon[i]->GetPosition(ax, ay);
+			CHitEffect* effect = new CHitEffect({ ax, ay }, listWeapon[i]->nx);
 			listEffect.push_back(effect);
 		}
 	}
@@ -1238,10 +1228,10 @@ void CMario::Reset()
 	CGame::GetInstance()->cam_y = 200;
 }
 
-CFireball* CMario::CreateFireball(float x, float y, int nx)
+void CMario::CreateFireball()
 {
 	CFireball* fireball = new CFireball({ x, y }, nx);
-	return fireball;
+	listWeapon.push_back(fireball);
 }
 
 
