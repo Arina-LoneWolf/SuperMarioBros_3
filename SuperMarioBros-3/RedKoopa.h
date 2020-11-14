@@ -8,7 +8,8 @@ class CRedKoopa : public CGameObject
 	virtual void Render();
 
 public:
+	bool died;
+
 	CRedKoopa();
 	virtual void SetState(int state);
-	~CRedKoopa();
 };

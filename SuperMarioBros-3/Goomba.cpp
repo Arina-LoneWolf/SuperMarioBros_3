@@ -9,7 +9,7 @@ CGoomba::CGoomba()
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (isFinishedUsing)
+	if (died)
 		return;
 	left = x;
 	right = x + GOOMBA_BBOX_WIDTH;
@@ -31,10 +31,13 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vy += MARIO_GRAVITY * dt;
 
+	float camPosY = CGame::GetInstance()->GetCamPosY();
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
+		isFinishedUsing = true;
+
 	if (dieTime && GetTickCount() - dieTime >= 250)
 	{
 		isFinishedUsing = true;
-		vanish = true;
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -95,8 +98,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGoomba::Render()
 {
-	if (vanish) return;
-
 	if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
 		ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
 	else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
@@ -117,12 +118,12 @@ void CGoomba::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = GOOMBA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -GOOMBA_DEFLECT_SPEED_Y;
-		isFinishedUsing = true;
+		died = true;
 		break;
 	case ENEMY_STATE_ATTACKED_BY_TAIL:
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
-		isFinishedUsing = true;
+		died = true;
 		break;
 	case ENEMY_STATE_MOVE:
 		vx = -GOOMBA_MOVE_SPEED_X;
@@ -133,8 +134,4 @@ void CGoomba::SetState(int state)
 		dieTime = GetTickCount();
 		break;
 	}
-}
-
-CGoomba::~CGoomba()
-{
 }

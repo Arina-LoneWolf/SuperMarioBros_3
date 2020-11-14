@@ -7,9 +7,9 @@ class CGoomba : public CGameObject
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 	DWORD dieTime;
-public: 
-	bool vanish;
+public:
+	bool died;
+
 	CGoomba();
 	virtual void SetState(int state);
-	~CGoomba();
 };

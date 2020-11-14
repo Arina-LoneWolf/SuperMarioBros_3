@@ -9,7 +9,7 @@ CRedKoopa::CRedKoopa()
 
 void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (isFinishedUsing)
+	if (died)
 		return;
 	left = x;
 	right = x + KOOPA_BBOX_WIDTH;
@@ -25,6 +25,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vy += MARIO_GRAVITY * dt;
+
+	float camPosY = CGame::GetInstance()->GetCamPosY();
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
+		isFinishedUsing = true;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -115,7 +119,7 @@ void CRedKoopa::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = KOOPA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -KOOPA_DEFLECT_SPEED_Y;
-		isFinishedUsing = true;
+		died = true;
 		break;
 	case ENEMY_STATE_MOVE:
 		vx = -KOOPA_MOVE_SPEED_X;
@@ -128,8 +132,4 @@ void CRedKoopa::SetState(int state)
 		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
 		break;
 	}
-}
-
-CRedKoopa::~CRedKoopa()
-{
 }
