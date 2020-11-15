@@ -36,7 +36,8 @@ void CPiranhaFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		e->GetBoundingBox(ol, ot, or , ob);
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, ol, ot, or, ob))
 		{
-			if (e->category == Category::PLAYER && !collisionIsDone)
+			DebugOut(L"fireball collide, object type is %d\n", e->type);
+			if (e->category == Type::MARIO /*&& !collisionIsDone*/)
 			{
 				// viên đạn đứng yên trong giây lát
 				collisionStartTime = GetTickCount();
@@ -71,7 +72,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 	{
 	case TOP_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
-		vy = vx / 2;
+		vy = vx / 2.8;
 		break;
 	case TOP_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
@@ -79,15 +80,15 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 		break;
 	case TOP_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
-		vy = -vx / 2;
+		vy = -vx / 2.8;
 		break;
 	case TOP_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
-		vy = vx;
+		vy = -vx;
 		break;
 	case BOTTOM_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
-		vy = -vx / 2;
+		vy = -vx / 2.8;
 		break;
 	case BOTTOM_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
@@ -95,7 +96,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 		break;
 	case BOTTOM_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
-		vy = vx / 2;
+		vy = vx / 2.8;
 		break;
 	case BOTTOM_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;

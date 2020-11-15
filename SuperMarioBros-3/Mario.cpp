@@ -250,6 +250,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
+			else if (e->obj->type == Type::FIRE_PIRANHA && !untouchable)
+			{
+				CollideWithEnemy();
+			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
 				if (e->nx != 0)

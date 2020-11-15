@@ -22,8 +22,7 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (delayToAttackStartTime && GetTickCount() - delayToAttackStartTime > FIRE_PIRANHA_DELAY_TO_ATTACK_TIME)
 	{
-		DebugOut(L"SHOOT!\n");
-		//if (listFireball.empty()) // để tạm test thôi, xong xóa
+		if (playerArea != Area::OUTSIDE_AREA)
 			CreateFireball();
 		delayToAttackStartTime = 0;
 	}
@@ -33,16 +32,14 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (!attackStartTime && y <= RED_FIRE_PIRANHA_MIN_Y)
 	{
-		DebugOut(L"set state attack, attack time begin\n");
 		y = RED_FIRE_PIRANHA_MIN_Y;
 		vy = 0;
 		attackStartTime = GetTickCount();
 		delayToAttackStartTime = GetTickCount();
-		//SetState(FIRE_PIRANHA_STATE_ATTACK);
+		SetState(FIRE_PIRANHA_STATE_ATTACK);
 	}
 	else if (!sleepStartTime && y >= RED_FIRE_PIRANHA_MAX_Y)
 	{
-		DebugOut(L"sleep time begin\n");
 		y = RED_FIRE_PIRANHA_MAX_Y;
 		vy = 0;
 		sleepStartTime = GetTickCount();
@@ -50,7 +47,6 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (attackStartTime && GetTickCount() - attackStartTime > FIRE_PIRANHA_DELAY_TIME)
 	{
-		DebugOut(L"set state move down\n");
 		attackStartTime = 0;
 		SetState(FIRE_PIRANHA_STATE_MOVE_DOWN);
 	}
@@ -88,10 +84,11 @@ void CFirePiranha::Render()
 			case BOTTOM_RIGHT_NEAR:
 				ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_RIGHT;
 				break;
-			default:
-				ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
+			case OUTSIDE_AREA:
+				ani = last_attack_ani;
 				break;
 			}
+			last_attack_ani = ani;
 		}
 		else
 		{
@@ -113,10 +110,11 @@ void CFirePiranha::Render()
 			case BOTTOM_RIGHT_NEAR:
 				ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_RIGHT;
 				break;
-			default:
-				ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
+			case OUTSIDE_AREA:
+				ani = last_face_ani;
 				break;
 			}
+			last_face_ani = ani;
 		}
 	}
 
@@ -170,29 +168,32 @@ void CFirePiranha::SetState(int state)
 
 Area CFirePiranha::GetCurrentPlayerArea()
 {
-	float playerPosX = player->x;
-	float playerPosY = player->y; // chỗ này nghĩ là nên lấy bottom của mario
+	float playerLeft, playerTop, playerRight, playerBottom;
+	player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
-	if (playerPosY <= 367 && playerPosY >= 200)
+	/*float playerRight = player->x;
+	float playerBottom = player->y;*/ // chỗ này nghĩ là nên lấy bottom của mario
+
+	if (playerBottom < 367 && playerBottom >= 200) //	367	200
 	{
-		if (playerPosX >= 248 && playerPosX <= 295)
+		if (playerRight >= 191 && playerRight <= 295)	// 248	295
 			return Area::TOP_LEFT_FAR;
-		else if (playerPosX >= 296 && playerPosX <= 367)
+		else if (playerRight >= 296 && playerRight <= 367) // 296	367
 			return Area::TOP_LEFT_NEAR;
-		else if (playerPosX >= 368 && playerPosX <= 439)
+		else if (playerRight >= 368 && playerRight <= 439) //	368	439
 			return Area::TOP_RIGHT_NEAR;
-		else if (playerPosX >= 440 && playerPosX <= 487)
+		else if (playerRight >= 440 && playerRight <= 535) //	440	487
 			return Area::TOP_RIGHT_FAR;
 	}
-	else if (player->y >= 368)
+	else if (playerBottom >= 367)	//	368
 	{
-		if (playerPosX >= 248 && playerPosX <= 295)
+		if (playerRight >= 191 && playerRight <= 295)	
 			return Area::BOTTOM_LEFT_FAR;
-		else if (playerPosX >= 296 && playerPosX <= 367)
+		else if (playerRight >= 296 && playerRight <= 367)
 			return Area::BOTTOM_LEFT_NEAR;
-		else if (playerPosX >= 368 && playerPosX <= 439)
+		else if (playerRight >= 368 && playerRight <= 439)
 			return Area::BOTTOM_RIGHT_NEAR;
-		else if (playerPosX >= 440 && playerPosX <= 487)
+		else if (playerRight >= 440 && playerRight <= 535)
 			return Area::BOTTOM_RIGHT_FAR;
 	}
 	return Area::OUTSIDE_AREA;

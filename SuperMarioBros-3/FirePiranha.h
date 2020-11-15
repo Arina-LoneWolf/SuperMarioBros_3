@@ -12,6 +12,9 @@ public:
 	DWORD sleepStartTime;
 	DWORD delayToAttackStartTime;
 
+	int last_face_ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
+	int last_attack_ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
+
 	int piranhaType;
 	Area playerArea;
 	CMario* player;
