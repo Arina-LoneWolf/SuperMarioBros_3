@@ -45,7 +45,6 @@ void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CTail::Render()
 {
-
 	for (LPGAMEOBJECT effect : listEffect)
 		effect->Render();
 

@@ -1,10 +1,11 @@
 ﻿#include "PiranhaFireball.h"
 
-CPiranhaFireball::CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea)
+CPiranhaFireball::CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea, CMario* player)
 {
 	// đọc player area và set vị trí, hướng bay
 	this->x = piranhaPos.x + 4;
 	this->y = piranhaPos.y + 4;
+	this->player = player;
 	SetRoute(playerArea);
 	SetNx(playerArea);
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
@@ -17,33 +18,31 @@ void CPiranhaFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (y > CGame::GetInstance()->GetCamPosY() + SCREEN_HEIGHT / 2 || y < CGame::GetInstance()->GetCamPosY())
 		isFinishedUsing = true;
 
-	if (collisionStartTime && GetTickCount() - collisionStartTime > 500)
-	{
-		collisionIsDone = true;
-	}
-
-	if (!collisionStartTime || collisionIsDone)
+	if (listEffect.empty())
 	{
 		x += dx;
 		y += dy;
 	}
 
-	float ml, mt, mr, mb, ol, ot, or, ob; // main object (m) and the other one (o)
-	GetBoundingBox(ml, mt, mr, mb);
-	for (UINT i = 0; i < coObjects->size(); i++)
+	for (LPGAMEOBJECT effect : listEffect)
 	{
-		LPGAMEOBJECT e = coObjects->at(i);
-		e->GetBoundingBox(ol, ot, or , ob);
-		if (CGameObject::CheckAABB(ml, mt, mr, mb, ol, ot, or, ob))
+		if (effect->isFinishedUsing)
+			listEffect.erase(listEffect.begin());
+	}
+
+	for (LPGAMEOBJECT effect : listEffect)
+		effect->Update(dt, coObjects);
+
+	float ml, mt, mr, mb, pl, pt, pr , pb; // main object - fireball (m) and the player (p)
+	GetBoundingBox(ml, mt, mr, mb);
+	player->GetBoundingBox(pl, pt, pr, pb);
+
+	if (CGameObject::CheckAABB(ml, mt, mr, mb, pl, pt, pr, pb))
+	{
+		if (!player->GetUntouchable())
 		{
-			DebugOut(L"fireball collide, object type is %d\n", e->type);
-			if (e->category == Type::MARIO /*&& !collisionIsDone*/)
-			{
-				// viên đạn đứng yên trong giây lát
-				collisionStartTime = GetTickCount();
-				CMario* mario = dynamic_cast<CMario*>(e);
-				mario->CollideWithEnemy();
-			}
+			CreateEffect();
+			player->CollideWithEnemy();
 		}
 	}
 }
@@ -62,6 +61,9 @@ void CPiranhaFireball::Render()
 		animation_set->at(FIREBALL_TO_RIGHT)->Render(x, y);
 	else
 		animation_set->at(FIREBALL_TO_LEFT)->Render(x, y);
+
+	for (LPGAMEOBJECT effect : listEffect)
+		effect->Render();
 
 	//RenderBoundingBox();
 }
@@ -122,4 +124,10 @@ void CPiranhaFireball::SetNx(Area playerArea)
 		nx = 1;
 		break;
 	}
+}
+
+void CPiranhaFireball::CreateEffect()
+{
+	CHitEffect* effect = new CHitEffect({ x, y }, nx);
+	listEffect.push_back(effect);
 }

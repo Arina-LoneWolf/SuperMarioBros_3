@@ -280,7 +280,7 @@ enum TypeOfFirePiranha
 #define GREEN_FIRE_PIRANHA_BBOX_HEIGHT			24
 
 // Piranha Fireball
-#define PIRANHA_FIREBALL_SPEED_X	0.06f
+#define PIRANHA_FIREBALL_SPEED_X				0.05f
 
 
 enum Area

@@ -158,7 +158,7 @@ void CFirePiranha::SetState(int state)
 	case FIRE_PIRANHA_STATE_MOVE_DOWN:
 		vy = FIRE_PIRANHA_MOVE_SPEED_Y;
 		break;
-	case FIRE_PIRANHA_STATE_ATTACK:
+	case FIRE_PIRANHA_STATE_ATTACK: // this line is just for drawing
 		break;
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		isFinishedUsing = true;
@@ -171,21 +171,18 @@ Area CFirePiranha::GetCurrentPlayerArea()
 	float playerLeft, playerTop, playerRight, playerBottom;
 	player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
-	/*float playerRight = player->x;
-	float playerBottom = player->y;*/ // chỗ này nghĩ là nên lấy bottom của mario
-
-	if (playerBottom < 367 && playerBottom >= 200) //	367	200
+	if (playerBottom < 367 && playerBottom >= 200)
 	{
-		if (playerRight >= 191 && playerRight <= 295)	// 248	295
+		if (playerRight >= 191 && playerRight <= 295)
 			return Area::TOP_LEFT_FAR;
-		else if (playerRight >= 296 && playerRight <= 367) // 296	367
+		else if (playerRight >= 296 && playerRight <= 367)
 			return Area::TOP_LEFT_NEAR;
-		else if (playerRight >= 368 && playerRight <= 439) //	368	439
+		else if (playerRight >= 368 && playerRight <= 439)
 			return Area::TOP_RIGHT_NEAR;
-		else if (playerRight >= 440 && playerRight <= 535) //	440	487
+		else if (playerRight >= 440 && playerRight <= 535)
 			return Area::TOP_RIGHT_FAR;
 	}
-	else if (playerBottom >= 367)	//	368
+	else if (playerBottom >= 367)
 	{
 		if (playerRight >= 191 && playerRight <= 295)	
 			return Area::BOTTOM_LEFT_FAR;
@@ -201,6 +198,6 @@ Area CFirePiranha::GetCurrentPlayerArea()
 
 void CFirePiranha::CreateFireball()
 {
-	CPiranhaFireball* fireball = new CPiranhaFireball({ x, y }, playerArea);
+	CPiranhaFireball* fireball = new CPiranhaFireball({ x, y }, playerArea, player);
 	listFireball.push_back(fireball);
 }
