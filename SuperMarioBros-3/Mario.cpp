@@ -33,7 +33,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (canFly && GetTickCount() - flyStartTime > 5000)
 	{
-		DebugOut(L"CANNOT FLY\n");
 		canFly = false;
 	}
 
@@ -210,18 +209,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (goomba->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 						{
-							if (level > MARIO_LEVEL_BIG)
-							{
-								level = MARIO_LEVEL_BIG;
-								StartUntouchable();
-							}
-							else if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else
-								SetState(MARIO_STATE_DIE);
+							CollideWithEnemy();
 						}
 					}
 				}
@@ -250,18 +238,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (koopa->GetState() != ENEMY_STATE_IDLE)
 						{
-							if (level > MARIO_LEVEL_BIG)
-							{
-								level = MARIO_LEVEL_BIG;
-								StartUntouchable();
-							}
-							else if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else
-								SetState(MARIO_STATE_DIE);
+							CollideWithEnemy();
 						}
 						else
 						{
@@ -1232,6 +1209,22 @@ void CMario::CreateFireball()
 {
 	CFireball* fireball = new CFireball({ x, y }, nx);
 	listWeapon.push_back(fireball);
+}
+
+void CMario::CollideWithEnemy()
+{
+	if (level > MARIO_LEVEL_BIG)
+	{
+		level = MARIO_LEVEL_BIG;
+		StartUntouchable();
+	}
+	else if (level > MARIO_LEVEL_SMALL)
+	{
+		level = MARIO_LEVEL_SMALL;
+		StartUntouchable();
+	}
+	else
+		SetState(MARIO_STATE_DIE);
 }
 
 

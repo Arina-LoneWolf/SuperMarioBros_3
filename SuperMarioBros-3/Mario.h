@@ -56,6 +56,7 @@ public:
 	int GetAni() { return ani; }
 
 	void CreateFireball();
+	void CollideWithEnemy();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

@@ -104,11 +104,10 @@ void CFireball::GetBoundingBox(float& left, float& top, float& right, float& bot
 
 void CFireball::Render()
 {
-	int alpha = 255;
 	if (nx > 0)
-		animation_set->at(FIREBALL_TO_RIGHT)->Render(x, y, alpha);
+		animation_set->at(FIREBALL_TO_RIGHT)->Render(x, y);
 	else
-		animation_set->at(FIREBALL_TO_LEFT)->Render(x, y, alpha);
+		animation_set->at(FIREBALL_TO_LEFT)->Render(x, y);
 	//RenderBoundingBox();
 }
 

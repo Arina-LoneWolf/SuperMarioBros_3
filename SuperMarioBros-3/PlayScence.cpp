@@ -171,6 +171,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case Type::FIRE_PIRANHA:
+	{
+		int piranhaType = atof(tokens[4].c_str());
+		obj = new CFirePiranha(player, piranhaType);
+		break;
+	}
+
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
 	case Type::KOOPA: obj = new CRedKoopa(); break;

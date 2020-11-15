@@ -10,6 +10,7 @@
 #include "RedKoopa.h"
 #include "TileMap.h"
 #include "Floor.h"
+#include "FirePiranha.h"
 
 
 class CPlayScene: public CScene
