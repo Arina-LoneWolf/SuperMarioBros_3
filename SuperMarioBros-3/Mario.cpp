@@ -254,6 +254,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CollideWithEnemy();
 			}
+			else if (e->obj->type == Type::BRICK_CONTAINS_ITEM)
+			{
+				if (ny > 0)
+				{
+					e->obj->SetState(STATE_RAMMED);
+				}
+			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
 				if (e->nx != 0)

@@ -167,7 +167,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int brickType = atof(tokens[4].c_str());
 		int itemType = atof(tokens[5].c_str());
-		obj = new CBrickContainsItem(brickType, itemType);
+		obj = new CBrickContainsItem(brickType, itemType, y);
 		break;
 	}
 

@@ -1,11 +1,33 @@
 ﻿#include "BrickContainsItem.h"
 
-CBrickContainsItem::CBrickContainsItem(int brickType, int itemType)
+CBrickContainsItem::CBrickContainsItem(int brickType, int itemType, float originalY)
 {
 	category = MISC;
 	type = BRICK_CONTAINS_ITEM;
 	this->brickType = brickType;
 	this->itemType = itemType;
+	this->originalY = originalY;
+}
+
+void CBrickContainsItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt);
+
+	y += dy;
+
+	if (y < originalY - 12)
+	{
+		y = originalY;
+		vy = -vy;
+		rammed = true;
+	}
+
+	if (rammed && y >= originalY)
+	{
+		y = originalY;
+		vy = 0;
+	}
+
 }
 
 void CBrickContainsItem::Render()
@@ -40,5 +62,7 @@ void CBrickContainsItem::SetState(int state)
 	if (state == STATE_RAMMED)
 	{
 		// brick bounces and become normal, item appear
+		if (!rammed)
+			vy = -0.08;
 	}
 }
