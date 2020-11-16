@@ -6,6 +6,9 @@
 #define BRICK_BBOX_SIDE_LENGTH	16
 
 // Brick contains item
+#define BRICK_DEFLECT_SPEED_Y		0.1f
+#define BRICK_BOUNCE_UP_TO			10
+
 #define QUESTION_BRICK_ANI			0
 #define NORMAL_BRICK_ANI			1
 #define	DISGUISED_BRONZE_BRICK_ANI	2

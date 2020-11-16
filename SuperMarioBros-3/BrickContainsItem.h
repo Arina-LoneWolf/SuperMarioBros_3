@@ -7,10 +7,10 @@ public:
 	int brickType;
 	int itemType;
 
-	float originalY;
+	float originalPosY;
 	bool rammed;
 
-	CBrickContainsItem(int brickType, int itemType, float originalY);
+	CBrickContainsItem(int brickType, int itemType, float originalPosY);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
