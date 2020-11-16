@@ -13,6 +13,7 @@
 #define NORMAL_BRICK_ANI			1
 #define	DISGUISED_BRONZE_BRICK_ANI	2
 #define	STATE_RAMMED				101
+#define STATE_BEING_HIT_BY_TAIL		102
 
 enum ItemOfBrick
 {

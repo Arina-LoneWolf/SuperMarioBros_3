@@ -60,7 +60,7 @@ void CBrickContainsItem::SetState(int state)
 
 	if (state == STATE_RAMMED)
 	{
-		// brick bounces and become normal, item appear
+		// brick bounces and become normal, item appears
 		if (!rammed)
 			vy = -BRICK_DEFLECT_SPEED_Y;
 	}

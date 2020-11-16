@@ -29,6 +29,10 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				e->SetState(STATE_DESTROYED);
 			}
+			else if (e->type == Type::BRICK_CONTAINS_ITEM)
+			{
+				e->SetState(STATE_RAMMED);
+			}
 		}
 	}
 }
