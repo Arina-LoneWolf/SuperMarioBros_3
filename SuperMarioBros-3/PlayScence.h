@@ -12,6 +12,7 @@
 #include "Floor.h"
 #include "FirePiranha.h"
 #include "GreenPiranha.h"
+#include "Pipe.h"
 
 
 class CPlayScene: public CScene
@@ -21,6 +22,7 @@ protected:
 	TileMap* map;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> listItem;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

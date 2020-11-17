@@ -178,6 +178,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case Type::PIPE:
+	{
+		int pipeType = atof(tokens[4].c_str());
+		obj = new CPipe(pipeType);
+		break;
+	}
+
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
@@ -301,38 +308,18 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 
-	//CGame::GetInstance()->cam_y = 200;
-	//DebugOut(L"x cua mario: %f\n", player->x);
-	//DebugOut(L"cam x: %f\n", CGame::GetInstance()->cam_x);
+	CGame::GetInstance()->cam_y = 200;
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);
 		CGame::GetInstance()->cam_x = cx;
 	}
-	/*DebugOut(L"y cua mario: %f\n", player->y);
-	DebugOut(L"cam y: %f\n", CGame::GetInstance()->cam_y + SCREEN_HEIGHT / 2);
-	if (player->y < 300 && !player->isOnGround && player->canFly && player->y - (SCREEN_HEIGHT / 8) > 0)
-	{
-		DebugOut(L"IF 1111111111111\n");
-		cy = player->y - (SCREEN_HEIGHT / 8);
-		CGame::GetInstance()->cam_y = cy;
-	}
-
-	else if (player->y < 300 && player->y - (SCREEN_HEIGHT / 6) > 0 && !player->isOnGround)
-	{
-		DebugOut(L"IF 222222222222222\n");
-		cy = player->y - (SCREEN_HEIGHT / 6);
-		CGame::GetInstance()->cam_y = cy;
-	}
-
-	else*/
-		CGame::GetInstance()->cam_y = 200;
 }
 
 void CPlayScene::Render()
 {
 	map->Draw();
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = objects.size() - 1; i >= 0; i--)
 		objects[i]->Render();
 }
 

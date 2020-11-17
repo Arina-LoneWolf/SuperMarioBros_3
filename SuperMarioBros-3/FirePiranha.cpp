@@ -167,26 +167,26 @@ Area CFirePiranha::GetCurrentPlayerArea()
 {
 	player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
-	float HorizontalSeparationLine = y + RED_FIRE_PIRANHA_BBOX_HEIGHT - 1;
+	float horizontalSeparationLine = y + RED_FIRE_PIRANHA_BBOX_HEIGHT - 1;
 
-	if (playerBottom < HorizontalSeparationLine && playerBottom >= 200)
+	if (playerBottom < horizontalSeparationLine && playerBottom >= 200)
 	{
-		if (playerRight >= farLeftStart && playerRight <= nearLeftStart - 1)
+		if (playerRight >= farLeftStart && playerRight < nearLeftStart)
 			return Area::TOP_LEFT_FAR;
-		else if (playerRight >= nearLeftStart && playerRight <= nearRightStart - 1)
+		else if (playerRight >= nearLeftStart && playerRight < nearRightStart)
 			return Area::TOP_LEFT_NEAR;
-		else if (playerRight >= nearRightStart && playerRight <= farRightStart - 1)
+		else if (playerRight >= nearRightStart && playerRight < farRightStart)
 			return Area::TOP_RIGHT_NEAR;
 		else if (playerRight >= farRightStart && playerRight <= farRightEnd)
 			return Area::TOP_RIGHT_FAR;
 	}
-	else if (playerBottom >= HorizontalSeparationLine) // 367
+	else if (playerBottom >= horizontalSeparationLine) // 367
 	{
-		if (playerRight >= farLeftStart && playerRight <= nearLeftStart - 1)
+		if (playerRight >= farLeftStart && playerRight < nearLeftStart)
 			return Area::BOTTOM_LEFT_FAR;
-		else if (playerRight >= nearLeftStart && playerRight <= nearRightStart - 1)
+		else if (playerRight >= nearLeftStart && playerRight < nearRightStart)
 			return Area::BOTTOM_LEFT_NEAR;
-		else if (playerRight >= nearRightStart && playerRight <= farRightStart - 1)
+		else if (playerRight >= nearRightStart && playerRight < farRightStart)
 			return Area::BOTTOM_RIGHT_NEAR;
 		else if (playerRight >= farRightStart && playerRight <= farRightEnd)
 			return Area::BOTTOM_RIGHT_FAR;
