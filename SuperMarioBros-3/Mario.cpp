@@ -501,7 +501,7 @@ void CMario::Render()
 		case MARIO_STATE_FLYING:
 			if (isWaggingTail)
 			{
-				DebugOut(L"ani = wagging\n");
+				//DebugOut(L"ani = wagging\n");
 				if (nx > 0)
 					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT;
 				else

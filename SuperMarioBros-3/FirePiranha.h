@@ -12,12 +12,15 @@ public:
 	DWORD sleepStartTime;
 	DWORD delayToAttackStartTime;
 
-	int last_face_ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
-	int last_attack_ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
+	int last_face_ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
+	int last_attack_ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
+	
+	float farLeftStart, nearLeftStart, nearRightStart, farRightStart, farRightEnd;
 
 	int piranhaType;
 	Area playerArea;
 	CMario* player;
+	float minPosY;
 
 	CFirePiranha(CMario* mario, int piranhaType);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -27,5 +30,6 @@ public:
 
 	Area GetCurrentPlayerArea();
 	void CreateFireball();
+	void SetAreaLimit();
 };
 

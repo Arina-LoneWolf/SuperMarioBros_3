@@ -300,12 +300,32 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 
-	CGame::GetInstance()->cam_y = 200;
+	//CGame::GetInstance()->cam_y = 200;
+	//DebugOut(L"x cua mario: %f\n", player->x);
+	//DebugOut(L"cam x: %f\n", CGame::GetInstance()->cam_x);
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);
 		CGame::GetInstance()->cam_x = cx;
 	}
+	/*DebugOut(L"y cua mario: %f\n", player->y);
+	DebugOut(L"cam y: %f\n", CGame::GetInstance()->cam_y + SCREEN_HEIGHT / 2);
+	if (player->y < 300 && !player->isOnGround && player->canFly && player->y - (SCREEN_HEIGHT / 8) > 0)
+	{
+		DebugOut(L"IF 1111111111111\n");
+		cy = player->y - (SCREEN_HEIGHT / 8);
+		CGame::GetInstance()->cam_y = cy;
+	}
+
+	else if (player->y < 300 && player->y - (SCREEN_HEIGHT / 6) > 0 && !player->isOnGround)
+	{
+		DebugOut(L"IF 222222222222222\n");
+		cy = player->y - (SCREEN_HEIGHT / 6);
+		CGame::GetInstance()->cam_y = cy;
+	}
+
+	else*/
+		CGame::GetInstance()->cam_y = 200;
 }
 
 void CPlayScene::Render()
@@ -339,7 +359,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_S: // high jump
 		if (mario->canFly)
 		{
-			DebugOut(L"can fly\n");
+			//DebugOut(L"can fly\n");
 			if (mario->GetLevel() == MARIO_RACCOON)
 			{
 				mario->Fly();

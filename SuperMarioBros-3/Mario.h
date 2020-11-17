@@ -34,7 +34,7 @@ public:
 	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
 	bool kickShell;
 	bool canFly;
-	bool isOnGround;
+	bool isOnGround = true;
 	bool immovable;
 	bool isWaitingForAni;
 

@@ -6,6 +6,8 @@ CFirePiranha::CFirePiranha(CMario* mario, int piranhaType)
 	type = FIRE_PIRANHA;
 	player = mario;
 	this->piranhaType = piranhaType;
+
+	SetAreaLimit();
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
 
@@ -30,17 +32,17 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (LPGAMEOBJECT fireball : listFireball)
 		fireball->Update(dt, coObjects);
 
-	if (!attackStartTime && y <= RED_FIRE_PIRANHA_MIN_Y)
+	if (!attackStartTime && y <= minPosY)
 	{
-		y = RED_FIRE_PIRANHA_MIN_Y;
+		y = minPosY;
 		vy = 0;
 		attackStartTime = GetTickCount();
 		delayToAttackStartTime = GetTickCount();
 		SetState(FIRE_PIRANHA_STATE_ATTACK);
 	}
-	else if (!sleepStartTime && y >= RED_FIRE_PIRANHA_MAX_Y)
+	else if (!sleepStartTime && y >= FIRE_PIRANHA_MAX_Y)
 	{
-		y = RED_FIRE_PIRANHA_MAX_Y;
+		y = FIRE_PIRANHA_MAX_Y;
 		vy = 0;
 		sleepStartTime = GetTickCount();
 	}
@@ -62,65 +64,57 @@ void CFirePiranha::Render()
 {
 	playerArea = GetCurrentPlayerArea();
 
-	if (piranhaType == TypeOfFirePiranha::RED)
+	if (state == FIRE_PIRANHA_STATE_ATTACK)
 	{
-		if (state == FIRE_PIRANHA_STATE_ATTACK)
+		switch (playerArea)
 		{
-			switch (playerArea)
-			{
-			case TOP_LEFT_FAR:
-			case TOP_LEFT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_ATTACK_UP_LEFT;
-				break;
-			case TOP_RIGHT_FAR:
-			case TOP_RIGHT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_ATTACK_UP_RIGHT;
-				break;
-			case BOTTOM_LEFT_FAR:
-			case BOTTOM_LEFT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
-				break;
-			case BOTTOM_RIGHT_FAR:
-			case BOTTOM_RIGHT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_ATTACK_DOWN_RIGHT;
-				break;
-			case OUTSIDE_AREA:
-				ani = last_attack_ani;
-				break;
-			}
-			last_attack_ani = ani;
+		case TOP_LEFT_FAR:
+		case TOP_LEFT_NEAR:
+			ani = FIRE_PIRANHA_ANI_ATTACK_UP_LEFT;
+			break;
+		case TOP_RIGHT_FAR:
+		case TOP_RIGHT_NEAR:
+			ani = FIRE_PIRANHA_ANI_ATTACK_UP_RIGHT;
+			break;
+		case BOTTOM_LEFT_FAR:
+		case BOTTOM_LEFT_NEAR:
+			ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
+			break;
+		case BOTTOM_RIGHT_FAR:
+		case BOTTOM_RIGHT_NEAR:
+			ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_RIGHT;
+			break;
+		case OUTSIDE_AREA:
+			ani = last_attack_ani;
+			break;
 		}
-		else
-		{
-			switch (playerArea)
-			{
-			case TOP_LEFT_FAR:
-			case TOP_LEFT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_FACE_UP_LEFT;
-				break;
-			case TOP_RIGHT_FAR:
-			case TOP_RIGHT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_FACE_UP_RIGHT;
-				break;
-			case BOTTOM_LEFT_FAR:
-			case BOTTOM_LEFT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
-				break;
-			case BOTTOM_RIGHT_FAR:
-			case BOTTOM_RIGHT_NEAR:
-				ani = RED_FIRE_PIRANHA_ANI_FACE_DOWN_RIGHT;
-				break;
-			case OUTSIDE_AREA:
-				ani = last_face_ani;
-				break;
-			}
-			last_face_ani = ani;
-		}
+		last_attack_ani = ani;
 	}
-
-	else if (piranhaType == TypeOfFirePiranha::GREEN)
+	else
 	{
-		//
+		switch (playerArea)
+		{
+		case TOP_LEFT_FAR:
+		case TOP_LEFT_NEAR:
+			ani = FIRE_PIRANHA_ANI_FACE_UP_LEFT;
+			break;
+		case TOP_RIGHT_FAR:
+		case TOP_RIGHT_NEAR:
+			ani = FIRE_PIRANHA_ANI_FACE_UP_RIGHT;
+			break;
+		case BOTTOM_LEFT_FAR:
+		case BOTTOM_LEFT_NEAR:
+			ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
+			break;
+		case BOTTOM_RIGHT_FAR:
+		case BOTTOM_RIGHT_NEAR:
+			ani = FIRE_PIRANHA_ANI_FACE_DOWN_RIGHT;
+			break;
+		case OUTSIDE_AREA:
+			ani = last_face_ani;
+			break;
+		}
+		last_face_ani = ani;
 	}
 
 	animation_set->at(ani)->Render(x, y);
@@ -171,26 +165,28 @@ Area CFirePiranha::GetCurrentPlayerArea()
 	float playerLeft, playerTop, playerRight, playerBottom;
 	player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
-	if (playerBottom < 367 && playerBottom >= 200)
+	float HorizontalSeparationLine = y + RED_FIRE_PIRANHA_BBOX_HEIGHT - 1;
+
+	if (playerBottom < HorizontalSeparationLine && playerBottom >= 200)
 	{
-		if (playerRight >= 191 && playerRight <= 295)
+		if (playerRight >= farLeftStart && playerRight <= nearLeftStart - 1)
 			return Area::TOP_LEFT_FAR;
-		else if (playerRight >= 296 && playerRight <= 367)
+		else if (playerRight >= nearLeftStart && playerRight <= nearRightStart - 1)
 			return Area::TOP_LEFT_NEAR;
-		else if (playerRight >= 368 && playerRight <= 439)
+		else if (playerRight >= nearRightStart && playerRight <= farRightStart - 1)
 			return Area::TOP_RIGHT_NEAR;
-		else if (playerRight >= 440 && playerRight <= 535)
+		else if (playerRight >= farRightStart && playerRight <= farRightEnd)
 			return Area::TOP_RIGHT_FAR;
 	}
-	else if (playerBottom >= 367)
+	else if (playerBottom >= HorizontalSeparationLine) // 367
 	{
-		if (playerRight >= 191 && playerRight <= 295)	
+		if (playerRight >= farLeftStart && playerRight <= nearLeftStart - 1)
 			return Area::BOTTOM_LEFT_FAR;
-		else if (playerRight >= 296 && playerRight <= 367)
+		else if (playerRight >= nearLeftStart && playerRight <= nearRightStart - 1)
 			return Area::BOTTOM_LEFT_NEAR;
-		else if (playerRight >= 368 && playerRight <= 439)
+		else if (playerRight >= nearRightStart && playerRight <= farRightStart - 1)
 			return Area::BOTTOM_RIGHT_NEAR;
-		else if (playerRight >= 440 && playerRight <= 535)
+		else if (playerRight >= farRightStart && playerRight <= farRightEnd)
 			return Area::BOTTOM_RIGHT_FAR;
 	}
 	return Area::OUTSIDE_AREA;
@@ -200,4 +196,26 @@ void CFirePiranha::CreateFireball()
 {
 	CPiranhaFireball* fireball = new CPiranhaFireball({ x, y }, playerArea, player);
 	listFireball.push_back(fireball);
+}
+
+void CFirePiranha::SetAreaLimit()
+{
+	if (piranhaType == TypeOfFirePiranha::RED)
+	{
+		minPosY = RED_FIRE_PIRANHA_MIN_Y;
+		farLeftStart = RED_FIRE_PIRANHA_FAR_LEFT_START;
+		nearLeftStart = RED_FIRE_PIRANHA_NEAR_LEFT_START;
+		nearRightStart = RED_FIRE_PIRANHA_NEAR_RIGHT_START;
+		farRightStart = RED_FIRE_PIRANHA_FAR_RIGHT_START;
+		farRightEnd = RED_FIRE_PIRANHA_FAR_RIGHT_END;
+	}
+	else
+	{
+		farLeftStart = GREEN_FIRE_PIRANHA_FAR_LEFT_START;
+		nearLeftStart = GREEN_FIRE_PIRANHA_NEAR_LEFT_START;
+		nearRightStart = GREEN_FIRE_PIRANHA_NEAR_RIGHT_START;
+		farRightStart = GREEN_FIRE_PIRANHA_FAR_RIGHT_START;
+		farRightEnd = GREEN_FIRE_PIRANHA_FAR_RIGHT_END;
+		minPosY = GREEN_FIRE_PIRANHA_MIN_Y;
+	}
 }

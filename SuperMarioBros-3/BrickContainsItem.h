@@ -1,9 +1,13 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
 
 class CBrickContainsItem : public CGameObject
 {
 public:
+	vector<LPGAMEOBJECT> listItem;
+	CMario* player;
+
 	int brickType;
 	int itemType;
 
@@ -15,4 +19,5 @@ public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 	virtual void SetState(int state);
+	void DropItem();
 };

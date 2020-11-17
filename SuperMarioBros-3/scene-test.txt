@@ -229,7 +229,18 @@
 42008	273	126	289	158	50
 
 #===========GREEN FIRE PIRANHA============
-
+# face up left
+42011	271	100	287	124	51
+42012	254	100	270	124	51
+# face down left
+42013	237	100	253	124	51
+42014	220	100	236	124	51
+# face up right
+42015	152	100	168	124	50
+42016	169	100	185	124	50
+# face down right
+42017	186	100	202	124	50
+42018	203	100	219	124	50
 
 #==============GREEN PIRANHA==============
 301	57	100	73	124	51
@@ -578,6 +589,24 @@
 # attack down right
 627	42008	100
 
+# ====== GREEN FIRE PIRANHA =====
+# face up left
+720	42011	200	42012	200
+# face down left
+721	42013	200	42014	200
+# face up right
+722	42015	200	42016	200
+# face down right
+723	42017	200	42018	200
+# attack up left
+724	42012	100
+# attack down left
+725	42014	100
+# attack up right
+726	42016	100
+# attack down right
+727	42018	100
+
 # ======= HIT EFFECT =======
 900	1000	50	1001	50	1002	50
 
@@ -607,8 +636,10 @@
 5	700
 # ICE FLOWER
 6	701
-# FIRE PIRANHA
+# RED FIRE PIRANHA
 7	620	621	622	623	624	625	626	627
+# GREEN FIRE PIRANHA
+14	720	721	722	723	724	725	726	727
 # FIREBALL
 9	890	891
 # HIT EFFECT
@@ -623,6 +654,7 @@
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
 0	17	100	1
+#0	672	100	1
 # start at bronze brick position
 #0	1912	100	1
 # start at koopa position
@@ -638,8 +670,11 @@
 3	591	356	4
 #3	559	276	4
 
-# FIRE PIRANHA
+# RED FIRE PIRANHA
 6	360	368	7	1
+
+# GREEN FIRE PIRANHA
+6	1864	344	14	2
 
 # BRICK CONTAINS ITEM
 1	176	352	22	1	1
@@ -649,7 +684,7 @@
 1	416	320	22	1	1
 1	656	384	22	1	0
 1	704	352	22	1	1
-1	1440	128	22	1	5
+1	1440	128	22	2	5
 1	2032	368	22	2	6
 
 # BRONZE BRICK
