@@ -14,8 +14,10 @@ public:
 
 	int last_face_ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
 	int last_attack_ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
-	
+
+	float playerLeft, playerTop, playerRight, playerBottom;
 	float farLeftStart, nearLeftStart, nearRightStart, farRightStart, farRightEnd;
+	float safeZoneLeft, safeZoneRight, safeZoneBottom;
 
 	int piranhaType;
 	Area playerArea;
@@ -31,5 +33,6 @@ public:
 	Area GetCurrentPlayerArea();
 	void CreateFireball();
 	void SetAreaLimit();
+	bool CheckPlayerInSafeZone(float pl, float pt, float pr, float pb);
 };
 

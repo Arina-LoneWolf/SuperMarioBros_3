@@ -11,6 +11,7 @@
 #include "TileMap.h"
 #include "Floor.h"
 #include "FirePiranha.h"
+#include "GreenPiranha.h"
 
 
 class CPlayScene: public CScene

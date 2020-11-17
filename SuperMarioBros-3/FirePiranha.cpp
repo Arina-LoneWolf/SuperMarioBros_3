@@ -55,8 +55,11 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (sleepStartTime && GetTickCount() - sleepStartTime > FIRE_PIRANHA_DELAY_TIME)
 	{
-		sleepStartTime = 0;
-		SetState(FIRE_PIRANHA_STATE_MOVE_UP);
+		if (!CheckPlayerInSafeZone(playerLeft, playerTop, playerRight, playerBottom))
+		{
+			sleepStartTime = 0;
+			SetState(FIRE_PIRANHA_STATE_MOVE_UP);
+		}
 	}
 }
 
@@ -162,7 +165,6 @@ void CFirePiranha::SetState(int state)
 
 Area CFirePiranha::GetCurrentPlayerArea()
 {
-	float playerLeft, playerTop, playerRight, playerBottom;
 	player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
 	float HorizontalSeparationLine = y + RED_FIRE_PIRANHA_BBOX_HEIGHT - 1;
@@ -208,14 +210,28 @@ void CFirePiranha::SetAreaLimit()
 		nearRightStart = RED_FIRE_PIRANHA_NEAR_RIGHT_START;
 		farRightStart = RED_FIRE_PIRANHA_FAR_RIGHT_START;
 		farRightEnd = RED_FIRE_PIRANHA_FAR_RIGHT_END;
+		safeZoneLeft = RED_FIRE_PIRANHA_SAFE_ZONE_LEFT;
+		safeZoneRight = RED_FIRE_PIRANHA_SAFE_ZONE_RIGHT;
+		safeZoneBottom = RED_FIRE_PIRANHA_SAFE_ZONE_BOTTOM;
 	}
 	else
 	{
+		minPosY = GREEN_FIRE_PIRANHA_MIN_Y;
 		farLeftStart = GREEN_FIRE_PIRANHA_FAR_LEFT_START;
 		nearLeftStart = GREEN_FIRE_PIRANHA_NEAR_LEFT_START;
 		nearRightStart = GREEN_FIRE_PIRANHA_NEAR_RIGHT_START;
 		farRightStart = GREEN_FIRE_PIRANHA_FAR_RIGHT_START;
 		farRightEnd = GREEN_FIRE_PIRANHA_FAR_RIGHT_END;
-		minPosY = GREEN_FIRE_PIRANHA_MIN_Y;
+		safeZoneLeft = GREEN_FIRE_PIRANHA_SAFE_ZONE_LEFT;
+		safeZoneRight = GREEN_FIRE_PIRANHA_SAFE_ZONE_RIGHT;
+		safeZoneBottom = GREEN_FIRE_PIRANHA_SAFE_ZONE_BOTTOM;
 	}
+}
+
+bool CFirePiranha::CheckPlayerInSafeZone(float pl, float pt, float pr, float pb)
+{
+	return (pl < safeZoneRight
+		&& pr > safeZoneLeft
+		&& pt < safeZoneBottom
+		&& pb > 0);
 }

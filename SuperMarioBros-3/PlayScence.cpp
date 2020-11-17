@@ -178,6 +178,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
 	case Type::KOOPA: obj = new CRedKoopa(); break;

@@ -250,7 +250,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			else if (e->obj->type == Type::FIRE_PIRANHA && !untouchable)
+			else if ((e->obj->type == Type::FIRE_PIRANHA || e->obj->type == Type::GREEN_PIRANHA) && !untouchable)
 			{
 				CollideWithEnemy();
 			}

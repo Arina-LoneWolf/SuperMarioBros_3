@@ -607,6 +607,9 @@
 # attack down right
 727	42018	100
 
+# ======= GREEN PIRANHA =======
+730	301	100	302	100
+
 # ======= HIT EFFECT =======
 900	1000	50	1001	50	1002	50
 
@@ -640,6 +643,8 @@
 7	620	621	622	623	624	625	626	627
 # GREEN FIRE PIRANHA
 14	720	721	722	723	724	725	726	727
+# GREEN PIRANHA
+15	730
 # FIREBALL
 9	890	891
 # HIT EFFECT
@@ -653,10 +658,10 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-0	17	100	1
+#0	17	100	1
 #0	672	100	1
 # start at bronze brick position
-#0	1912	100	1
+0	1912	100	1
 # start at koopa position
 #0	465	100	1
 # start at red fire piranha position
@@ -675,6 +680,9 @@
 
 # GREEN FIRE PIRANHA
 6	1864	344	14	2
+
+# GREEN PIRANHA
+7	1800	384	15
 
 # BRICK CONTAINS ITEM
 1	176	352	22	1	1
