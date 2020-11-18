@@ -17,8 +17,6 @@
 
 #include "Utils.h"
 #include "Game.h"
-#include "GameObject.h"
-#include "Textures.h"
 #include "PlayScence.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"

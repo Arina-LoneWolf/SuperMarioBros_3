@@ -2,10 +2,6 @@
 #include <fstream>
 
 #include "PlayScence.h"
-#include "Utils.h"
-#include "Textures.h"
-#include "Sprites.h"
-#include "Portal.h"
 
 using namespace std;
 
@@ -188,7 +184,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
-	case Type::KOOPA: obj = new CRedKoopa(); break;
+	case Type::KOOPA: obj = new CRedKoopa(player); break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -413,6 +409,11 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		mario->vy += MARIO_GRAVITY * 7 * mario->dt;
 		break;
 
+	case DIK_A:
+		mario->isRunning = false;
+		mario->isHoldingShell = false;
+		break;
+
 	case DIK_DOWN:
 		if (mario->isOnGround)
 			mario->isSitting = false;
@@ -437,6 +438,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_RIGHT))
 	{
+		mario->isRunning = true;
 		if (!mario->immovable)
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		else
@@ -444,6 +446,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	}
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_LEFT))
 	{
+		mario->isRunning = true;
 		if (!mario->immovable)
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "BronzeBrick.h"
 #include "TailHitEffect.h"
+#include "Mario.h"
 
 class CTail : public CGameObject
 {

@@ -6,8 +6,6 @@
 #include "Fireball.h"
 #include "Tail.h"
 #include "HitEffect.h"
-#include "Goomba.h"
-#include "RedKoopa.h"
 #include "Portal.h"
 
 
@@ -31,8 +29,9 @@ public:
 	DWORD flyStartTime;
 	DWORD kickStartTime;
 
-	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking;
+	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning;
 	bool kickShell;
+	bool isHoldingShell;
 	bool canFly;
 	bool isOnGround = true;
 	bool immovable;
@@ -58,6 +57,7 @@ public:
 
 	void CreateFireball();
 	void CollideWithEnemy();
+	void DropShell();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

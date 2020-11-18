@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Mario.h"
+//class CMario;
 
 class CRedKoopa : public CGameObject
 {
@@ -9,7 +11,12 @@ class CRedKoopa : public CGameObject
 
 public:
 	bool died;
-
-	CRedKoopa();
+	bool isSupine;
+	bool isBeingHeld;
+	
+	CMario* player;
+	
+	CRedKoopa(CMario* mario);
 	virtual void SetState(int state);
+	void SetPositionAccordingToPlayer();
 };

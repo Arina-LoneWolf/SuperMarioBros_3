@@ -1,11 +1,11 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "Utils.h"
+#include "Game.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "Game.h"
 
 class TileMap
 {

@@ -1,9 +1,10 @@
 ﻿#include "RedKoopa.h"
 
-CRedKoopa::CRedKoopa()
+CRedKoopa::CRedKoopa(CMario* mario)
 {
 	type = KOOPA;
 	category = ENEMY;
+	player = mario;
 	SetState(ENEMY_STATE_MOVE);
 }
 
@@ -24,7 +25,24 @@ void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bot
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	vy += MARIO_GRAVITY * dt;
+
+	if (isBeingHeld && !player->isHoldingShell)
+	{
+		if (player->nx > 0)
+			object_colliding_nx = 1;
+		else
+			object_colliding_nx = -1;
+		x += 8 * object_colliding_nx;
+		SetState(KOOPA_STATE_SPIN_AND_MOVE);
+		isBeingHeld = false;
+	}
+
+	if (state != KOOPA_STATE_BEING_HELD)
+		vy += MARIO_GRAVITY * dt;
+	else
+	{
+		SetPositionAccordingToPlayer();
+	}
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
@@ -92,18 +110,32 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CRedKoopa::Render()
 {
-	if (state == ENEMY_STATE_DIE_BY_WEAPON)
-		ani = KOOPA_ANI_LAY_SUPINE;
-	else if (state == KOOPA_STATE_SPIN_AND_MOVE)
-		ani = KOOPA_ANI_SPIN_AND_MOVE_PRONE;
-	else if (state == ENEMY_STATE_IDLE)
-		ani = KOOPA_ANI_LAY_PRONE;
-	else if (state == ENEMY_STATE_MOVE)
+	switch (state)
 	{
+	case ENEMY_STATE_DIE_BY_WEAPON:
+		ani = KOOPA_ANI_LAY_SUPINE;
+		break;
+
+	case ENEMY_STATE_IDLE:
+		if (isSupine)
+			ani = KOOPA_ANI_LAY_SUPINE;
+		else
+			ani = KOOPA_ANI_LAY_PRONE;
+		break;
+
+	case ENEMY_STATE_MOVE:
 		if (vx > 0)
 			ani = KOOPA_ANI_MOVE_RIGHT;
 		else
 			ani = KOOPA_ANI_MOVE_LEFT;
+		break;
+
+	case KOOPA_STATE_SPIN_AND_MOVE:
+		if (isSupine)
+			ani = KOOPA_ANI_SPIN_AND_MOVE_SUPINE;
+		else
+			ani = KOOPA_ANI_SPIN_AND_MOVE_PRONE;
+		break;
 	}
 
 	animation_set->at(ani)->Render(x, y);
@@ -121,9 +153,15 @@ void CRedKoopa::SetState(int state)
 		vy = -KOOPA_DEFLECT_SPEED_Y;
 		died = true;
 		break;
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
+		isSupine = true;
+		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
+		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
 	case ENEMY_STATE_MOVE:
 		vx = -KOOPA_MOVE_SPEED_X;
 		break;
+	case KOOPA_STATE_BEING_HELD:
+		isBeingHeld = true;
 	case ENEMY_STATE_IDLE:
 		vx = 0;
 		vy = 0;
@@ -131,5 +169,61 @@ void CRedKoopa::SetState(int state)
 	case KOOPA_STATE_SPIN_AND_MOVE:
 		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
 		break;
+	}
+}
+
+void CRedKoopa::SetPositionAccordingToPlayer()
+{
+	if (player->GetLevel() == MARIO_LEVEL_BIG)
+	{
+		if (player->nx > 0)
+		{
+			x = player->x + 17;
+			y = player->y - 2;
+		}
+		else
+		{
+			x = player->x - 11;
+			y = player->y - 2;
+		}
+	}
+	else if (player->GetLevel() == MARIO_LEVEL_SMALL)
+	{
+		if (player->nx > 0)
+		{
+			x = player->x + 10;
+			y = player->y - 12;
+		}
+		else
+		{
+			x = player->x - 11;
+			y = player->y - 12;
+		}
+	}
+	else if (player->GetLevel() == MARIO_RACCOON)
+	{
+		if (player->nx > 0)
+		{
+			x = player->x + 17;
+			y = player->y - 2;
+		}
+		else
+		{
+			x = player->x - 2;
+			y = player->y - 2;
+		}
+	}
+	else if (player->GetLevel() == MARIO_FIRE)
+	{
+		if (player->nx > 0)
+		{
+			x = player->x + 10;
+			y = player->y - 2;
+		}
+		else
+		{
+			x = player->x - 11;
+			y = player->y - 2;
+		}
 	}
 }
