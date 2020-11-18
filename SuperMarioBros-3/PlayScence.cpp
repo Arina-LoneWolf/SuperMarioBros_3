@@ -181,10 +181,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case Type::KOOPA:
+	{
+		int startingPos = atof(tokens[4].c_str());
+		obj = new CRedKoopa(player, startingPos);
+		break;
+	}
+
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
 	case Type::GOOMBA: obj = new CGoomba(); break;
-	case Type::KOOPA: obj = new CRedKoopa(player); break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);

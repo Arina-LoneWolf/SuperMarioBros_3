@@ -279,6 +279,23 @@ enum TypeOfPipe
 #define GOOMBA_STATE_DIE_BY_CRUSH			299
 
 // Koopa
+enum PositionOfKoopa
+{
+	ON_GREEN_COLOR_BOX = 1,
+	ON_PURPLE_COLOR_BOX = 2,
+	ON_BRONZE_BRICK = 3,
+	ON_GROUND = 4,
+};
+
+#define GCB_KOOPA_POS_X	591
+#define GCB_KOOPA_POS_Y	356
+#define PCB_KOOPA_POS_X
+#define PCB_KOOPA_POS_Y
+#define BB_KOOPA_POS_X
+#define BB_KOOPA_POS_Y
+#define G_KOOPA_POS_X
+#define G_KOOPA_POS_Y
+
 #define KOOPA_MOVE_SPEED_X					0.025f
 #define KOOPA_SPIN_AND_MOVE_SPEED_X			0.2f
 #define KOOPA_DEFLECT_SPEED_Y				0.15f

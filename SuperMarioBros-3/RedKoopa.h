@@ -13,10 +13,13 @@ public:
 	bool died;
 	bool isSupine;
 	bool isBeingHeld;
+
+	int startingPos;
 	
 	CMario* player;
 	
-	CRedKoopa(CMario* mario);
+	CRedKoopa(CMario* mario, int startingPos);
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
+	void Reset();
 };

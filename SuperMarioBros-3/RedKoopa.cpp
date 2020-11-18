@@ -1,10 +1,11 @@
 ﻿#include "RedKoopa.h"
 
-CRedKoopa::CRedKoopa(CMario* mario)
+CRedKoopa::CRedKoopa(CMario* mario, int startingPos)
 {
 	type = KOOPA;
 	category = ENEMY;
 	player = mario;
+	this->startingPos = startingPos;
 	SetState(ENEMY_STATE_MOVE);
 }
 
@@ -101,6 +102,31 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						vx = -vx;
 					}
 				}
+				if (e->obj->category == Category::ENEMY)
+				{
+					if (e->nx != 0)
+					{
+						if (vx > 0)
+							e->obj->object_colliding_nx = 1;
+						else
+							e->obj->object_colliding_nx = -1;
+						
+						e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
+					}
+				}
+			}
+			else if (state == ENEMY_STATE_ATTACKED_BY_TAIL)
+			{
+				if (e->obj->type == Type::COLOR_BOX)
+				{
+					if (e->ny > 0)
+						y += dy;
+				}
+				if (e->obj->category == Category::MISC)
+				{
+					if (e->ny < 0)
+						SetState(ENEMY_STATE_IDLE);
+				}
 			}
 		}
 	}
@@ -112,6 +138,7 @@ void CRedKoopa::Render()
 {
 	switch (state)
 	{
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		ani = KOOPA_ANI_LAY_SUPINE;
 		break;
@@ -157,6 +184,7 @@ void CRedKoopa::SetState(int state)
 		isSupine = true;
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
+		break;
 	case ENEMY_STATE_MOVE:
 		vx = -KOOPA_MOVE_SPEED_X;
 		break;
@@ -226,4 +254,23 @@ void CRedKoopa::SetPositionAccordingToPlayer()
 			y = player->y - 2;
 		}
 	}
+}
+
+void CRedKoopa::Reset()
+{
+	switch (startingPos)
+	{
+	case ON_GREEN_COLOR_BOX:
+		SetPosition(GCB_KOOPA_POS_X, GCB_KOOPA_POS_Y);
+		break;
+	case ON_PURPLE_COLOR_BOX:
+		break;
+	case ON_BRONZE_BRICK:
+		break;
+	case ON_GROUND:
+		break;
+	}
+
+	SetState(ENEMY_STATE_MOVE);
+	isSupine = false;
 }
