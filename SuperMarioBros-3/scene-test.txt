@@ -805,15 +805,15 @@
 #0	17	100	1
 #0	672	100	1
 # start at bronze brick position
-#0	1912	100	1
+0	1912	100	1
 # start at koopa position
-0	465	100	1
+#0	465	100	1
 # start at red fire piranha position
 #0	320	100	1
 
 # GOOMBA
-2	250	399	3
-2	350	399	3
+#2	250	399	3
+#2	350	399	3
 
 # RED KOOPA
 3	591	356	4	1

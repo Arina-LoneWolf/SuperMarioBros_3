@@ -311,6 +311,7 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	player->CheckCollisionWithItems(&listItem);
+	player->CheckCollisionWithItems(&priorityListItem);
 
 	for (LPGAMEOBJECT item : listItem)
 		item->Update(dt, &coObjects);

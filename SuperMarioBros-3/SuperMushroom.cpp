@@ -25,8 +25,12 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isFalling)
 	{
-		vx = SUPER_MUSHROOM_SPEED_X;
+		if (!isdone)
+		{
+			vx = SUPER_MUSHROOM_SPEED_X;
+		}
 		vy = SUPER_MUSHROOM_SPEED_Y;
+		isdone = true;
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -66,9 +70,8 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (e->obj->type == Type::COLOR_BOX) // tạm thôi, còn sửa
 			{
-				//if (e->nx != 0)
-				x += dx;
-				y += dy;
+				if (e->nx != 0)
+					x += dx;
 			}
 			else if (e->obj->category == Category::MISC)
 			{
@@ -90,7 +93,7 @@ void CSuperMushroom::Render()
 {
 	animation_set->at(0)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)

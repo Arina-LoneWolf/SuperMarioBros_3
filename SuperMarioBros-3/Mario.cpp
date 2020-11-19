@@ -1421,6 +1421,7 @@ void CMario::CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem)
 		e->GetBoundingBox(il, it, ir, ib);
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, il, it, ir, ib))
 		{
+			DebugOut(L"type: %d\n", e->type);
 			switch (e->type)
 			{
 			case Type::SUPER_MUSHROOM:
