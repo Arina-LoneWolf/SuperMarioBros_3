@@ -14,6 +14,7 @@
 #include "GreenPiranha.h"
 #include "Pipe.h"
 #include "SuperLeaf.h"
+#include "SuperMushroom.h"
 
 
 class CPlayScene: public CScene
@@ -24,6 +25,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listItem;
+	vector<LPGAMEOBJECT> priorityListItem;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

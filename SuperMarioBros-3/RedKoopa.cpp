@@ -102,7 +102,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						vx = -vx;
 					}
 				}
-				if (e->obj->category == Category::ENEMY)
+				if (e->obj->category == Category::ENEMY && state == KOOPA_STATE_SPIN_AND_MOVE)
 				{
 					if (e->nx != 0)
 					{
@@ -113,6 +113,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						
 						e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
 					}
+				}
+				if (e->obj->type == Type::BRICK_CONTAINS_ITEM && state == KOOPA_STATE_SPIN_AND_MOVE)
+				{
+					e->obj->SetState(STATE_RAMMED);
 				}
 			}
 			else if (state == ENEMY_STATE_ATTACKED_BY_TAIL)

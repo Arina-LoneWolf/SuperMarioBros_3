@@ -292,6 +292,9 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
+	for (LPGAMEOBJECT item : priorityListItem)
+		item->Update(dt, &coObjects);
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -325,6 +328,12 @@ void CPlayScene::Update(DWORD dt)
 			listItem.erase(listItem.begin() + i);
 	}
 
+	for (size_t i = 0; i < priorityListItem.size(); i++)
+	{
+		if (priorityListItem[i]->isFinishedUsing)
+			priorityListItem.erase(priorityListItem.begin() + i);
+	}
+
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -342,6 +351,10 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Draw();
+
+	for (LPGAMEOBJECT item : priorityListItem)
+		item->Render();
+
 	for (int i = objects.size() - 1; i >= 0; i--)
 		objects[i]->Render();
 
@@ -372,6 +385,8 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		if (player->GetLevel() == MARIO_LEVEL_SMALL)
 		{
 			// mushroom appears
+			CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+			priorityListItem.push_back(mushroom);
 		}
 		else if (player->GetLevel() == MARIO_RACCOON)
 		{
