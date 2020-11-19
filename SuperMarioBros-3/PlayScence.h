@@ -14,7 +14,6 @@
 #include "GreenPiranha.h"
 #include "Pipe.h"
 #include "SuperLeaf.h"
-#include "SuperMushroom.h"
 
 
 class CPlayScene: public CScene

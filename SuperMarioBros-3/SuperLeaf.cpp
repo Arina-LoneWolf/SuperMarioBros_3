@@ -24,7 +24,7 @@ void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	DebugOut(L"vy = %f\n", vy);
 	x += vx;
 	y += vy;
-	
+
 	if (y <= minPosY)
 	{
 		isFalling = true;

@@ -33,6 +33,11 @@ enum ItemOfBrick
 #define SUPER_LEAF_DEFLECT_SPEED_Y	1.0f//0.08f
 #define SUPER_LEAF_SPEED_Y			0.35f//0.02f
 
+#define SUPER_MUSHROOM_BBOX_WIDTH		16
+#define SUPER_MUSHROOM_BBOX_HEIGHT		14
+#define SUPER_MUSHROOM_DEFLECT_SPEED_Y	1.0f//0.08f
+#define SUPER_MUSHROOM_SPEED_Y			0.35f//0.02f
+
 enum TypeOfBrickContainsItem
 {
 	QUESTION_BRICK = 1,
@@ -413,7 +418,6 @@ enum Area
 // list of object type
 enum Type
 {
-	DEFAULT_TYPE = 99,
 	PORTAL = 55,
 	MARIO = 0,
 	BRICK_CONTAINS_ITEM = 1,
@@ -435,7 +439,6 @@ enum Type
 
 enum Category
 {
-	DEFAULT_CATEGORY,
 	PLAYER,
 	ENEMY,
 	MISC,

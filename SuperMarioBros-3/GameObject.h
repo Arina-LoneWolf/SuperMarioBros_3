@@ -57,7 +57,7 @@ public:
 	float vy;
 
 	bool isFinishedUsing;
-	Type type = Type::DEFAULT_TYPE;
+	Type type;
 	Category category;
 	int object_colliding_nx;
 	int width;

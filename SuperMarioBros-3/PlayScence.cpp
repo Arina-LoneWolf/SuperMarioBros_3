@@ -369,14 +369,20 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	{
 	case ITEM_RANDOM:
 	{
-		//if (player->GetLevel() == MARIO_LEVEL_SMALL)
-		//{
-		//	// mushroom appears
-		//}
-		//else if ()
-		CSuperLeaf* leaf = new CSuperLeaf(x, y);
-		listItem.push_back(leaf);
-		break;
+		if (player->GetLevel() == MARIO_LEVEL_SMALL)
+		{
+			// mushroom appears
+		}
+		else if (player->GetLevel() == MARIO_RACCOON)
+		{
+			// ice flower appears
+		}
+		else
+		{
+			CSuperLeaf* leaf = new CSuperLeaf(x, y);
+			listItem.push_back(leaf);
+			break;
+		}
 	}
 	case ITEM_MONEY:
 		break;
