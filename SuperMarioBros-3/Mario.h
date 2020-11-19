@@ -44,8 +44,6 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
-	virtual void CollideWithItem(vector<LPGAMEOBJECT>* itemsList);
-
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
@@ -57,7 +55,7 @@ public:
 
 	void CreateFireball();
 	void CollideWithEnemy();
-	void DropShell();
+	void CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 

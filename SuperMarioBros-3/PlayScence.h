@@ -13,6 +13,8 @@
 #include "FirePiranha.h"
 #include "GreenPiranha.h"
 #include "Pipe.h"
+#include "SuperLeaf.h"
+#include "SuperMushroom.h"
 
 
 class CPlayScene: public CScene
@@ -39,6 +41,8 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+
+	void DropItem(int itemType, float x, float y);
 
 	CMario * GetPlayer() { return player; } 
 

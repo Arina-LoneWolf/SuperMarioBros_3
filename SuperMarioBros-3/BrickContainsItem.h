@@ -13,6 +13,8 @@ public:
 
 	float originalPosY;
 	bool rammed;
+	bool isAboutToDropItem;
+	bool dropped;
 
 	CBrickContainsItem(int brickType, int itemType, float originalPosY);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

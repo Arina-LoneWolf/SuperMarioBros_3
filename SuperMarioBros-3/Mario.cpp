@@ -1048,21 +1048,6 @@ RENDER:
 	//RenderBoundingBox();
 }
 
-void CMario::CollideWithItem(vector<LPGAMEOBJECT>* coObjects)
-{
-	float l, t, r, b, ln, tn, rn, btn;
-	GetBoundingBox(l, t, r, b);
-	for (UINT i = 0; i < coObjects->size(); i++)
-	{
-		LPGAMEOBJECT e = coObjects->at(i);
-		e->GetBoundingBox(ln, tn, rn, btn);
-		if (CGameObject::CheckAABB(l, t, r, b, ln, tn, rn, btn))
-		{
-			DebugOut(L"bla bla");
-		}
-	}
-}
-
 void CMario::SetState(int state)
 {
 	CGameObject::SetState(state);
@@ -1426,9 +1411,31 @@ void CMario::CollideWithEnemy()
 		SetState(MARIO_STATE_DIE);
 }
 
-void CMario::DropShell()
+void CMario::CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem)
 {
-
+	float ml, mt, mr, mb, il, it, ir, ib; // main object (o) and the item (i)
+	GetBoundingBox(ml, mt, mr, mb);
+	for (UINT i = 0; i < listItem->size(); i++)
+	{
+		LPGAMEOBJECT e = listItem->at(i);
+		e->GetBoundingBox(il, it, ir, ib);
+		if (CGameObject::CheckAABB(ml, mt, mr, mb, il, it, ir, ib))
+		{
+			switch (e->type)
+			{
+			case Type::SUPER_MUSHROOM:
+				TurnIntoSuper();
+				break;
+			case Type::SUPER_LEAF:
+				TurnIntoRaccoon();
+				break;
+			case Type::ICE_FLOWER:
+				TurnIntoFire();
+				break;
+			}
+			e->isFinishedUsing = true;
+		}
+	}
 }
 
 

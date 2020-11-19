@@ -295,13 +295,34 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
+
+		if (objects[i]->type == Type::BRICK_CONTAINS_ITEM)
+		{
+			CBrickContainsItem* brick = dynamic_cast<CBrickContainsItem*>(objects[i]);
+			if (brick->isAboutToDropItem && !brick->dropped)
+			{
+				DropItem(brick->itemType, brick->x, brick->y);
+				brick->dropped = true;
+			}
+		}
 	}
+
+	player->CheckCollisionWithItems(&listItem);
+
+	for (LPGAMEOBJECT item : listItem)
+		item->Update(dt, &coObjects);
 
 	// remove
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->isFinishedUsing)
 			objects.erase(objects.begin() + i);
+	}
+
+	for (size_t i = 0; i < listItem.size(); i++)
+	{
+		if (listItem[i]->isFinishedUsing)
+			listItem.erase(listItem.begin() + i);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -323,6 +344,9 @@ void CPlayScene::Render()
 	map->Draw();
 	for (int i = objects.size() - 1; i >= 0; i--)
 		objects[i]->Render();
+
+	for (LPGAMEOBJECT item : listItem)
+		item->Render();
 }
 
 /*
@@ -337,6 +361,30 @@ void CPlayScene::Unload()
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
+}
+
+void CPlayScene::DropItem(int itemType, float x, float y)
+{
+	switch (itemType)
+	{
+	case ITEM_RANDOM:
+	{
+		//if (player->GetLevel() == MARIO_LEVEL_SMALL)
+		//{
+		//	// mushroom appears
+		//}
+		//else if ()
+		CSuperLeaf* leaf = new CSuperLeaf(x, y);
+		listItem.push_back(leaf);
+		break;
+	}
+	case ITEM_MONEY:
+		break;
+	case ITEM_UP_MUSHROOM:
+		break;
+	case ITEM_P_SWITCH:
+		break;
+	}
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)

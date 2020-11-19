@@ -25,6 +25,7 @@ void CBrickContainsItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y = originalPosY;
 		vy = 0;
+		isAboutToDropItem = true;
 	}
 
 }

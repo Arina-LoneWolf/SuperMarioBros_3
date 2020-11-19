@@ -3,7 +3,7 @@
 0	textures\mario.png	255	255	255
 1	textures\mario-hold-shell.png	255	255	255
 2	textures\mario-hold-shell-big.png	0	255	255
-20	textures\misc.png	176	224	248
+20	textures\misc.png	166	185	255
 21	textures\misc-2.png	0	117	255
 999	textures\raccoon_3.png	255	255	255
 40	textures\raccoon_4.png	255	255	255
@@ -391,7 +391,9 @@
 3	309	121	325	137	20
 
 #===============SUPER LEAF================
+# left
 30	180	123	196	137	20
+# right
 40	160	362	176	376	20
 
 #==================COIN===================
@@ -674,6 +676,7 @@
 
 # ==== SUPER LEAF ====
 700	30	100
+800	40	100
 
 # ==== ICE FLOWER ====
 701	3	100
@@ -777,7 +780,7 @@
 # SUPER MUSHROOM
 8	888
 # SUPER LEAF
-5	700
+5	700	800
 # ICE FLOWER
 6	701
 # RED FIRE PIRANHA
@@ -799,18 +802,18 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-#0	17	100	1
+0	17	100	1
 #0	672	100	1
 # start at bronze brick position
 #0	1912	100	1
 # start at koopa position
-0	465	100	1
+#0	465	100	1
 # start at red fire piranha position
 #0	320	100	1
 
 # GOOMBA
-#2	250	399	3
-#2	350	399	3
+2	250	399	3
+2	350	399	3
 
 # RED KOOPA
 3	591	356	4	1
@@ -822,7 +825,7 @@
 12	1856	368	40	2
 
 # RED FIRE PIRANHA
-#6	360	368	7	1
+6	360	368	7	1
 
 # GREEN FIRE PIRANHA
 6	1864	344	14	2

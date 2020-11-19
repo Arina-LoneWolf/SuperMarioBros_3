@@ -33,7 +33,7 @@ void CPiranhaFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	for (LPGAMEOBJECT effect : listEffect)
 		effect->Update(dt, coObjects);
 
-	float ml, mt, mr, mb, pl, pt, pr , pb; // main object - fireball (m) and the player (p)
+	float ml, mt, mr, mb, pl, pt, pr, pb; // main object - fireball (m) and the player (p)
 	GetBoundingBox(ml, mt, mr, mb);
 	player->GetBoundingBox(pl, pt, pr, pb);
 
