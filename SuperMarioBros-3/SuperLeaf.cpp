@@ -6,44 +6,39 @@ CSuperLeaf::CSuperLeaf(float brickX, float brickY)
 	category = ITEM;
 
 	this->x = brickX;
-	this->y = brickY - 7;
+	this->y = brickY - SUPER_LEAF_POSITION_ADJUSTMENT_NUM_Y;
 	vy = -SUPER_LEAF_DEFLECT_SPEED_Y;
 
-	minPosY = brickY - 32;
+	minPosY = brickY - SUPER_LEAF_MAX_DISTANCE_FROM_BRICK;
 	leftLimit = brickX;
-	rightLimit = brickX + 32;
+	rightLimit = brickX + SUPER_LEAF_RIGHT_LIMIT_FROM_BRICK;
 
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(5));
 }
 
 void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt);
+	if (y > CGame::GetInstance()->GetCamPosY() + SCREEN_HEIGHT / 2)
+		isFinishedUsing = true;
 
-	// xử lý ra khỏi camera xóa
-	DebugOut(L"vy = %f\n", vy);
 	x += vx;
 	y += vy;
 
 	if (y <= minPosY)
-	{
 		isFalling = true;
-		/*vy = SUPER_LEAF_SPEED_Y;
-		vx = 3 * pow(10, vy);*/
-	}
 
 	if (isFalling)
 	{
 		if (x <= leftLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = 0.3 * pow(35, vy); //0.05  0.3 35
+			vx = 0.3 * pow(35, vy);
 		}
 
 		if (x >= rightLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = -0.3 * pow(35, vy); //0.1
+			vx = -0.3 * pow(35, vy);
 		}
 	}
 }

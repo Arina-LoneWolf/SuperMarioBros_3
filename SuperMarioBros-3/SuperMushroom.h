@@ -6,8 +6,8 @@ class CSuperMushroom : public CGameObject
 public:
 	float minPosY;
 	float leftLimit, rightLimit;
-	bool isFalling;
-	bool isdone;
+	bool stopBouncing;
+	bool isSliding;
 
 	CSuperMushroom(float brickX, float brickY);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

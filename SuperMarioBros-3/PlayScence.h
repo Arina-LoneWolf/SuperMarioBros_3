@@ -15,6 +15,7 @@
 #include "Pipe.h"
 #include "SuperLeaf.h"
 #include "SuperMushroom.h"
+#include "IceFlower.h"
 
 
 class CPlayScene: public CScene

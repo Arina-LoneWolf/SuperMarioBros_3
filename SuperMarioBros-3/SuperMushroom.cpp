@@ -21,16 +21,15 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	if (y <= minPosY)
-		isFalling = true; // stopBouncing
+		stopBouncing = true; // stopBouncing
 
-	if (isFalling)
+	if (stopBouncing)
 	{
-		if (!isdone)
-		{
+		if (!isSliding)
 			vx = SUPER_MUSHROOM_SPEED_X;
-		}
+
 		vy = SUPER_MUSHROOM_SPEED_Y;
-		isdone = true;
+		isSliding = true;
 	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -68,7 +67,7 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (e->obj->type == Type::COLOR_BOX) // tạm thôi, còn sửa
+			if (e->obj->type == Type::COLOR_BOX)
 			{
 				if (e->nx != 0)
 					x += dx;
@@ -80,8 +79,10 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (e->obj->category == Category::ENEMY)
 			{
-				x += dx;
-				y += dy;
+				if (e->nx != 0)
+					x += dx;
+				if (e->ny != 0)
+					y += dy;
 			}
 		}
 	}

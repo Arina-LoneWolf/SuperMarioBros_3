@@ -385,13 +385,13 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	{
 		if (player->GetLevel() == MARIO_LEVEL_SMALL)
 		{
-			// mushroom appears
 			CSuperMushroom* mushroom = new CSuperMushroom(x, y);
 			priorityListItem.push_back(mushroom);
 		}
 		else if (player->GetLevel() == MARIO_RACCOON)
 		{
-			// ice flower appears
+			CIceFlower* flower = new CIceFlower(x, y);
+			priorityListItem.push_back(flower);
 		}
 		else
 		{

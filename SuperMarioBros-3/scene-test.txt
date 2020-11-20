@@ -802,17 +802,17 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-#0	17	100	1
+0	17	100	1
 #0	672	100	1
 # start at bronze brick position
-0	1912	100	1
+#0	1912	100	1
 # start at koopa position
 #0	465	100	1
 # start at red fire piranha position
 #0	320	100	1
 
 # GOOMBA
-#2	250	399	3
+2	250	399	3
 #2	350	399	3
 
 # RED KOOPA
@@ -842,6 +842,7 @@
 1	656	384	22	1	0
 1	704	352	22	1	1
 1	1440	128	22	2	5
+1	1472	368	22	1	0
 1	2032	368	22	2	6
 
 # BRONZE BRICK
