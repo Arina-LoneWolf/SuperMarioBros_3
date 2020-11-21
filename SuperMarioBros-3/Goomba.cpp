@@ -35,7 +35,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
 		isFinishedUsing = true;
 
-	if (deadTime && GetTickCount() - deadTime >= GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH)
+	if (deadTime && GetTickCount64() - deadTime >= GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH)
 	{
 		isFinishedUsing = true;
 	}
@@ -131,7 +131,7 @@ void CGoomba::SetState(int state)
 		break;
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
-		deadTime = GetTickCount();
+		deadTime = GetTickCount64();
 		break;
 	}
 }

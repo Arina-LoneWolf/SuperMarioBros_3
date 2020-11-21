@@ -3,7 +3,7 @@
 CEffect::CEffect()
 {
 	category = EFFECT;
-	startEffect = GetTickCount(); // i think this variable shouldn't be assigned here.
+	startEffect = GetTickCount64(); // i think this variable shouldn't be assigned here.
 }
 
 void CEffect::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -13,7 +13,7 @@ void CEffect::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* objects)
 {
-	if (GetTickCount() - startEffect > effectTime)
+	if (GetTickCount64() - startEffect > effectTime)
 		isFinishedUsing = true;
 }
 

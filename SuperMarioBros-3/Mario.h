@@ -48,7 +48,7 @@ public:
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 	int GetUntouchable() { return untouchable; }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void Reset();
 	int GetAni() { return ani; }

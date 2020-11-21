@@ -123,14 +123,14 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(l, t, bbox, rect.left, rect.top, rect.right, rect.bottom, 200); //32
+	CGame::GetInstance()->Draw(l, t, bbox, rect.left, rect.top, rect.right, rect.bottom, 150); //32
 }
 
 
 void CGameObject::ResetAni()
 {
 	//DebugOut(L"reset ani %d\n", ani);
-	animation_set->at(ani)->SetAniStartTime(GetTickCount());
+	animation_set->at(ani)->SetAniStartTime(GetTickCount64());
 }
 
 bool CGameObject::IsDrawnCompletely()

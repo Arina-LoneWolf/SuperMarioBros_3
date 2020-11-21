@@ -430,7 +430,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			if (!mario->isOnGround && mario->GetLevel() == MARIO_RACCOON)
 				mario->isWaggingTail = true;
 			mario->SetState(MARIO_STATE_JUMP_HIGH);
-			mario->waggingTailStartTime = GetTickCount();
+			mario->waggingTailStartTime = GetTickCount64();
 		}
 		break;
 
@@ -460,6 +460,19 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_SPACE: // reset the game starting as small mario
 		mario->Reset();
+		break;
+
+	case DIK_1:
+		mario->SetLevel(MARIO_LEVEL_SMALL);
+		break;
+	case DIK_2:
+		mario->SetLevel(MARIO_LEVEL_BIG);
+		break;
+	case DIK_3:
+		mario->SetLevel(MARIO_RACCOON);
+		break;
+	case DIK_4:
+		mario->SetLevel(MARIO_FIRE);
 		break;
 	}
 }

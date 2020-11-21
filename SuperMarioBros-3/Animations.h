@@ -37,7 +37,7 @@ public:
 	int GetTotalNumberOfFrame() { return frames.size(); }
 	void Render(float x, float y, int alpha = 255);
 	void SetAniStartTime(DWORD t) { aniStartTime = t; }
-	bool IsOver() { return GetTickCount() - aniStartTime >= totalFrameTime; }
+	bool IsOver() { return GetTickCount64() - aniStartTime >= totalFrameTime; }
 };
 
 typedef CAnimation *LPANIMATION;

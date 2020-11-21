@@ -17,22 +17,22 @@ void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y = GREEN_PIRANHA_MIN_Y;
 		vy = 0;
-		attackStartTime = GetTickCount();
+		attackStartTime = GetTickCount64();
 	}
 	else if (!sleepStartTime && y >= GREEN_PIRANHA_MAX_Y)
 	{
 		y = GREEN_PIRANHA_MAX_Y;
 		vy = 0;
-		sleepStartTime = GetTickCount();
+		sleepStartTime = GetTickCount64();
 	}
 
-	if (attackStartTime && GetTickCount() - attackStartTime > GREEN_PIRANHA_DELAY_TIME)
+	if (attackStartTime && GetTickCount64() - attackStartTime > GREEN_PIRANHA_DELAY_TIME)
 	{
 		attackStartTime = 0;
 		SetState(GREEN_PIRANHA_STATE_MOVE_DOWN);
 	}
 
-	if (sleepStartTime && GetTickCount() - sleepStartTime > GREEN_PIRANHA_DELAY_TIME)
+	if (sleepStartTime && GetTickCount64() - sleepStartTime > GREEN_PIRANHA_DELAY_TIME)
 	{
 		player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 

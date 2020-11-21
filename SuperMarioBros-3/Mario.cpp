@@ -10,7 +10,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	type = MARIO;
 	category = PLAYER;
 
-	level = MARIO_LEVEL_SMALL;
+	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 
@@ -33,29 +33,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	#pragma region Wait for animation
 
-	if (canFly && GetTickCount() - flyStartTime > 5000)
+	if (canFly && GetTickCount64() - flyStartTime > 5000)
 	{
 		canFly = false;
 	}
 
 	if (level == MARIO_RACCOON && attackStartTime
-		&& GetTickCount() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
+		&& GetTickCount64() - attackStartTime < MARIO_SPINNING_TAIL_TIME)
 		SetState(MARIO_STATE_ATTACK);
 	else if (level == MARIO_FIRE && attackStartTime
-		&& GetTickCount() - attackStartTime < MARIO_SHOOTING_FIREBALL_TIME)
+		&& GetTickCount64() - attackStartTime < MARIO_SHOOTING_FIREBALL_TIME)
 		SetState(MARIO_STATE_ATTACK);
 	else
 		attackStartTime = 0;
 
 	if (!waggingTailStartTime
-		|| GetTickCount() - waggingTailStartTime >= MARIO_WAGGING_TAIL_TIME)
+		|| GetTickCount64() - waggingTailStartTime >= MARIO_WAGGING_TAIL_TIME)
 	{
 		waggingTailStartTime = 0;
 		isWaggingTail = false;
 	}
 
 	if (kickStartTime
-		&& GetTickCount() - kickStartTime >= MARIO_KICK_TIME)
+		&& GetTickCount64() - kickStartTime >= MARIO_KICK_TIME)
 	{
 		//DebugOut(L"time up\n");
 		kickStartTime = 0;
@@ -121,7 +121,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -253,7 +253,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							{
 								koopa->object_colliding_nx = this->nx;
 								kickShell = true;
-								kickStartTime = GetTickCount();
+								kickStartTime = GetTickCount64();
 								koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
 							}
 						}
@@ -1045,7 +1045,7 @@ RENDER:
 
 	tail->Render();
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -1122,11 +1122,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP_LOW:
 		if (isOnGround)
 		{
-			jumpStartTime = GetTickCount();
+			jumpStartTime = GetTickCount64();
 			vy = -MARIO_LOW_JUMP_SPEED_Y;
 			isOnGround = false;
 		}
-		if (GetTickCount() - jumpStartTime >= 100 && !isFalling)
+		if (GetTickCount64() - jumpStartTime >= 100 && !isFalling)
 			vy += MARIO_LOW_JUMP_GRAVITY * dt;
 		break;
 
@@ -1208,68 +1208,110 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-
 	if (level == MARIO_LEVEL_BIG)
 	{
-		bottom = y + MARIO_BIG_BBOX_HEIGHT;
+		left = x;
+		top = y + 3;
+		bottom = top + MARIO_BIG_BBOX_HEIGHT;
+
 		if (nx > 0)
 		{
-			left = x + MARIO_BIG_BBOX_L;
-			right = x + MARIO_BIG_BBOX_WIDTH_RIGHT;
+			left = x + MARIO_BIG_BBOX_L + 5;
+			right = x + MARIO_BIG_BBOX_WIDTH_RIGHT + 5;
 		}
 		else
 		{
-			left = x;
-			right = x + MARIO_BIG_BBOX_WIDTH;
+			left = x + MARIO_BIG_BBOX_L + 5;
+			right = x + MARIO_BIG_BBOX_WIDTH + 8;
+
+			if (isHoldingShell)
+			{
+				left = x + MARIO_BIG_BBOX_L + 2;
+				right = x + MARIO_BIG_BBOX_WIDTH + 5;
+			}
 		}
 
+		// isSitting
 		if (GetAni() == MARIO_ANI_BIG_SITTING_RIGHT
 			|| GetAni() == MARIO_ANI_BIG_SITTING_LEFT)
 		{
-			top = y + MARIO_SIT_BBOX;
+			top = y + MARIO_SIT_BBOX + 3; // consider
 			bottom = top + MARIO_BIG_SIT_BBOX_HEIGHT;
 		}
 	}
 
 	else if (level == MARIO_LEVEL_SMALL)
 	{
-		right = x + MARIO_SMALL_BBOX_WIDTH;
-		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
+		left = x + 12;
+		top = y + 14;
+		right = left + MARIO_SMALL_BBOX_WIDTH - 3;
+		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}
 
 	else if (level == MARIO_RACCOON)
 	{
+		left = x;
+		top = y + 2;
 		bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
 		right = left + MARIO_RACCOON_BBOX_WIDTH;
+
 		if (GetAni() == MARIO_RACCOON_ANI_SITTING_RIGHT
 			|| GetAni() == MARIO_RACCOON_ANI_SITTING_LEFT)
 		{
-			top = y + MARIO_RACCOON_BBOX_SIT;
+			top = y + MARIO_RACCOON_BBOX_SIT + 2;
 			bottom = top + MARIO_RACCOON_SIT_BBOX_HEIGHT;
 		}
 
 		if (nx > 0)
 		{
-			left = x + MARIO_SIT_BBOX;
+			left = x + MARIO_SIT_BBOX + 3;
 			right = left + MARIO_RACCOON_BBOX_WIDTH_RIGHT;
+
+			if (isHoldingShell)
+			{
+				left = x + 8;
+			}
 		}
 		else
 		{
-			left = x + MARIO_RACCOON_BBOX_LEFT;
+			left = x + MARIO_RACCOON_BBOX_LEFT + 1;
 			right = left + MARIO_RACCOON_BBOX_WIDTH_RIGHT;
+
+			if (isHoldingShell)
+				left = x;
 		}
 	}
 	else if (level == MARIO_FIRE)
 	{
+		left = x;
+		top = y + 3;
 		right = left + MARIO_FIRE_BBOX_WIDTH;
 		bottom = top + MARIO_FIRE_BBOX_HEIGHT;
+
 		if (GetAni() == MARIO_FIRE_ANI_SITTING_RIGHT
 			|| GetAni() == MARIO_FIRE_ANI_SITTING_LEFT)
 		{
-			top = y + MARIO_SIT_BBOX;
+			top = y + MARIO_SIT_BBOX + 3;
 			bottom = top + MARIO_FIRE_SIT_BBOX_HEIGHT;
+		}
+
+		if (nx > 0)
+		{
+			left = x + MARIO_SIT_BBOX + 3;
+
+			if (isHoldingShell)
+				left = x + MARIO_SIT_BBOX;
+
+			right = left + MARIO_RACCOON_BBOX_WIDTH_RIGHT;
+		}
+		else
+		{
+			left = x + MARIO_RACCOON_BBOX_LEFT + 2;
+
+			if (isHoldingShell)
+				left = x;
+
+			right = left + MARIO_RACCOON_BBOX_WIDTH_RIGHT;
 		}
 	}
 }
@@ -1361,9 +1403,9 @@ void CMario::Fly()
 {
 	isWaggingTail = true;
 	if (isOnGround)
-		flyStartTime = GetTickCount();
+		flyStartTime = GetTickCount64();
 	SetState(MARIO_STATE_FLYING);
-	waggingTailStartTime = GetTickCount();
+	waggingTailStartTime = GetTickCount64();
 }
 
 void CMario::Attack()
@@ -1371,7 +1413,7 @@ void CMario::Attack()
 	if (level == MARIO_FIRE && listWeapon.size() == 2)
 		return;
 	SetState(MARIO_STATE_ATTACK);
-	attackStartTime = GetTickCount();
+	attackStartTime = GetTickCount64();
 	if (level == MARIO_FIRE)
 		isAttacking = true; // use also for Tail
 }
@@ -1421,7 +1463,6 @@ void CMario::CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem)
 		e->GetBoundingBox(il, it, ir, ib);
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, il, it, ir, ib))
 		{
-			DebugOut(L"type: %d\n", e->type);
 			switch (e->type)
 			{
 			case Type::SUPER_MUSHROOM:

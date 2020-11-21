@@ -22,7 +22,7 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			listFireball.erase(listFireball.begin() + i);
 	}
 
-	if (delayToAttackStartTime && GetTickCount() - delayToAttackStartTime > FIRE_PIRANHA_DELAY_TO_ATTACK_TIME)
+	if (delayToAttackStartTime && GetTickCount64() - delayToAttackStartTime > FIRE_PIRANHA_DELAY_TO_ATTACK_TIME)
 	{
 		if (playerArea != Area::OUTSIDE_AREA)
 			CreateFireball();
@@ -36,24 +36,24 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		y = minPosY;
 		vy = 0;
-		attackStartTime = GetTickCount();
-		delayToAttackStartTime = GetTickCount();
+		attackStartTime = GetTickCount64();
+		delayToAttackStartTime = GetTickCount64();
 		SetState(FIRE_PIRANHA_STATE_ATTACK);
 	}
 	else if (!sleepStartTime && y >= FIRE_PIRANHA_MAX_Y)
 	{
 		y = FIRE_PIRANHA_MAX_Y;
 		vy = 0;
-		sleepStartTime = GetTickCount();
+		sleepStartTime = GetTickCount64();
 	}
 
-	if (attackStartTime && GetTickCount() - attackStartTime > FIRE_PIRANHA_DELAY_TIME)
+	if (attackStartTime && GetTickCount64() - attackStartTime > FIRE_PIRANHA_DELAY_TIME)
 	{
 		attackStartTime = 0;
 		SetState(FIRE_PIRANHA_STATE_MOVE_DOWN);
 	}
 
-	if (sleepStartTime && GetTickCount() - sleepStartTime > FIRE_PIRANHA_DELAY_TIME)
+	if (sleepStartTime && GetTickCount64() - sleepStartTime > FIRE_PIRANHA_DELAY_TIME)
 	{
 		if (!CheckPlayerInSafeZone(playerLeft, playerTop, playerRight, playerBottom))
 		{
