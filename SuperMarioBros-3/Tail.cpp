@@ -52,7 +52,7 @@ void CTail::Render()
 	for (LPGAMEOBJECT effect : listEffect)
 		effect->Render();
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CTail::CreateEffect()

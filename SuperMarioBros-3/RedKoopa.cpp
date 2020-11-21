@@ -13,8 +13,8 @@ void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bot
 {
 	if (died)
 		return;
-	left = x;
-	right = x + KOOPA_BBOX_WIDTH;
+	left = x + KOOPA_LEFT_ADDEND;
+	right = left + KOOPA_BBOX_WIDTH;
 	bottom = y + KOOPA_BBOX_HEIGHT;
 
 	if (state == ENEMY_STATE_MOVE)
@@ -206,57 +206,26 @@ void CRedKoopa::SetState(int state)
 
 void CRedKoopa::SetPositionAccordingToPlayer()
 {
-	if (player->GetLevel() == MARIO_LEVEL_BIG)
+	if (player->GetLevel() == MARIO_LEVEL_SMALL)
 	{
 		if (player->nx > 0)
-		{
-			x = player->x + 17;
-			y = player->y - 2;
-		}
+			SetPosition(player->x + 19, player->y + 2);
 		else
-		{
-			x = player->x - 11;
-			y = player->y - 2;
-		}
-	}
-	else if (player->GetLevel() == MARIO_LEVEL_SMALL)
-	{
-		if (player->nx > 0)
-		{
-			x = player->x + 10;
-			y = player->y - 12;
-		}
-		else
-		{
-			x = player->x - 11;
-			y = player->y - 12;
-		}
+			SetPosition(player->x - 3, player->y + 2);
 	}
 	else if (player->GetLevel() == MARIO_RACCOON)
 	{
 		if (player->nx > 0)
-		{
-			x = player->x + 17;
-			y = player->y - 2;
-		}
+			SetPosition(player->x + 18, player->y);
 		else
-		{
-			x = player->x - 2;
-			y = player->y - 2;
-		}
+			SetPosition(player->x - 4, player->y);
 	}
-	else if (player->GetLevel() == MARIO_FIRE)
+	else if (player->GetLevel() == MARIO_LEVEL_BIG || player->GetLevel() == MARIO_FIRE)
 	{
 		if (player->nx > 0)
-		{
-			x = player->x + 10;
-			y = player->y - 2;
-		}
+			SetPosition(player->x + 19, player->y);
 		else
-		{
-			x = player->x - 11;
-			y = player->y - 2;
-		}
+			SetPosition(player->x - 3, player->y);
 	}
 }
 

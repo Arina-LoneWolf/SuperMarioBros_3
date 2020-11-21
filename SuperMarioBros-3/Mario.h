@@ -59,10 +59,6 @@ public:
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 
-	void TurnIntoSuper();
-	void TurnIntoRaccoon();
-	void TurnIntoFire();
-
 	void DecelerateSharply();
 	void DecelerateSlightly();
 

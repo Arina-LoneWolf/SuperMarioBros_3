@@ -153,7 +153,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case Type::COLOR_BOX:
 	{
-		float width = atof(tokens[4].c_str());
+		float width = atof(tokens[4].c_str()); // Why float?
 		float height = atof(tokens[5].c_str());
 		obj = new CColorBox(width, height);
 		break;
@@ -447,15 +447,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			}*/
 
 	case DIK_R: // turn into raccoon mario
-		mario->TurnIntoRaccoon();
+		mario->SetLevel(MARIO_RACCOON);
 		break;
 
 	case DIK_F: // turn into fire mario
-		mario->TurnIntoFire();
+		mario->SetLevel(MARIO_FIRE);
 		break;
 
 	case DIK_B: // turn into big mario
-		mario->TurnIntoSuper();
+		mario->SetLevel(MARIO_LEVEL_BIG);
 		break;
 
 	case DIK_SPACE: // reset the game starting as small mario
@@ -465,12 +465,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
 		break;
+
 	case DIK_2:
 		mario->SetLevel(MARIO_LEVEL_BIG);
 		break;
+
 	case DIK_3:
 		mario->SetLevel(MARIO_RACCOON);
 		break;
+
 	case DIK_4:
 		mario->SetLevel(MARIO_FIRE);
 		break;
