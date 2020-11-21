@@ -6,8 +6,10 @@ CPiranhaFireball::CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea, CMar
 	this->x = piranhaPos.x + 4;
 	this->y = piranhaPos.y + 4;
 	this->player = player;
+
 	SetRoute(playerArea);
 	SetNx(playerArea);
+
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
 }
 

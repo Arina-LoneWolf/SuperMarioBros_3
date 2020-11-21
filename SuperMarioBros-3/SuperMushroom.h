@@ -5,7 +5,6 @@ class CSuperMushroom : public CGameObject
 {
 public:
 	float minPosY;
-	float leftLimit, rightLimit;
 	bool stopBouncing;
 	bool isSliding;
 

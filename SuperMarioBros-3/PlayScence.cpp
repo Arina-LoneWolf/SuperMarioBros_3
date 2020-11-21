@@ -397,11 +397,15 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		{
 			CSuperLeaf* leaf = new CSuperLeaf(x, y);
 			listItem.push_back(leaf);
-			break;
 		}
+		break;
 	}
 	case ITEM_MONEY:
-		break;
+	{
+		CCoinEffect* effect = new CCoinEffect(x, y);
+		listItem.push_back(effect);
+		break; 
+	}
 	case ITEM_UP_MUSHROOM:
 		break;
 	case ITEM_P_SWITCH:
@@ -419,7 +423,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_S: // high jump
 		if (mario->canFly)
 		{
-			//DebugOut(L"can fly\n");
 			if (mario->GetLevel() == MARIO_RACCOON)
 			{
 				mario->Fly();

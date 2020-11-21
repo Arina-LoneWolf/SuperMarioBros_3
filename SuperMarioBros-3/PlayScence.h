@@ -16,6 +16,7 @@
 #include "SuperLeaf.h"
 #include "SuperMushroom.h"
 #include "IceFlower.h"
+#include "CoinEffect.h"
 
 
 class CPlayScene: public CScene

@@ -9,9 +9,7 @@ CSuperMushroom::CSuperMushroom(float brickX, float brickY)
 	this->y = brickY;
 	vy = -SUPER_MUSHROOM_DEFLECT_SPEED_Y;
 
-	minPosY = brickY - SUPER_MUSHROOM_BBOX_HEIGHT; // -1?
-	/*leftLimit = brickX;
-	rightLimit = brickX + 32;*/
+	minPosY = brickY - SUPER_MUSHROOM_BBOX_HEIGHT;
 
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(8));
 }
@@ -21,7 +19,7 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	if (y <= minPosY)
-		stopBouncing = true; // stopBouncing
+		stopBouncing = true;
 
 	if (stopBouncing)
 	{
