@@ -190,14 +190,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
-	case Type::BRONZE_BRICK:
-	{
-		int transformation = atoi(tokens[4].c_str());
-		brick = new CBronzeBrick(transformation);
-		break;
-	}
-
+	
 	case Type::COIN:
+	case Type::BRONZE_BRICK:
 	{
 		int transformation = atoi(tokens[4].c_str());
 		brick = new CBronzeBrick(transformation);
@@ -464,7 +459,10 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		break; 
 	}
 	case ITEM_UP_MUSHROOM:
+	{
 		break;
+	}
+
 	case ITEM_P_SWITCH:
 		CP_Switch* p_switch = new CP_Switch();
 		objects.push_back(p_switch);

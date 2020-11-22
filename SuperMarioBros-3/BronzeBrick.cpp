@@ -17,7 +17,6 @@ CBronzeBrick::CBronzeBrick(int transformation)
 
 void CBronzeBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	DebugOut(L"vao update bronze brick\n");
 	int num_vanishPiece = 0;
 
 	for (LPGAMEOBJECT piece : listPiece)
