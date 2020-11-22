@@ -16,6 +16,19 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	y += dy;
 
+	if (effect)
+		effect->Update(dt, coObjects);
+
+	if (deadTime && GetTickCount64() - deadTime > PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH)
+		isFinishedUsing = true;
+
+	if (vanish)
+	{
+		for (int i = 0; i < listFireball.size(); i++)
+			listFireball.erase(listFireball.begin() + i);
+		return;
+	}
+
 	for (int i = 0; i < listFireball.size(); i++)
 	{
 		if (listFireball[i]->isFinishedUsing)
@@ -120,14 +133,23 @@ void CFirePiranha::Render()
 		last_face_ani = ani;
 	}
 
-	animation_set->at(ani)->Render(x, y);
+	if (!vanish)
+		animation_set->at(ani)->Render(x, y);
 
 	for (LPGAMEOBJECT fireball : listFireball)
 		fireball->Render();
+
+	if (effect)
+		effect->Render();
+
+	//RenderBoundingBox();
 }
 
 void CFirePiranha::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
+	if (vanish)
+		return;
+
 	if (piranhaType == TypeOfFirePiranha::RED)
 	{
 		l = x;
@@ -158,7 +180,9 @@ void CFirePiranha::SetState(int state)
 	case FIRE_PIRANHA_STATE_ATTACK: // this line is just for drawing
 		break;
 	case ENEMY_STATE_DIE_BY_WEAPON:
-		isFinishedUsing = true;
+		effect = new CMoneyEffect({ x + 3, y - 7 });
+		vanish = true;
+		deadTime = GetTickCount64();
 		break;
 	}
 }

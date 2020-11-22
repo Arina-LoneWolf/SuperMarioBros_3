@@ -12,7 +12,13 @@ void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;
-	// bug hahahaha !!
+	
+	if (effect)
+		effect->Update(dt, coObjects);
+
+	if (deadTime && GetTickCount64() - deadTime > PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH)
+		isFinishedUsing = true;
+
 	if (!attackStartTime && y <= GREEN_PIRANHA_MIN_Y)
 	{
 		y = GREEN_PIRANHA_MIN_Y;
@@ -46,13 +52,20 @@ void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGreenPiranha::Render()
 {
-	animation_set->at(0)->Render(x, y);
+	if (!vanish)
+		animation_set->at(0)->Render(x, y);
+
+	if (effect)
+		effect->Render();
 
 	//RenderBoundingBox();
 }
 
 void CGreenPiranha::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
+	if (vanish)
+		return;
+
 	l = x;
 	t = y;
 	r = x + GREEN_PIRANHA_BBOX_WIDTH;
@@ -71,7 +84,9 @@ void CGreenPiranha::SetState(int state)
 		vy = GREEN_PIRANHA_MOVE_SPEED_Y;
 		break;
 	case ENEMY_STATE_DIE_BY_WEAPON:
-		isFinishedUsing = true;
+		effect = new CMoneyEffect({ x + 3, y - 7 });
+		vanish = true;
+		deadTime = GetTickCount64();
 		break;
 	}
 }

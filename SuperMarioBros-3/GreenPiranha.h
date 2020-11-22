@@ -1,16 +1,20 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
+#include "MoneyEffect.h"
 
 class CGreenPiranha : public CGameObject
 {
 public:
 	DWORD attackStartTime;
 	DWORD sleepStartTime;
+	DWORD deadTime;
 
 	float playerLeft, playerTop, playerRight, playerBottom;
+	bool vanish;
 
 	CMario* player;
+	CMoneyEffect* effect;
 
 	CGreenPiranha(CMario* mario);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

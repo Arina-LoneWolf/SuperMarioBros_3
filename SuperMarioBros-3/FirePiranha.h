@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "PiranhaFireball.h"
+#include "MoneyEffect.h"
 
 class CFirePiranha : public CGameObject
 {
@@ -11,6 +12,7 @@ public:
 	DWORD attackStartTime;
 	DWORD sleepStartTime;
 	DWORD delayToAttackStartTime;
+	DWORD deadTime;
 
 	int last_face_ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
 	int last_attack_ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
@@ -22,7 +24,9 @@ public:
 	int piranhaType;
 	Area playerArea;
 	CMario* player;
+	CMoneyEffect* effect;
 	float minPosY;
+	bool vanish;
 
 	CFirePiranha(CMario* mario, int piranhaType);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

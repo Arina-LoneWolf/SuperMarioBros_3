@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
-//class CMario;
+#include "MoneyEffect.h"
 
 class CRedKoopa : public CGameObject
 {
@@ -17,6 +17,7 @@ public:
 	int startingPos;
 	
 	CMario* player;
+	CMoneyEffect* effect;
 	
 	CRedKoopa(CMario* mario, int startingPos);
 	virtual void SetState(int state);

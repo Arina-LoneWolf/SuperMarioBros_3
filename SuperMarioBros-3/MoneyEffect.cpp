@@ -2,11 +2,10 @@
 
 CMoneyEffect::CMoneyEffect(D3DXVECTOR2 position, int moneyAni)
 {
-	effectTime = 100;
 	x = position.x;
 	y = position.y;
 	ani = moneyAni;
-	vy = -0.04f; //0.1f
+	vy = -MONEY_EFFECT_SPEED_Y;
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(17));
 }
 

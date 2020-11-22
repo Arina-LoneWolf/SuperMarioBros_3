@@ -1,12 +1,10 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\mario.png	255	255	255
-1	textures\mario-hold-shell.png	255	255	255
 2	textures\mario-hold-shell-big.png	0	255	255
 20	textures\misc.png	166	185	255
 21	textures\misc-2.png	0	117	255
 999	textures\raccoon_3.png	255	255	255
-40	textures\raccoon_4.png	255	255	255
 41	textures\raccoon_5.png	255 	255	255
 42	textures\fireball_right.png	0	255	255
 43	textures\fireball_left.png	0	255	255
@@ -17,7 +15,6 @@
 52	textures\enemies-5.png	0	255	255
 53	textures\enemies-5_1.png	0	255	255
 54	textures\enemies-5_2.png	0	255	255
-55	textures\enemies-5_3.png	0	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -67,7 +64,7 @@
 10032	39	4	64	33	2
 
 # die 
-10099	375	209	391	225	0
+10099	365	195	391	225	0
 
 #===============SMALL MARIO==============
 # idle right
@@ -837,7 +834,7 @@
 
 # GOOMBA
 2	250	399	3
-#2	350	399	3
+2	350	399	3
 
 # RED KOOPA
 3	591	356	4	1

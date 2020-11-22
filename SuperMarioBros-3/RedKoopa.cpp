@@ -45,6 +45,9 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetPositionAccordingToPlayer();
 	}
 
+	if (effect)
+		effect->Update(dt, coObjects);
+
 	float camPosY = CGame::GetInstance()->GetCamPosY();
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
 		isFinishedUsing = true;
@@ -171,6 +174,9 @@ void CRedKoopa::Render()
 
 	animation_set->at(ani)->Render(x, y);
 
+	if (effect)
+		effect->Render();
+
 	//RenderBoundingBox();
 }
 
@@ -182,12 +188,20 @@ void CRedKoopa::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = KOOPA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -KOOPA_DEFLECT_SPEED_Y;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x - 1, y - 7 });
+		else
+			effect = new CMoneyEffect({ x + 8, y - 7 });
 		died = true;
 		break;
 	case ENEMY_STATE_ATTACKED_BY_TAIL:
 		isSupine = true;
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x + 1, y - 3 });
+		else
+			effect = new CMoneyEffect({ x - 7, y - 3 });
 		break;
 	case ENEMY_STATE_MOVE:
 		vx = -KOOPA_MOVE_SPEED_X;

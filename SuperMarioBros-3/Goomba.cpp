@@ -40,6 +40,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isFinishedUsing = true;
 	}
 
+	if (effect)
+		effect->Update(dt, coObjects);
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -107,6 +110,9 @@ void CGoomba::Render()
 
 	animation_set->at(ani)->Render(x, y);
 
+	if (effect)
+		effect->Render();
+
 	//RenderBoundingBox();
 }
 
@@ -118,11 +124,19 @@ void CGoomba::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		vx = GOOMBA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -GOOMBA_DEFLECT_SPEED_Y;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x - 1, y - 7 });
+		else
+			effect = new CMoneyEffect({ x + 8, y - 7 });
 		died = true;
 		break;
 	case ENEMY_STATE_ATTACKED_BY_TAIL:
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x + 1, y - 3 });
+		else
+			effect = new CMoneyEffect({ x - 7, y - 3 });
 		died = true;
 		break;
 	case ENEMY_STATE_MOVE:
@@ -132,6 +146,7 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
 		deadTime = GetTickCount64();
+		effect = new CMoneyEffect({ x + 3, y - 7 });
 		break;
 	}
 }
