@@ -64,7 +64,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (level == MARIO_FIRE && isAttacking)
 	{
-		if (listWeapon.size() < 2)
+		if (listWeapons.size() < 2)
 		{
 			CreateFireball();
 		}
@@ -74,39 +74,39 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	#pragma region Update weapon and effect
 
 	// update listWeapon
-	for (int i = 0; i < listWeapon.size(); i++)
+	for (int i = 0; i < listWeapons.size(); i++)
 	{
-		listWeapon[i]->Update(dt, coObjects);
-		if (listWeapon[i]->isFinishedUsing)
+		listWeapons[i]->Update(dt, coObjects);
+		if (listWeapons[i]->isFinishedUsing)
 		{
 			float ax, ay; // accord (a)
-			listWeapon[i]->GetPosition(ax, ay);
-			CHitEffect* effect = new CHitEffect({ ax, ay }, listWeapon[i]->nx);
-			listEffect.push_back(effect);
+			listWeapons[i]->GetPosition(ax, ay);
+			CHitEffect* effect = new CHitEffect({ ax, ay }, listWeapons[i]->nx);
+			listEffects.push_back(effect);
 		}
 	}
 
-	for (int i = 0; i < listEffect.size(); i++)
+	for (int i = 0; i < listEffects.size(); i++)
 	{
-		listEffect[i]->Update(dt, coObjects);
+		listEffects[i]->Update(dt, coObjects);
 	}
 
 	tail->Update(dt, coObjects);
 
 	// remove weapons and effects have done
-	for (int i = 0; i < listWeapon.size(); i++)
+	for (int i = 0; i < listWeapons.size(); i++)
 	{
-		if (listWeapon[i]->isFinishedUsing)
+		if (listWeapons[i]->isFinishedUsing)
 		{
-			listWeapon.erase(listWeapon.begin() + i);
+			listWeapons.erase(listWeapons.begin() + i);
 		}
 	}
 
-	for (int i = 0; i < listEffect.size(); i++)
+	for (int i = 0; i < listEffects.size(); i++)
 	{
-		if (listEffect[i]->isFinishedUsing)
+		if (listEffects[i]->isFinishedUsing)
 		{
-			listEffect.erase(listEffect.begin() + i);
+			listEffects.erase(listEffects.begin() + i);
 		}
 	}
 	#pragma endregion
@@ -270,6 +270,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					e->obj->SetState(STATE_RAMMED);
 				}
+			}
+			else if (e->obj->type == Type::P_SWITCH)
+			{
+				if (e->ny < 0)
+				{
+					vy = -0.1f;
+					e->obj->SetState(STATE_PRESSED);
+				}
+			}
+			else if (e->obj->type == Type::COIN)
+			{
+				e->obj->isFinishedUsing = true;
 			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
@@ -1033,14 +1045,14 @@ RENDER:
 
 	animation_set->at(ani)->Render(x, y, alpha);
 	//DebugOut(L"ani id %d\n", ani);
-	for (int i = 0; i < listWeapon.size(); i++)
+	for (int i = 0; i < listWeapons.size(); i++)
 	{
-		listWeapon[i]->Render();
+		listWeapons[i]->Render();
 	}
 
-	for (int i = 0; i < listEffect.size(); i++)
+	for (int i = 0; i < listEffects.size(); i++)
 	{
-		listEffect[i]->Render();
+		listEffects[i]->Render();
 	}
 
 	tail->Render();
@@ -1307,7 +1319,7 @@ void CMario::Fly()
 
 void CMario::Attack()
 {
-	if (level == MARIO_FIRE && listWeapon.size() == 2)
+	if (level == MARIO_FIRE && listWeapons.size() == 2)
 		return;
 	SetState(MARIO_STATE_ATTACK);
 	attackStartTime = GetTickCount64();
@@ -1331,7 +1343,7 @@ void CMario::Reset()
 void CMario::CreateFireball()
 {
 	CFireball* fireball = new CFireball({ x, y }, nx);
-	listWeapon.push_back(fireball);
+	listWeapons.push_back(fireball);
 }
 
 void CMario::CollideWithEnemy()

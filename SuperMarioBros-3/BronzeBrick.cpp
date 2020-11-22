@@ -1,13 +1,23 @@
 #include "BronzeBrick.h"
 
-CBronzeBrick::CBronzeBrick()
+CBronzeBrick::CBronzeBrick(int transformation)
 {
-	type = BRONZE_BRICK;
-	category = MISC;
+	if (transformation == BrickTransformation::BRICK_FORM)
+	{
+		type = BRONZE_BRICK;
+		category = MISC;
+	}
+	else if (transformation == BrickTransformation::COIN_FORM)
+	{
+		type = COIN;
+		category = ITEM;
+	}
+	this->transformation = transformation;
 }
 
 void CBronzeBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	DebugOut(L"vao update bronze brick\n");
 	int num_vanishPiece = 0;
 
 	for (LPGAMEOBJECT piece : listPiece)
@@ -19,17 +29,28 @@ void CBronzeBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (num_vanishPiece == 4)
 		isFinishedUsing = true;
+
+	if (transformationTime && GetTickCount64() - transformationTime > TRANSFORMATION_TIME)
+		SetState(STATE_NORMAL);
 }
 
 void CBronzeBrick::Render()
 {
+	if (type == Type::BRONZE_BRICK)
+		ani = BRONZE_BRICK_ANI;
+	else if (type == Type::COIN)
+	{
+		if (y > HORIZONTAL_SEPARATION_LINE)
+			ani = IDLE_COIN_ANI;
+		else
+			ani = ROTATING_COIN;
+	}
+
 	if (!vanish)
-		animation_set->at(0)->Render(x, y);
+		animation_set->at(ani)->Render(x, y);
 
 	for (LPGAMEOBJECT piece : listPiece)
-	{
 		piece->Render();
-	}
 }
 
 void CBronzeBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -55,5 +76,32 @@ void CBronzeBrick::SetState(int state)
 
 		listPiece = { topLeftPiece, topRightPiece, bottomLeftPiece, bottomRightPiece };
 		vanish = true;
+	}
+	else if (state == STATE_TRANSFORMATION)
+	{
+		if (transformation == BrickTransformation::BRICK_FORM)
+		{
+			type = COIN;
+			category = ITEM;
+		}
+		else if (transformation == BrickTransformation::COIN_FORM)
+		{
+			type = BRONZE_BRICK;
+			category = MISC;
+		}
+		transformationTime = GetTickCount64();
+	}
+	else if (state == STATE_NORMAL)
+	{
+		if (transformation == BrickTransformation::BRICK_FORM)
+		{
+			type = BRONZE_BRICK;
+			category = MISC;
+		}
+		else if (transformation == BrickTransformation::COIN_FORM)
+		{
+			type = COIN;
+			category = ITEM;
+		}
 	}
 }

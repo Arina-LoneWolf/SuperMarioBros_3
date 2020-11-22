@@ -18,8 +18,8 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 public: 
-	vector<LPGAMEOBJECT> listWeapon;
-	vector<LPGAMEOBJECT> listEffect;
+	vector<LPGAMEOBJECT> listWeapons;
+	vector<LPGAMEOBJECT> listEffects;
 
 	CTail* tail = new CTail();
 

@@ -17,6 +17,7 @@
 #include "SuperMushroom.h"
 #include "IceFlower.h"
 #include "CoinEffect.h"
+#include "P_Switch.h"
 
 
 class CPlayScene: public CScene
@@ -26,8 +27,9 @@ protected:
 	TileMap* map;
 
 	vector<LPGAMEOBJECT> objects;
-	vector<LPGAMEOBJECT> listItem;
-	vector<LPGAMEOBJECT> priorityListItem;
+	vector<LPGAMEOBJECT> listBronzeBricks; // brick contains the item
+	vector<LPGAMEOBJECT> listItems;
+	vector<LPGAMEOBJECT> priorityListItems;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

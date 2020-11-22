@@ -16,14 +16,9 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 	bottom = y + GOOMBA_BBOX_HEIGHT;
 
 	if (state == GOOMBA_STATE_DIE_BY_CRUSH)
-	{
 		top = y + (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE_BY_CRUSH);
-	}
 	else
-	{
 		top = y;
-	}
-
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

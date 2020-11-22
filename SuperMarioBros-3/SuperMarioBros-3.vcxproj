@@ -143,6 +143,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PiranhaFireball.cpp" />
+    <ClCompile Include="P_Switch.cpp" />
     <ClCompile Include="RedKoopa.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaFireball.h" />
+    <ClInclude Include="P_Switch.h" />
     <ClInclude Include="RedKoopa.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />

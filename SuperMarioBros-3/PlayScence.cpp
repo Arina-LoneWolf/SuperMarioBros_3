@@ -119,6 +119,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
 	CGameObject* obj = NULL;
+	CBronzeBrick* brick = NULL;
 
 	switch (object_type)
 	{
@@ -145,51 +146,64 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case Type::FLOOR:
 	{
-		float width = atof(tokens[4].c_str());
-		float height = atof(tokens[5].c_str());
+		int width = atoi(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
 		obj = new CFloor(width, height);
 		break;
 	}
 
 	case Type::COLOR_BOX:
 	{
-		float width = atof(tokens[4].c_str()); // Why float?
-		float height = atof(tokens[5].c_str());
+		int width = atoi(tokens[4].c_str()); // Why float?
+		int height = atoi(tokens[5].c_str());
 		obj = new CColorBox(width, height);
 		break;
 	}
 
 	case Type::BRICK_CONTAINS_ITEM:
 	{
-		int brickType = atof(tokens[4].c_str());
-		int itemType = atof(tokens[5].c_str());
+		int brickType = atoi(tokens[4].c_str());
+		int itemType = atoi(tokens[5].c_str());
 		obj = new CBrickContainsItem(brickType, itemType, y);
 		break;
 	}
 
 	case Type::FIRE_PIRANHA:
 	{
-		int piranhaType = atof(tokens[4].c_str());
+		int piranhaType = atoi(tokens[4].c_str());
 		obj = new CFirePiranha(player, piranhaType);
 		break;
 	}
 
 	case Type::PIPE:
 	{
-		int pipeType = atof(tokens[4].c_str());
+		int pipeType = atoi(tokens[4].c_str());
 		obj = new CPipe(pipeType);
 		break;
 	}
 
 	case Type::KOOPA:
 	{
-		int startingPos = atof(tokens[4].c_str());
+		int startingPos = atoi(tokens[4].c_str());
 		obj = new CRedKoopa(player, startingPos);
 		break;
 	}
 
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
-	case Type::BRONZE_BRICK: obj = new CBronzeBrick(); break;
+	case Type::BRONZE_BRICK:
+	{
+		int transformation = atoi(tokens[4].c_str());
+		brick = new CBronzeBrick(transformation);
+		break;
+	}
+
+	case Type::COIN:
+	{
+		int transformation = atoi(tokens[4].c_str());
+		brick = new CBronzeBrick(transformation);
+		break;
+	}
+
 	case Type::GOOMBA: obj = new CGoomba(); break;
 
 	default:
@@ -198,12 +212,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	obj->SetPosition(x, y);
+	//obj->SetPosition(x, y);
 
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
-	obj->SetAnimationSet(ani_set);
-	objects.push_back(obj);
+	//obj->SetAnimationSet(ani_set);
+
+	if (obj)
+	{
+		obj->SetPosition(x, y);
+		obj->SetAnimationSet(ani_set);
+		objects.push_back(obj);
+	}
+	else if (brick)
+	{
+		brick->SetPosition(x, y);
+		brick->SetAnimationSet(ani_set);
+		listBronzeBricks.push_back(brick);
+	}
 }
 
 void CPlayScene::_ParseSection_TileMap(string line)
@@ -292,47 +318,75 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	for (LPGAMEOBJECT item : priorityListItem)
+	for (size_t i = 0; i < listBronzeBricks.size(); i++)
+	{
+		coObjects.push_back(listBronzeBricks[i]);
+	}
+
+	for (LPGAMEOBJECT item : priorityListItems)
 		item->Update(dt, &coObjects);
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
-
-		if (objects[i]->type == Type::BRICK_CONTAINS_ITEM)
+		LPGAMEOBJECT e = objects[i];
+		
+		if (e->type == Type::BRICK_CONTAINS_ITEM)
 		{
-			CBrickContainsItem* brick = dynamic_cast<CBrickContainsItem*>(objects[i]);
+			CBrickContainsItem* brick = dynamic_cast<CBrickContainsItem*>(e);
 			if (brick->isAboutToDropItem && !brick->dropped)
 			{
 				DropItem(brick->itemType, brick->x, brick->y);
 				brick->dropped = true;
 			}
 		}
+		else if (e->type == Type::P_SWITCH)
+		{
+			CP_Switch* p_switch = dynamic_cast<CP_Switch*>(e);
+			if (p_switch->GetState() == STATE_PRESSED && p_switch->readyToPerform)
+			{
+				p_switch->PerformBricksTransformation(&listBronzeBricks);
+				p_switch->readyToPerform = false;
+			}
+		}
 	}
 
-	player->CheckCollisionWithItems(&listItem);
-	player->CheckCollisionWithItems(&priorityListItem);
+	player->CheckCollisionWithItems(&listItems);
+	player->CheckCollisionWithItems(&priorityListItems);
 
-	for (LPGAMEOBJECT item : listItem)
+	for (size_t i = 0; i < listBronzeBricks.size(); i++)
+	{
+		listBronzeBricks[i]->Update(dt, &coObjects);
+	}
+
+	for (LPGAMEOBJECT item : listItems)
 		item->Update(dt, &coObjects);
 
-	// remove
+	// remove objects
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->isFinishedUsing)
 			objects.erase(objects.begin() + i);
 	}
 
-	for (size_t i = 0; i < listItem.size(); i++)
+	for (size_t i = 0; i < listBronzeBricks.size(); i++)
 	{
-		if (listItem[i]->isFinishedUsing)
-			listItem.erase(listItem.begin() + i);
+		if (listBronzeBricks[i]->isFinishedUsing)
+			listBronzeBricks.erase(listBronzeBricks.begin() + i);
 	}
 
-	for (size_t i = 0; i < priorityListItem.size(); i++)
+	// remove items
+	for (size_t i = 0; i < listItems.size(); i++)
 	{
-		if (priorityListItem[i]->isFinishedUsing)
-			priorityListItem.erase(priorityListItem.begin() + i);
+		if (listItems[i]->isFinishedUsing)
+			listItems.erase(listItems.begin() + i);
+	}
+
+	
+	for (size_t i = 0; i < priorityListItems.size(); i++)
+	{
+		if (priorityListItems[i]->isFinishedUsing)
+			priorityListItems.erase(priorityListItems.begin() + i);
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -353,13 +407,16 @@ void CPlayScene::Render()
 {
 	map->Draw();
 
-	for (LPGAMEOBJECT item : priorityListItem)
+	for (LPGAMEOBJECT item : priorityListItems)
 		item->Render();
 
 	for (int i = objects.size() - 1; i >= 0; i--)
 		objects[i]->Render();
 
-	for (LPGAMEOBJECT item : listItem)
+	for (int i = listBronzeBricks.size() - 1; i >= 0; i--)
+		listBronzeBricks[i]->Render();
+
+	for (LPGAMEOBJECT item : listItems)
 		item->Render();
 }
 
@@ -386,29 +443,31 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		if (player->GetLevel() == MARIO_LEVEL_SMALL)
 		{
 			CSuperMushroom* mushroom = new CSuperMushroom(x, y);
-			priorityListItem.push_back(mushroom);
+			priorityListItems.push_back(mushroom);
 		}
 		else if (player->GetLevel() == MARIO_RACCOON)
 		{
 			CIceFlower* flower = new CIceFlower(x, y);
-			priorityListItem.push_back(flower);
+			priorityListItems.push_back(flower);
 		}
 		else
 		{
 			CSuperLeaf* leaf = new CSuperLeaf(x, y);
-			listItem.push_back(leaf);
+			listItems.push_back(leaf);
 		}
 		break;
 	}
 	case ITEM_MONEY:
 	{
 		CCoinEffect* effect = new CCoinEffect(x, y);
-		listItem.push_back(effect);
+		listItems.push_back(effect);
 		break; 
 	}
 	case ITEM_UP_MUSHROOM:
 		break;
 	case ITEM_P_SWITCH:
+		CP_Switch* p_switch = new CP_Switch();
+		objects.push_back(p_switch);
 		break;
 	}
 }

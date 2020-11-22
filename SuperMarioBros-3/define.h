@@ -15,6 +15,21 @@
 #define	STATE_RAMMED				101
 #define STATE_BEING_HIT_BY_TAIL		102
 
+// Bronze brick and Coin
+#define BRONZE_BRICK_ANI			0
+#define IDLE_COIN_ANI				1
+#define ROTATING_COIN				2
+#define HORIZONTAL_SEPARATION_LINE	367
+#define TRANSFORMATION_TIME			7000 //8000
+#define STATE_TRANSFORMATION		100
+#define STATE_NORMAL				200
+
+enum BrickTransformation
+{
+	BRICK_FORM = 1,
+	COIN_FORM
+};
+
 enum ItemOfBrick
 {
 	ITEM_RANDOM = 0,
@@ -25,6 +40,13 @@ enum ItemOfBrick
 	ITEM_UP_MUSHROOM = 5,
 	ITEM_P_SWITCH = 6,
 };
+
+#define STATE_PRESSED				250
+#define P_SWITCH_BBBOX_SIDE_LENGTH	16
+#define P_SWITCH_NORMAL_ANI			0
+#define P_SWITCH_PRESSED_ANI		1
+#define P_SWITCH_POS_X				2032
+#define P_SWITCH_POS_Y				352
 	
 #define SUPER_LEAF_ANI_LEFT						0
 #define SUPER_LEAF_ANI_RIGHT					1
@@ -465,6 +487,8 @@ enum Type
 	SUPER_LEAF = 13,
 	SUPER_MUSHROOM = 14,
 	ICE_FLOWER = 15,
+	COIN = 16,
+	P_SWITCH = 17,
 };
 
 enum Category
