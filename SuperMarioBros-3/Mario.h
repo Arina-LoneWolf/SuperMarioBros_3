@@ -36,9 +36,11 @@ public:
 	bool isOnGround = true;
 	bool immovable;
 	bool isWaitingForAni;
+	bool isWalkingThrough;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
+	float last_vy;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);

@@ -494,6 +494,7 @@ enum Type
 	ICE_FLOWER = 15,
 	COIN = 16,
 	P_SWITCH = 17,
+	UP_MUSHROOM = 18,
 };
 
 enum Category

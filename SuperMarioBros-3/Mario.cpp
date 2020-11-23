@@ -179,8 +179,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isFalling = false;
 				isOnGround = true;
-				/*if (canFly)
-					canFly = false;*/
 			}
 			vy = 0;
 		}
@@ -281,6 +279,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (e->obj->type == Type::COIN)
 			{
+				vy = last_vy;
+				//y += dy;
 				e->obj->isFinishedUsing = true;
 			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
@@ -299,6 +299,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	last_y = y;
+	if (vy)
+		last_vy = vy;
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];

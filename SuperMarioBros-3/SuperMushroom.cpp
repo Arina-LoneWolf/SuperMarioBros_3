@@ -2,13 +2,17 @@
 
 CSuperMushroom::CSuperMushroom(float brickX, float brickY)
 {
-	type = SUPER_MUSHROOM;
 	category = ITEM;
 
 	this->x = brickX;
 	this->y = brickY;
-	vy = -SUPER_MUSHROOM_DEFLECT_SPEED_Y;
 
+	if (x < BRICK_VERTICAL_SEPARATION_LINE)
+		type = SUPER_MUSHROOM;
+	else
+		type = UP_MUSHROOM;
+
+	vy = -SUPER_MUSHROOM_DEFLECT_SPEED_Y;
 	minPosY = brickY - SUPER_MUSHROOM_BBOX_HEIGHT;
 
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(8));
@@ -90,7 +94,7 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CSuperMushroom::Render()
 {
-	if (x < BRICK_VERTICAL_SEPARATION_LINE)
+	if (type == Type::SUPER_MUSHROOM)
 		ani = SUPER_MUSHROOM_ANI;
 	else
 		ani = UP_MUSHROOM_ANI;

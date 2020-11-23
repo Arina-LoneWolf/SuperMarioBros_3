@@ -367,7 +367,9 @@ void CPlayScene::Update(DWORD dt)
 	for (size_t i = 0; i < listBronzeBricks.size(); i++)
 	{
 		if (listBronzeBricks[i]->isFinishedUsing)
+		{
 			listBronzeBricks.erase(listBronzeBricks.begin() + i);
+		}
 	}
 
 	// remove items
