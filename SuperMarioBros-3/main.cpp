@@ -166,7 +166,7 @@ int Run()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH / 1, SCREEN_HEIGHT / 1);
 
 	game = CGame::GetInstance();
 	game->Init(hWnd);

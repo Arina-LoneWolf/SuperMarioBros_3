@@ -39,7 +39,7 @@ void CBronzeBrick::Render()
 		ani = BRONZE_BRICK_ANI;
 	else if (type == Type::COIN)
 	{
-		if (y > HORIZONTAL_SEPARATION_LINE)
+		if (y > BRONZE_BRICK_HORIZONTAL_SEPARATION_LINE)
 			ani = IDLE_COIN_ANI;
 		else
 			ani = ROTATING_COIN;

@@ -90,7 +90,12 @@ void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CSuperMushroom::Render()
 {
-	animation_set->at(0)->Render(x, y);
+	if (x < BRICK_VERTICAL_SEPARATION_LINE)
+		ani = SUPER_MUSHROOM_ANI;
+	else
+		ani = UP_MUSHROOM_ANI;
+
+	animation_set->at(ani)->Render(x, y);
 
 	//RenderBoundingBox();
 }

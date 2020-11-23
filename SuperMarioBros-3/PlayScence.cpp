@@ -390,7 +390,7 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 
-	CGame::GetInstance()->cam_y = 200;
+	CGame::GetInstance()->cam_y = 50;
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);
@@ -460,9 +460,10 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 	case ITEM_UP_MUSHROOM:
 	{
+		CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+		priorityListItems.push_back(mushroom);
 		break;
 	}
-
 	case ITEM_P_SWITCH:
 		CP_Switch* p_switch = new CP_Switch();
 		objects.push_back(p_switch);
