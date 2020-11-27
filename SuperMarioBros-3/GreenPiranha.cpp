@@ -8,7 +8,7 @@ CGreenPiranha::CGreenPiranha(CMario* mario)
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
 
-void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CGreenPiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;
@@ -16,35 +16,35 @@ void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (effect)
 		effect->Update(dt, coObjects);
 
-	if (deadTime && GetTickCount64() - deadTime > PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH)
+	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
 
-	if (!attackStartTime && y <= GREEN_PIRANHA_MIN_Y)
+	if (attackTime->IsStopping() && y <= GREEN_PIRANHA_MIN_Y)
 	{
 		y = GREEN_PIRANHA_MIN_Y;
 		vy = 0;
-		attackStartTime = GetTickCount64();
+		attackTime->Start();
 	}
-	else if (!sleepStartTime && y >= GREEN_PIRANHA_MAX_Y)
+	else if (sleepTime->IsStopping() && y >= GREEN_PIRANHA_MAX_Y)
 	{
 		y = GREEN_PIRANHA_MAX_Y;
 		vy = 0;
-		sleepStartTime = GetTickCount64();
+		sleepTime->Start();
 	}
 
-	if (attackStartTime && GetTickCount64() - attackStartTime > GREEN_PIRANHA_DELAY_TIME)
+	if (attackTime->IsTimeUp())
 	{
-		attackStartTime = 0;
+		attackTime->Stop();
 		SetState(GREEN_PIRANHA_STATE_MOVE_DOWN);
 	}
 
-	if (sleepStartTime && GetTickCount64() - sleepStartTime > GREEN_PIRANHA_DELAY_TIME)
+	if (sleepTime->IsTimeUp())
 	{
 		player->GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
 
 		if (!CheckPlayerInSafeZone(playerLeft, playerTop, playerRight, playerBottom))
 		{
-			sleepStartTime = 0;
+			sleepTime->Stop();
 			SetState(GREEN_PIRANHA_STATE_MOVE_UP);
 		}
 	}
@@ -86,7 +86,7 @@ void CGreenPiranha::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		effect = new CMoneyEffect({ x + 3, y - 7 });
 		vanish = true;
-		deadTime = GetTickCount64();
+		deadTime->Start();
 		break;
 	}
 }

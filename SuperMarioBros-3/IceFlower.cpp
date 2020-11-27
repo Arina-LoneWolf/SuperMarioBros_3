@@ -14,7 +14,7 @@ CIceFlower::CIceFlower(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(6));
 }
 
-void CIceFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CIceFlower::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	y += vy;
 

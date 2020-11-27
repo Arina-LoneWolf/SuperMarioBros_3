@@ -3,16 +3,17 @@
 #include "Mario.h"
 #include "PiranhaFireball.h"
 #include "MoneyEffect.h"
+#include "Timer.h"
 
 class CFirePiranha : public CGameObject
 {
 public:
 	vector<LPGAMEOBJECT> listFireball;
 
-	DWORD attackStartTime;
-	DWORD sleepStartTime;
-	DWORD delayToAttackStartTime;
-	DWORD deadTime;
+	CTimer* attackTime = new CTimer(FIRE_PIRANHA_DELAY_TIME);
+	CTimer* sleepTime = new CTimer(FIRE_PIRANHA_DELAY_TIME);
+	CTimer* delayToAttackTime = new CTimer(FIRE_PIRANHA_DELAY_TO_ATTACK_TIME);
+	CTimer* deadTime = new CTimer(PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH);
 
 	int last_face_ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
 	int last_attack_ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
@@ -29,7 +30,7 @@ public:
 	bool vanish;
 
 	CFirePiranha(CMario* mario, int piranhaType);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);

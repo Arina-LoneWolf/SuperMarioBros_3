@@ -9,7 +9,7 @@ CMoneyEffect::CMoneyEffect(D3DXVECTOR2 position, int moneyAni)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(17));
 }
 
-void CMoneyEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CMoneyEffect::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;

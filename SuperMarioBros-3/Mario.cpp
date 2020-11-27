@@ -20,7 +20,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->y = y;
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -30,16 +30,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_FLY_GRAVITY * dt;
 	else
 		vy += MARIO_GRAVITY * dt;
-
-	/*if (koopaIsReset)
-	{
-		isHoldingShell = false;
-		koopaIsReset = false;
-	}*/
 	
 	#pragma region Wait for animation
 
-	if (canFly && GetTickCount64() - flyStartTime > 5000)
+	if (canFly && flyTime->IsTimeUp()) // có cần xét canFly?
 	{
 		canFly = false;
 	}
@@ -60,10 +54,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isWaggingTail = false;
 	}
 
-	if (kickStartTime
-		&& GetTickCount64() - kickStartTime >= MARIO_KICK_TIME)
+	if (kickTime->IsTimeUp())
 	{
-		kickStartTime = 0;
+		kickTime->Stop();
 		kickShell = false;
 	}
 	#pragma endregion
@@ -268,7 +261,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							y += dy;
 						koopa->object_colliding_nx = this->nx;
 						kickShell = true;
-						kickStartTime = GetTickCount64();
+						kickTime->Start();
 						koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
 					}
 				}
@@ -1158,11 +1151,11 @@ void CMario::SetState(int state)
 	case MARIO_STATE_JUMP_LOW:
 		if (isOnGround)
 		{
-			jumpStartTime = GetTickCount64();
+			jumpTime->Start();
 			vy = -MARIO_LOW_JUMP_SPEED_Y;
 			isOnGround = false;
 		}
-		if (GetTickCount64() - jumpStartTime >= 100 && !isFalling)
+		if (jumpTime->IsTimeUp() && !isFalling)
 			vy += MARIO_LOW_JUMP_GRAVITY * dt;
 		break;
 
@@ -1336,7 +1329,7 @@ void CMario::Fly()
 {
 	isWaggingTail = true;
 	if (isOnGround)
-		flyStartTime = GetTickCount64();
+		flyTime->Start();
 	SetState(MARIO_STATE_FLYING);
 	waggingTailStartTime = GetTickCount64();
 }

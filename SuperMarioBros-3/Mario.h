@@ -7,13 +7,14 @@
 #include "Tail.h"
 #include "HitEffect.h"
 #include "Portal.h"
+#include "Timer.h"
 
 
 class CMario : public CGameObject
 {
 	int level;
 	int untouchable;
-	DWORD untouchable_start;
+	ULONGLONG untouchable_start;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
@@ -23,11 +24,12 @@ public:
 
 	CTail* tail = new CTail();
 
-	DWORD jumpStartTime;
-	DWORD attackStartTime;
-	DWORD waggingTailStartTime;
-	DWORD flyStartTime;
-	DWORD kickStartTime;
+	ULONGLONG attackStartTime;
+	ULONGLONG waggingTailStartTime;
+
+	CTimer* jumpTime = new CTimer(MARIO_LOW_JUMP_TIME);
+	CTimer* flyTime = new CTimer(MARIO_FLYING_TIME);
+	CTimer* kickTime = new CTimer(MARIO_KICK_TIME);
 
 	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning;
 	bool kickShell;
@@ -42,7 +44,7 @@ public:
 	float last_vy;
 
 	CMario(float x = 0.0f, float y = 0.0f);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
+	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
 	void SetState(int state);

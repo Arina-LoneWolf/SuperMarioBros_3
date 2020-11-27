@@ -23,19 +23,19 @@ void CItem::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		bottom = y + 18;
 	}
 }
-void CItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CItem::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
 	if (spawn) {
 		//DebugOut(L"vy %f \n", vy);
 		if (y > Item_move)
-			vy = -0.05;
+			vy = -0.05f;
 		else spawn = false;
 
 	}
 	else
 	{
-		vx = 0.05 * change_direction;
+		vx = 0.05f * change_direction;
 		vy = GRAVITY;
 
 	}

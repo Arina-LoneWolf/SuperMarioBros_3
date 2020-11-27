@@ -21,7 +21,7 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 		top = y;
 }
 
-void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vy += MARIO_GRAVITY * dt;
@@ -30,10 +30,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
 		isFinishedUsing = true;
 
-	if (deadTime && GetTickCount64() - deadTime >= GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH)
-	{
+	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
-	}
 
 	if (effect)
 		effect->Update(dt, coObjects);
@@ -140,7 +138,7 @@ void CGoomba::SetState(int state)
 		break;
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
-		deadTime = GetTickCount64();
+		deadTime->Start();
 		effect = new CMoneyEffect({ x + 3, y - 7 });
 		break;
 	}

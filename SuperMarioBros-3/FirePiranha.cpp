@@ -11,7 +11,7 @@ CFirePiranha::CFirePiranha(CMario* mario, int piranhaType)
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
 
-void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CFirePiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;
@@ -19,7 +19,7 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (effect)
 		effect->Update(dt, coObjects);
 
-	if (deadTime && GetTickCount64() - deadTime > PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH)
+	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
 
 	if (vanish)
@@ -35,42 +35,42 @@ void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			listFireball.erase(listFireball.begin() + i);
 	}
 
-	if (delayToAttackStartTime && GetTickCount64() - delayToAttackStartTime > FIRE_PIRANHA_DELAY_TO_ATTACK_TIME)
+	if (delayToAttackTime->IsTimeUp())
 	{
 		if (playerArea != Area::OUTSIDE_AREA)
 			CreateFireball();
-		delayToAttackStartTime = 0;
+		delayToAttackTime->Stop();
 	}
 
 	for (LPGAMEOBJECT fireball : listFireball)
 		fireball->Update(dt, coObjects);
 
-	if (!attackStartTime && y <= minPosY)
+	if (attackTime->IsStopping() && y <= minPosY)
 	{
 		y = minPosY;
 		vy = 0;
-		attackStartTime = GetTickCount64();
-		delayToAttackStartTime = GetTickCount64();
+		attackTime->Start();
+		delayToAttackTime->Start();
 		SetState(FIRE_PIRANHA_STATE_ATTACK);
 	}
-	else if (!sleepStartTime && y >= FIRE_PIRANHA_MAX_Y)
+	else if (sleepTime->IsStopping() && y >= FIRE_PIRANHA_MAX_Y)
 	{
 		y = FIRE_PIRANHA_MAX_Y;
 		vy = 0;
-		sleepStartTime = GetTickCount64();
+		sleepTime->Start();
 	}
 
-	if (attackStartTime && GetTickCount64() - attackStartTime > FIRE_PIRANHA_DELAY_TIME)
+	if (attackTime->IsTimeUp())
 	{
-		attackStartTime = 0;
+		attackTime->Stop();
 		SetState(FIRE_PIRANHA_STATE_MOVE_DOWN);
 	}
 
-	if (sleepStartTime && GetTickCount64() - sleepStartTime > FIRE_PIRANHA_DELAY_TIME)
+	if (sleepTime->IsTimeUp())
 	{
 		if (!CheckPlayerInSafeZone(playerLeft, playerTop, playerRight, playerBottom))
 		{
-			sleepStartTime = 0;
+			sleepTime->Stop();
 			SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 		}
 	}
@@ -182,7 +182,7 @@ void CFirePiranha::SetState(int state)
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		effect = new CMoneyEffect({ x + 3, y - 7 });
 		vanish = true;
-		deadTime = GetTickCount64();
+		deadTime->Start();
 		break;
 	}
 }

@@ -3,11 +3,12 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "MoneyEffect.h"
+#include "Timer.h"
 
 class CKoopa : public CGameObject
 {
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
 public:
@@ -16,11 +17,10 @@ public:
 	bool isBeingHeld;
 	bool reset;
 
-	ULONGLONG sleepStartTime;
-	ULONGLONG vibrationStartTime;
+	CTimer* sleepTime = new CTimer(KOOPA_SLEEP_TIME);
+	CTimer* vibrationTime = new CTimer(KOOPA_VIBRATION_TIME);
 
 	float lastMoveSpeed = KOOPA_MOVE_SPEED_X;
-	//float last_vx_para = GREEN_PARAKOOPA_MOVE_SPEED_X;
 	int startingPos;
 	
 	CMario* player;
@@ -30,5 +30,4 @@ public:
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
-	void Revive();
 };

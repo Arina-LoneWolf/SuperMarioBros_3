@@ -15,7 +15,7 @@ public:
 	CMoneyEffect* effect;
 
 	CCoinEffect(float brickX, float brickY);
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	~CCoinEffect();
 };

@@ -146,11 +146,13 @@
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="SuperMushroom.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="TailHitEffect.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -185,11 +187,13 @@
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="StatusBar.h" />
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="SuperMushroom.h" />
     <ClInclude Include="Tail.h" />
     <ClInclude Include="TailHitEffect.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />

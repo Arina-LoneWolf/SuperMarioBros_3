@@ -13,7 +13,7 @@ CPiranhaFireball::CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea, CMar
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
 }
 
-void CPiranhaFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CPiranhaFireball::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 
@@ -76,7 +76,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 	{
 	case TOP_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
-		vy = vx / 2.8;
+		vy = vx / 2.8f;
 		break;
 	case TOP_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
@@ -84,7 +84,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 		break;
 	case TOP_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
-		vy = -vx / 2.8;
+		vy = -vx / 2.8f;
 		break;
 	case TOP_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
@@ -92,7 +92,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 		break;
 	case BOTTOM_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
-		vy = -vx / 2.8;
+		vy = -vx / 2.8f;
 		break;
 	case BOTTOM_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
@@ -100,7 +100,7 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 		break;
 	case BOTTOM_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
-		vy = vx / 2.8;
+		vy = vx / 2.8f;
 		break;
 	case BOTTOM_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;

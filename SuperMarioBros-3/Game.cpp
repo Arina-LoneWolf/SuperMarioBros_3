@@ -65,7 +65,7 @@ void CGame::Init(HWND hWnd)
 */
 void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha)
 {
-	D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
+	D3DXVECTOR3 p(round(x - cam_x), round(y - cam_y), 0);
 	RECT r; 
 	r.left = left;
 	r.top = top;
@@ -125,7 +125,7 @@ void CGame::InitKeyboard()
 	//
 	// Set the buffer size to DINPUT_BUFFERSIZE (defined above) elements.
 	//
-	// The buffer size is a DWORD property associated with the device.
+	// The buffer size is a ULONGLONG property associated with the device.
 	DIPROPDWORD dipdw;
 
 	dipdw.diph.dwSize = sizeof(DIPROPDWORD);
@@ -185,7 +185,7 @@ void CGame::ProcessKeyboard()
 	}
 
 	// Scan through all buffered events, check if the key is pressed or released
-	for (DWORD i = 0; i < dwElements; i++)
+	for (ULONGLONG i = 0; i < dwElements; i++)
 	{
 		int KeyCode = keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;

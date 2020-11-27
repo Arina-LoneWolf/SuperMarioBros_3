@@ -23,12 +23,17 @@ void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	bottom = y + KOOPA_BBOX_HEIGHT;
 
 	if (state == ENEMY_STATE_MOVE)
-		top = y;
+	{
+		if (type == Type::GREEN_PARAKOOPA)
+			top = y;
+		else
+			top = y + 1;
+	}
 	else
 		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
-void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
@@ -79,21 +84,21 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		x += 6 * object_colliding_nx;
 
 		player->kickShell = true;
-		player->kickStartTime = GetTickCount64();
+		player->kickTime->Start();
 		SetState(KOOPA_STATE_SPIN_AND_MOVE);
 		isBeingHeld = false;
 	}
-
-	if (sleepStartTime && GetTickCount64() - sleepStartTime > KOOPA_SLEEP_TIME)
+	
+	if (sleepTime->IsTimeUp())
 	{
 		SetState(KOOPA_STATE_VIBRATE);
-		sleepStartTime = 0;
+		sleepTime->Stop();
 	}
-
-	if (vibrationStartTime && GetTickCount64() - vibrationStartTime > KOOPA_VIBRATION_TIME)
+	
+	if (vibrationTime->IsTimeUp())
 	{
 		SetState(ENEMY_STATE_MOVE);
-		vibrationStartTime = 0;
+		vibrationTime->Stop();
 		player->isHoldingShell = false;
 	}
 
@@ -262,7 +267,7 @@ void CKoopa::Render()
 	if (effect)
 		effect->Render();
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)
@@ -312,17 +317,18 @@ void CKoopa::SetState(int state)
 	case ENEMY_STATE_IDLE:
 		vx = 0;
 		vy = 0;
-		sleepStartTime = GetTickCount64();
+		sleepTime->Start();
 		break;
 
 	case KOOPA_STATE_SPIN_AND_MOVE:
 		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
 		isBeingHeld = false;
-		sleepStartTime = 0;
+		sleepTime->Stop();
+		vibrationTime->Stop();
 		break;
 
 	case KOOPA_STATE_VIBRATE:
-		vibrationStartTime = GetTickCount64();
+		vibrationTime->Start();
 		break;
 
 	case KOOPA_STATE_NORMAL:
@@ -379,6 +385,6 @@ void CKoopa::Reset()
 	SetState(ENEMY_STATE_MOVE);
 	isSupine = false;
 	reset = false;
-	sleepStartTime = 0;
-	vibrationStartTime = 0;
+	sleepTime->Stop();
+	vibrationTime->Stop();
 }

@@ -17,7 +17,7 @@ public:
 	bool dropped;
 
 	CBrickContainsItem(int brickType, int itemType, float originalPosY);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 	virtual void SetState(int state);

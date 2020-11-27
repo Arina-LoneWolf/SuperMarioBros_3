@@ -9,7 +9,7 @@ CBrickContainsItem::CBrickContainsItem(int brickType, int itemType, float origin
 	this->originalPosY = originalPosY;
 }
 
-void CBrickContainsItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CBrickContainsItem::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 
