@@ -9,7 +9,7 @@ CBrokenBrickPiece::CBrokenBrickPiece(D3DXVECTOR2 position, int nx, int deflectFa
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(12));
 }
 
-void CBrokenBrickPiece::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CBrokenBrickPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 

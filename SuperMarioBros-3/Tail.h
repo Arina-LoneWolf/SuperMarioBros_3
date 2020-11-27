@@ -7,9 +7,9 @@ class CTail : public CGameObject
 {
 public:
 	vector<LPGAMEOBJECT> listEffect;
-	bool appear;
+	bool appear = false;
 
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Render();
 

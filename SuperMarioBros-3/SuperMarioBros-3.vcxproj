@@ -144,7 +144,6 @@
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
-    <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="SuperMushroom.cpp" />
     <ClCompile Include="Tail.cpp" />
@@ -183,7 +182,6 @@
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />
-    <ClInclude Include="StatusBar.h" />
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="SuperMushroom.h" />
     <ClInclude Include="Tail.h" />

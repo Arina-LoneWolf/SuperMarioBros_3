@@ -5,11 +5,11 @@ class CSuperMushroom : public CGameObject
 {
 public:
 	float minPosY;
-	bool stopBouncing;
-	bool isSliding;
+	bool stopBouncing = false;
+	bool isSliding = false;
 
 	CSuperMushroom(float brickX, float brickY);
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 };

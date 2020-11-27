@@ -7,7 +7,6 @@
 #include "Tail.h"
 #include "HitEffect.h"
 #include "Portal.h"
-#include "Timer.h"
 
 
 class CMario : public CGameObject
@@ -44,7 +43,7 @@ public:
 	float last_vy;
 
 	CMario(float x = 0.0f, float y = 0.0f);
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
 	void SetState(int state);

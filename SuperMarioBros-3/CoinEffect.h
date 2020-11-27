@@ -9,13 +9,13 @@ public:
 	float maxPosY;
 	D3DXVECTOR2 moneyStartingPos;
 
-	bool isFalling;
-	bool vanish;
+	bool isFalling = false;
+	bool vanish = false;
 
 	CMoneyEffect* effect;
 
 	CCoinEffect(float brickX, float brickY);
-	void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
+	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	~CCoinEffect();
 };

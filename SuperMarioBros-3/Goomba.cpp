@@ -21,7 +21,7 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 		top = y;
 }
 
-void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	vy += MARIO_GRAVITY * dt;

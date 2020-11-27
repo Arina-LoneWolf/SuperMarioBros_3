@@ -3,12 +3,11 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "MoneyEffect.h"
-#include "Timer.h"
 
 class CKoopa : public CGameObject
 {
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
 public:
@@ -30,4 +29,5 @@ public:
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
+	void Revive();
 };

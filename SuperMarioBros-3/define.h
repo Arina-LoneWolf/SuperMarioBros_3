@@ -50,7 +50,7 @@ enum ItemOfBrick
 #define P_SWITCH_PRESSED_ANI		1
 #define P_SWITCH_POS_X				2032
 #define P_SWITCH_POS_Y				352
-	
+
 #define SUPER_LEAF_ANI_LEFT						0
 #define SUPER_LEAF_ANI_RIGHT					1
 #define SUPER_LEAF_BBOX_WIDTH					16
@@ -339,7 +339,7 @@ enum TypeOfPipe
 #define GOOMBA_DEFLECT_SPEED_Y					0.15f
 #define GOOMBA_DEFLECT_SPEED_X					0.03f
 #define GOOMBA_BBOX_WIDTH						16
-#define GOOMBA_BBOX_HEIGHT						16
+#define GOOMBA_BBOX_HEIGHT						15
 #define GOOMBA_BBOX_HEIGHT_DIE_BY_CRUSH			9
 #define GOOMBA_ANI_MOVE							0
 #define GOOMBA_ANI_DIE_BY_CRUSH					1

@@ -16,7 +16,7 @@ CSuperLeaf::CSuperLeaf(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(5));
 }
 
-void CSuperLeaf::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (y > CGame::GetInstance()->GetCamPosY() + SCREEN_HEIGHT / 2)
 		isFinishedUsing = true;
@@ -32,13 +32,13 @@ void CSuperLeaf::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		if (x <= leftLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = 0.3f * pow(35.0f, vy);
+			vx = 0.3 * pow(35, vy);
 		}
 
 		if (x >= rightLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = -0.3f * pow(35.0f, vy);
+			vx = -0.3 * pow(35, vy);
 		}
 	}
 }

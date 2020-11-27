@@ -11,13 +11,13 @@ public:
 	CTimer* deadTime = new CTimer(PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH);
 
 	float playerLeft, playerTop, playerRight, playerBottom;
-	bool vanish;
+	bool vanish = false;
 
 	CMario* player;
 	CMoneyEffect* effect;
 
 	CGreenPiranha(CMario* mario);
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);

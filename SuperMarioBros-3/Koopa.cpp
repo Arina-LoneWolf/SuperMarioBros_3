@@ -23,17 +23,12 @@ void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	bottom = y + KOOPA_BBOX_HEIGHT;
 
 	if (state == ENEMY_STATE_MOVE)
-	{
-		if (type == Type::GREEN_PARAKOOPA)
-			top = y;
-		else
-			top = y + 1;
-	}
+		top = y;
 	else
 		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
-void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
+void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
@@ -56,10 +51,12 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 	if (type == Type::RED_KOOPA)
 	{
 		if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2)
-			Reset();
+		{
+			if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < resetPosX)
+				Reset();
+		}
 		else if (CGame::GetInstance()->GetCamPosX() > resetPosX + KOOPA_BBOX_HEIGHT)
 		{
-			//if (!isBeingHeld)
 			if (CGame::GetInstance()->GetCamPosX() > x + KOOPA_BBOX_WIDTH)
 				Reset();
 		}
@@ -88,13 +85,13 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(KOOPA_STATE_SPIN_AND_MOVE);
 		isBeingHeld = false;
 	}
-	
+
 	if (sleepTime->IsTimeUp())
 	{
 		SetState(KOOPA_STATE_VIBRATE);
 		sleepTime->Stop();
 	}
-	
+
 	if (vibrationTime->IsTimeUp())
 	{
 		SetState(ENEMY_STATE_MOVE);
@@ -110,8 +107,8 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 			vy += MARIO_GRAVITY * dt;
 	}
 	else if (state != KOOPA_STATE_BEING_HELD)
-			vy += MARIO_GRAVITY * dt;
-	
+		vy += MARIO_GRAVITY * dt;
+
 	if (isBeingHeld)
 		SetPositionAccordingToPlayer();
 
@@ -183,7 +180,7 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 							e->obj->object_colliding_nx = 1;
 						else
 							e->obj->object_colliding_nx = -1;
-						
+
 						e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
 					}
 				}

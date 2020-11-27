@@ -13,7 +13,7 @@ CPiranhaFireball::CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea, CMar
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
 }
 
-void CPiranhaFireball::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CPiranhaFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 

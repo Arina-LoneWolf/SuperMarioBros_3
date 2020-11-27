@@ -20,7 +20,7 @@ CFireball::CFireball(D3DXVECTOR2 position, int nx)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(9));
 }
 
-void CFireball::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 

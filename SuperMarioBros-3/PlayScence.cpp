@@ -66,7 +66,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (size_t i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -88,7 +88,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (size_t i = 1; i < tokens.size(); i++)
+	for (int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -111,8 +111,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
-	float x = (float)atof(tokens[1].c_str());
-	float y = (float)atof(tokens[2].c_str());
+	float x = atof(tokens[1].c_str());
+	float y = atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -137,8 +137,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case Type::PORTAL:
 	{
-		float r = (float)atof(tokens[4].c_str());
-		float b = (float)atof(tokens[5].c_str());
+		float r = atof(tokens[4].c_str());
+		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
@@ -301,7 +301,7 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
-void CPlayScene::Update(ULONGLONG dt)
+void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -421,7 +421,7 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (size_t i = 0; i < objects.size(); i++)
+	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
@@ -582,8 +582,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;
-	/*if (mario->isWaitingForAni)
-		return;*/
+	if (mario->isWaitingForAni)
+		return;
 
 	else if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))

@@ -23,8 +23,8 @@
 class CPlayScene: public CScene
 {
 protected: 
-	CMario* player = new CMario();					// A play scene has to have player, right? 
-	TileMap* map = new TileMap();
+	CMario *player;					// A play scene has to have player, right? 
+	TileMap* map;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listBronzeBricks; // brick contains the item
@@ -43,7 +43,7 @@ public:
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
-	virtual void Update(ULONGLONG dt);
+	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
 

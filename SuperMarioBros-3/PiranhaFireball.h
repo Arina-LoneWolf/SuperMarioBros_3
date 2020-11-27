@@ -11,7 +11,7 @@ public:
 	CMario* player;
 
 	CPiranhaFireball(D3DXVECTOR2 piranhaPos, Area playerArea, CMario* player);
-	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Render();
 

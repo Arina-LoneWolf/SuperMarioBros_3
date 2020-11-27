@@ -18,7 +18,7 @@ CSuperMushroom::CSuperMushroom(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(8));
 }
 
-void CSuperMushroom::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CSuperMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 

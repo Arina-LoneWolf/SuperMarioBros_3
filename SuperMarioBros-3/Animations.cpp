@@ -3,7 +3,7 @@
 
 CAnimationSets * CAnimationSets::__instance = NULL;
 
-void CAnimation::Add(int spriteId, ULONGLONG time)
+void CAnimation::Add(int spriteId, DWORD time)
 {
 	int t = time;
 	if (time == 0) t = this->defaultTime;
@@ -23,7 +23,7 @@ void CAnimation::Add(int spriteId, ULONGLONG time)
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
 void CAnimation::Render(float x, float y, int alpha)
 {
-	ULONGLONG now = GetTickCount64();
+	DWORD now = GetTickCount64();
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
@@ -31,7 +31,7 @@ void CAnimation::Render(float x, float y, int alpha)
 	}
 	else
 	{
-		ULONGLONG t = frames[currentFrame]->GetTime();
+		DWORD t = frames[currentFrame]->GetTime();
 		if (now - lastFrameTime > t)
 		{
 			currentFrame++;
