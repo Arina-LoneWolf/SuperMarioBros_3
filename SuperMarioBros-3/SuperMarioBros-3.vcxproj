@@ -128,7 +128,6 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BrokenBrickPiece.cpp" />
     <ClCompile Include="BronzeBrick.cpp" />
-    <ClCompile Include="Coin.cpp" />
     <ClCompile Include="CoinEffect.cpp" />
     <ClCompile Include="GreenKoopa.cpp" />
     <ClCompile Include="BrickContainsItem.cpp" />
@@ -144,7 +143,7 @@
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PiranhaFireball.cpp" />
     <ClCompile Include="P_Switch.cpp" />
-    <ClCompile Include="RedKoopa.cpp" />
+    <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
@@ -167,7 +166,6 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BrokenBrickPiece.h" />
     <ClInclude Include="BronzeBrick.h" />
-    <ClInclude Include="Coin.h" />
     <ClInclude Include="CoinEffect.h" />
     <ClInclude Include="GreenKoopa.h" />
     <ClInclude Include="BrickContainsItem.h" />
@@ -184,7 +182,7 @@
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaFireball.h" />
     <ClInclude Include="P_Switch.h" />
-    <ClInclude Include="RedKoopa.h" />
+    <ClInclude Include="Koopa.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SuperLeaf.h" />

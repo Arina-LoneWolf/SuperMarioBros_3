@@ -15,7 +15,7 @@
 #define	STATE_RAMMED				101
 #define STATE_BEING_HIT_BY_TAIL		102
 
-#define BRICK_VERTICAL_SEPARATION_LINE	352
+#define BRICK_VERTICAL_SEPARATION_LINE	1152
 
 // Bronze brick and Coin
 #define BRONZE_BRICK_ANI		0
@@ -162,7 +162,7 @@ enum TypeOfPipe
 
 #define MARIO_HIGH_JUMP_SPEED_Y		0.275f
 #define MARIO_LOW_JUMP_SPEED_Y		0.2f
-#define MARIO_JUMP_DEFLECT_SPEED	0.2f
+#define MARIO_JUMP_DEFLECT_SPEED	0.1f
 #define MARIO_GRAVITY				0.0006f
 #define MARIO_LOW_JUMP_GRAVITY		0.001f
 #define MARIO_FLY_GRAVITY			0.00045f
@@ -302,7 +302,7 @@ enum TypeOfPipe
 #define MARIO_RACCOON		3
 #define MARIO_FIRE			4
 
-#define MARIO_BBOX_HEIGHT				30
+#define MARIO_BBOX_HEIGHT				29
 #define MARIO_SIT_BBOX_DIFFERENCE_NUM	12
 
 #define MARIO_BIG_BBOX_WIDTH			15
@@ -354,15 +354,30 @@ enum PositionOfKoopa
 	ON_GROUND = 4,
 };
 
+enum TypeOfKoopa
+{
+	NORMAL_RED = 1,
+	NORMAL_GREEN = 2,
+	PARA_GREEN = 3,
+};
+
 #define GCB_KOOPA_POS_X	591
 #define GCB_KOOPA_POS_Y	356
-#define PCB_KOOPA_POS_X
-#define PCB_KOOPA_POS_Y
-#define BB_KOOPA_POS_X
-#define BB_KOOPA_POS_Y
-#define G_KOOPA_POS_X
-#define G_KOOPA_POS_Y
+#define PCB_KOOPA_POS_X	1424
+#define PCB_KOOPA_POS_Y	292
+#define BB_KOOPA_POS_X	2098
+#define BB_KOOPA_POS_Y	357
+#define G_KOOPA_POS_X	1472
+#define G_KOOPA_POS_Y	387
 
+#define GREEN_PARAKOOPA_DEFLECT_SPEED_Y		0.22f
+#define GREEN_PARAKOOPA_ANI_MOVE_RIGHT		8
+#define GREEN_PARAKOOPA_ANI_MOVE_LEFT		9
+#define GREEN_PARAKOOPA_MOVE_SPEED_X		0.032f
+
+#define KOOPA_SLEEP_TIME					6000
+#define KOOPA_VIBRATION_TIME				3000
+#define KOOPA_GRAVITY						0.00015f
 #define KOOPA_MOVE_SPEED_X					0.025f
 #define KOOPA_SPIN_AND_MOVE_SPEED_X			0.2f
 #define KOOPA_DEFLECT_SPEED_Y				0.15f
@@ -382,6 +397,8 @@ enum PositionOfKoopa
 #define KOOPA_ANI_SPIN_AND_MOVE_SUPINE		7
 #define KOOPA_STATE_SPIN_AND_MOVE			80
 #define KOOPA_STATE_BEING_HELD				81
+#define KOOPA_STATE_NORMAL					82
+#define KOOPA_STATE_VIBRATE					83
 
 // Fire Piranha
 enum TypeOfFirePiranha
@@ -495,6 +512,9 @@ enum Type
 	COIN = 16,
 	P_SWITCH = 17,
 	UP_MUSHROOM = 18,
+	RED_KOOPA = 19,
+	GREEN_KOOPA = 20,
+	GREEN_PARAKOOPA = 21,
 };
 
 enum Category

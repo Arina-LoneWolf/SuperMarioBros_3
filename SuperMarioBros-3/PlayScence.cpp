@@ -182,10 +182,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case Type::KOOPA:
+	case Type::RED_KOOPA:
+	case Type::GREEN_KOOPA:
+	case Type::GREEN_PARAKOOPA:
 	{
+		int koopaType = object_type;
 		int startingPos = atoi(tokens[4].c_str());
-		obj = new CRedKoopa(player, startingPos);
+		obj = new CKoopa(player, startingPos, koopaType);
 		break;
 	}
 
@@ -207,11 +210,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	//obj->SetPosition(x, y);
-
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
-	//obj->SetAnimationSet(ani_set);
 
 	if (obj)
 	{
@@ -392,7 +391,7 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 
-	CGame::GetInstance()->cam_y = 50;
+	CGame::GetInstance()->cam_y = 200;
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);

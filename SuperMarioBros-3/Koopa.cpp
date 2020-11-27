@@ -1,15 +1,20 @@
-﻿#include "RedKoopa.h"
+﻿#include "Koopa.h"
 
-CRedKoopa::CRedKoopa(CMario* mario, int startingPos)
+CKoopa::CKoopa(CMario* mario, int startingPos, int koopaType)
 {
-	type = KOOPA;
+	if (koopaType == Type::RED_KOOPA)
+		type = RED_KOOPA;
+	else if (koopaType == Type::GREEN_KOOPA)
+		type = GREEN_KOOPA;
+	else
+		type = GREEN_PARAKOOPA;
 	category = ENEMY;
 	player = mario;
 	this->startingPos = startingPos;
 	SetState(ENEMY_STATE_MOVE);
 }
 
-void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	if (died)
 		return;
@@ -23,9 +28,47 @@ void CRedKoopa::GetBoundingBox(float &left, float &top, float &right, float &bot
 		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
-void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
+
+	float resetPosX;
+	switch (startingPos)
+	{
+	case ON_GREEN_COLOR_BOX:
+		resetPosX = GCB_KOOPA_POS_X;
+		break;
+	case ON_PURPLE_COLOR_BOX:
+		resetPosX = PCB_KOOPA_POS_X;
+		break;
+	case ON_BRONZE_BRICK:
+		resetPosX = BB_KOOPA_POS_X;
+		break;
+	case ON_GROUND:
+		resetPosX = G_KOOPA_POS_X;
+		break;
+	}
+	if (type == Type::RED_KOOPA)
+	{
+		if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2)
+			Reset();
+		else if (CGame::GetInstance()->GetCamPosX() > resetPosX + KOOPA_BBOX_HEIGHT)
+		{
+			//if (!isBeingHeld)
+			if (CGame::GetInstance()->GetCamPosX() > x + KOOPA_BBOX_WIDTH)
+				Reset();
+		}
+	}
+
+	float camPosY = CGame::GetInstance()->GetCamPosY();
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
+		reset = true;
+
+	if (type != Type::RED_KOOPA && reset)
+	{
+		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < resetPosX || CGame::GetInstance()->GetCamPosX() > resetPosX + KOOPA_BBOX_HEIGHT)
+			Reset();
+	}
 
 	if (isBeingHeld && !player->isHoldingShell)
 	{
@@ -33,24 +76,42 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			object_colliding_nx = 1;
 		else
 			object_colliding_nx = -1;
-		x += 8 * object_colliding_nx;
+		x += 6 * object_colliding_nx;
+
+		player->kickShell = true;
+		player->kickStartTime = GetTickCount64();
 		SetState(KOOPA_STATE_SPIN_AND_MOVE);
 		isBeingHeld = false;
 	}
 
-	if (state != KOOPA_STATE_BEING_HELD)
-		vy += MARIO_GRAVITY * dt;
-	else
+	if (sleepStartTime && GetTickCount64() - sleepStartTime > KOOPA_SLEEP_TIME)
 	{
-		SetPositionAccordingToPlayer();
+		SetState(KOOPA_STATE_VIBRATE);
+		sleepStartTime = 0;
 	}
+
+	if (vibrationStartTime && GetTickCount64() - vibrationStartTime > KOOPA_VIBRATION_TIME)
+	{
+		SetState(ENEMY_STATE_MOVE);
+		vibrationStartTime = 0;
+		player->isHoldingShell = false;
+	}
+
+	if (state == KOOPA_STATE_VIBRATE)
+	{
+		if (isBeingHeld)
+			vy = 0;
+		else
+			vy += MARIO_GRAVITY * dt;
+	}
+	else if (state != KOOPA_STATE_BEING_HELD)
+			vy += MARIO_GRAVITY * dt;
+	
+	if (isBeingHeld)
+		SetPositionAccordingToPlayer();
 
 	if (effect)
 		effect->Update(dt, coObjects);
-
-	float camPosY = CGame::GetInstance()->GetCamPosY();
-	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
-		isFinishedUsing = true;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -78,7 +139,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		if (ny != 0)
 		{
-			vy = 0;
+			if (type == Type::GREEN_PARAKOOPA)
+				vy = -GREEN_PARAKOOPA_DEFLECT_SPEED_Y;
+			else
+				vy = 0;
 		}
 		//
 		// Collision logic with other objects
@@ -102,7 +166,8 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (x <= e->obj->x || x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH))
 					{
-						vx = -vx;
+						if (type == Type::RED_KOOPA)
+							vx = -vx;
 					}
 				}
 				if (e->obj->category == Category::ENEMY && state == KOOPA_STATE_SPIN_AND_MOVE)
@@ -138,10 +203,13 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
+	if (abs(vx) == KOOPA_MOVE_SPEED_X)
+		lastMoveSpeed = vx;
+
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CRedKoopa::Render()
+void CKoopa::Render()
 {
 	switch (state)
 	{
@@ -158,10 +226,20 @@ void CRedKoopa::Render()
 		break;
 
 	case ENEMY_STATE_MOVE:
-		if (vx > 0)
-			ani = KOOPA_ANI_MOVE_RIGHT;
+		if (type == Type::GREEN_PARAKOOPA)
+		{
+			if (vx > 0)
+				ani = GREEN_PARAKOOPA_ANI_MOVE_RIGHT;
+			else
+				ani = GREEN_PARAKOOPA_ANI_MOVE_LEFT;
+		}
 		else
-			ani = KOOPA_ANI_MOVE_LEFT;
+		{
+			if (vx > 0)
+				ani = KOOPA_ANI_MOVE_RIGHT;
+			else
+				ani = KOOPA_ANI_MOVE_LEFT;
+		}
 		break;
 
 	case KOOPA_STATE_SPIN_AND_MOVE:
@@ -169,6 +247,13 @@ void CRedKoopa::Render()
 			ani = KOOPA_ANI_SPIN_AND_MOVE_SUPINE;
 		else
 			ani = KOOPA_ANI_SPIN_AND_MOVE_PRONE;
+		break;
+
+	case KOOPA_STATE_VIBRATE:
+		if (isSupine)
+			ani = KOOPA_ANI_VIBRATE_SUPINE;
+		else
+			ani = KOOPA_ANI_VIBRATE_PRONE;
 		break;
 	}
 
@@ -180,7 +265,7 @@ void CRedKoopa::Render()
 	//RenderBoundingBox();
 }
 
-void CRedKoopa::SetState(int state)
+void CKoopa::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
@@ -194,6 +279,7 @@ void CRedKoopa::SetState(int state)
 			effect = new CMoneyEffect({ x + 8, y - 7 });
 		died = true;
 		break;
+
 	case ENEMY_STATE_ATTACKED_BY_TAIL:
 		isSupine = true;
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
@@ -203,22 +289,50 @@ void CRedKoopa::SetState(int state)
 		else
 			effect = new CMoneyEffect({ x - 7, y - 3 });
 		break;
+
 	case ENEMY_STATE_MOVE:
-		vx = -KOOPA_MOVE_SPEED_X;
+		if (type == Type::GREEN_PARAKOOPA)
+			vx = -GREEN_PARAKOOPA_MOVE_SPEED_X;
+		else if (type == Type::GREEN_KOOPA)
+		{
+			if (reset)
+				vx = -KOOPA_MOVE_SPEED_X;
+			else
+				vx = -lastMoveSpeed;
+		}
+		else
+			vx = -lastMoveSpeed;
+		isBeingHeld = false;
 		break;
+
 	case KOOPA_STATE_BEING_HELD:
 		isBeingHeld = true;
+		break;
+
 	case ENEMY_STATE_IDLE:
 		vx = 0;
 		vy = 0;
+		sleepStartTime = GetTickCount64();
 		break;
+
 	case KOOPA_STATE_SPIN_AND_MOVE:
 		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
+		isBeingHeld = false;
+		sleepStartTime = 0;
+		break;
+
+	case KOOPA_STATE_VIBRATE:
+		vibrationStartTime = GetTickCount64();
+		break;
+
+	case KOOPA_STATE_NORMAL:
+		type = GREEN_KOOPA;
+		SetState(ENEMY_STATE_MOVE);
 		break;
 	}
 }
 
-void CRedKoopa::SetPositionAccordingToPlayer()
+void CKoopa::SetPositionAccordingToPlayer()
 {
 	if (player->GetLevel() == MARIO_LEVEL_SMALL)
 	{
@@ -230,9 +344,9 @@ void CRedKoopa::SetPositionAccordingToPlayer()
 	else if (player->GetLevel() == MARIO_RACCOON)
 	{
 		if (player->nx > 0)
-			SetPosition(player->x + 18, player->y);
+			SetPosition(player->x + 19, player->y);
 		else
-			SetPosition(player->x - 4, player->y);
+			SetPosition(player->x - 3, player->y);
 	}
 	else if (player->GetLevel() == MARIO_LEVEL_BIG || player->GetLevel() == MARIO_FIRE)
 	{
@@ -243,7 +357,7 @@ void CRedKoopa::SetPositionAccordingToPlayer()
 	}
 }
 
-void CRedKoopa::Reset()
+void CKoopa::Reset()
 {
 	switch (startingPos)
 	{
@@ -251,13 +365,20 @@ void CRedKoopa::Reset()
 		SetPosition(GCB_KOOPA_POS_X, GCB_KOOPA_POS_Y);
 		break;
 	case ON_PURPLE_COLOR_BOX:
+		type = GREEN_PARAKOOPA;
+		SetPosition(PCB_KOOPA_POS_X, PCB_KOOPA_POS_Y);
 		break;
 	case ON_BRONZE_BRICK:
+		SetPosition(BB_KOOPA_POS_X, BB_KOOPA_POS_Y);
 		break;
 	case ON_GROUND:
+		SetPosition(G_KOOPA_POS_X, G_KOOPA_POS_Y);
 		break;
 	}
 
 	SetState(ENEMY_STATE_MOVE);
 	isSupine = false;
+	reset = false;
+	sleepStartTime = 0;
+	vibrationStartTime = 0;
 }

@@ -61,40 +61,7 @@ void CBrickContainsItem::SetState(int state)
 
 	if (state == STATE_RAMMED)
 	{
-		// brick bounces and become normal, item appears
 		if (!rammed)
 			vy = -BRICK_DEFLECT_SPEED_Y;
-		
-		//DropItem();
-	}
-}
-
-void CBrickContainsItem::DropItem()
-{
-	switch (itemType)
-	{
-	case ITEM_RANDOM:
-		if (player->GetLevel() == MARIO_LEVEL_SMALL)
-		{
-			// create super mushroom
-		}
-		else if (player->GetLevel() == MARIO_LEVEL_BIG || player->GetLevel() == MARIO_FIRE)
-		{
-			// create super leaf
-		}
-		else if (player->GetLevel() == MARIO_RACCOON)
-		{
-			// create ice flower
-		}
-		break;
-	case ITEM_MONEY:
-		// create money effect
-		break;
-	case ITEM_UP_MUSHROOM:
-		// create up mushroom
-		break;
-	case ITEM_P_SWITCH:
-		// create P switch
-		break;
 	}
 }

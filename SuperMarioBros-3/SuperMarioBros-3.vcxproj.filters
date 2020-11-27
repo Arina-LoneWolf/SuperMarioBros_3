@@ -87,13 +87,7 @@
     <ClCompile Include="BrokenBrickPiece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GreenKoopa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RedKoopa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BrickContainsItem.cpp">
@@ -124,6 +118,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="P_Switch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -203,12 +200,6 @@
     <ClInclude Include="BrokenBrickPiece.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Coin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RedKoopa.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GreenKoopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -240,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="P_Switch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

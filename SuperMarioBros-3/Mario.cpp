@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "Mario.h"
-#include "RedKoopa.h"
+#include "Koopa.h"
 #include "Goomba.h"
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -30,6 +30,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_FLY_GRAVITY * dt;
 	else
 		vy += MARIO_GRAVITY * dt;
+
+	/*if (koopaIsReset)
+	{
+		isHoldingShell = false;
+		koopaIsReset = false;
+	}*/
 	
 	#pragma region Wait for animation
 
@@ -214,47 +220,56 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			else if (dynamic_cast<CRedKoopa*>(e->obj))
+			else if (dynamic_cast<CKoopa*>(e->obj))
 			{
-				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
+				if (untouchable) return;
 
-				if (e->ny < 0)
+				CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+				if (koopa->type == Type::GREEN_PARAKOOPA)
 				{
-					if (koopa->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
+					if (ny < 0)
 					{
-						if (koopa->GetState() == ENEMY_STATE_IDLE)
-						{
-							koopa->object_colliding_nx = this->nx;
-							koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
-						}
-						else
-							koopa->SetState(ENEMY_STATE_IDLE);
+						koopa->SetState(KOOPA_STATE_NORMAL);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
+					else
+						CollideWithEnemy();
+					break;
 				}
-				else if (e->nx != 0)
+				
+				if (koopa->GetState() == ENEMY_STATE_MOVE || koopa->GetState() == KOOPA_STATE_SPIN_AND_MOVE)
 				{
-					if (untouchable == 0)
+					if (ny < 0 && nx == 0)
 					{
-						if (koopa->GetState() != ENEMY_STATE_IDLE && !isRunning)
-						{
-							CollideWithEnemy();
-						}
-						else
-						{
-							if (isRunning)
-							{
-								isHoldingShell = true;
-								koopa->SetState(KOOPA_STATE_BEING_HELD);
-							}
-							else
-							{
-								koopa->object_colliding_nx = this->nx;
-								kickShell = true;
-								kickStartTime = GetTickCount64();
-								koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
-							}
-						}
+						koopa->SetState(ENEMY_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+					else
+						CollideWithEnemy();
+				}
+				else if (koopa->GetState() == ENEMY_STATE_IDLE || koopa->GetState() == KOOPA_STATE_VIBRATE)
+				{
+					if (nx != 0 && isRunning)
+					{
+						isHoldingShell = true;
+						koopa->SetState(KOOPA_STATE_BEING_HELD);
+						//isHoldingShell = true;
+					}
+					else if (nx == 0 && ny < 0)
+					{
+						y += dy;
+						koopa->object_colliding_nx = this->nx;
+						koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
+					}
+					else
+					{
+						if (ny != 0 && nx == 0)
+							y += dy;
+						koopa->object_colliding_nx = this->nx;
+						kickShell = true;
+						kickStartTime = GetTickCount64();
+						koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
 					}
 				}
 			}
@@ -273,14 +288,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (e->ny < 0)
 				{
-					vy = -0.1f;
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
 					e->obj->SetState(STATE_PRESSED);
 				}
 			}
 			else if (e->obj->type == Type::COIN)
 			{
 				vy = last_vy;
-				//y += dy;
 				e->obj->isFinishedUsing = true;
 			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
@@ -408,6 +422,8 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_LOW:
 			if (isSitting)
 				goto CASE_FIRE_IS_SITTING;
+			if (!isOnGround && isHoldingShell)
+				goto CASE_FIRE_ON_AIR_AND_HOLD_SHELL;
 			if (vy < 0)
 			{
 				if (nx > 0)
@@ -623,6 +639,8 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_LOW:
 			if (isSitting)
 				goto CASE_RACCOON_IS_SITTING;
+			if (!isOnGround && isHoldingShell)
+				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (vy < 0)
 			{
 				if (nx > 0)
@@ -811,6 +829,8 @@ void CMario::Render()
 				goto CASE_BIG_IS_SITTING;
 			//if (isOnGround) // no working
 			//	goto CASE_BIG_IS_IDLING;
+			if (!isOnGround && isHoldingShell)
+				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
 			if (vy < 0)
 			{
 				if (nx > 0)
@@ -969,6 +989,8 @@ void CMario::Render()
 
 		case MARIO_STATE_JUMP_HIGH:
 		case MARIO_STATE_JUMP_LOW:
+			if (!isOnGround && isHoldingShell)
+				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
 			if (nx > 0)
 				ani = MARIO_ANI_SMALL_JUMP_RIGHT;
 			else

@@ -36,7 +36,6 @@ public:
 	bool isOnGround = true;
 	bool immovable;
 	bool isWaitingForAni;
-	bool isWalkingThrough;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
