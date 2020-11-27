@@ -2,8 +2,8 @@
 
 CIceFlower::CIceFlower(float brickX, float brickY)
 {
-	type = ICE_FLOWER;
-	category = ITEM;
+	type = Type::ICE_FLOWER;
+	category = Category::ITEM;
 
 	this->x = brickX;
 	this->y = brickY;

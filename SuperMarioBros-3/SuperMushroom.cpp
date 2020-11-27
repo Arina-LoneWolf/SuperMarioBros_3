@@ -2,15 +2,15 @@
 
 CSuperMushroom::CSuperMushroom(float brickX, float brickY)
 {
-	category = ITEM;
+	category = Category::ITEM;
 
 	this->x = brickX;
 	this->y = brickY;
 
 	if (x < BRICK_VERTICAL_SEPARATION_LINE)
-		type = SUPER_MUSHROOM;
+		type = Type::SUPER_MUSHROOM;
 	else
-		type = UP_MUSHROOM;
+		type = Type::UP_MUSHROOM;
 
 	vy = -SUPER_MUSHROOM_DEFLECT_SPEED_Y;
 	minPosY = brickY - SUPER_MUSHROOM_BBOX_HEIGHT;

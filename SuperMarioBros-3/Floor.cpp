@@ -2,8 +2,8 @@
 
 CFloor::CFloor(int width_in_units, int height_in_units)
 {
-	type = FLOOR;
-	category = MISC;
+	type = Type::FLOOR;
+	category = Category::MISC;
 	this->width = width_in_units * TILESET_BBOX_SIDE_LENGTH;
 	this->height = height_in_units * TILESET_BBOX_SIDE_LENGTH;
 }

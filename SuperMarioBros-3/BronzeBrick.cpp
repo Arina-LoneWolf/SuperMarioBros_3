@@ -4,13 +4,13 @@ CBronzeBrick::CBronzeBrick(int transformation)
 {
 	if (transformation == BrickTransformation::BRICK_FORM)
 	{
-		type = BRONZE_BRICK;
-		category = MISC;
+		type = Type::BRONZE_BRICK;
+		category = Category::MISC;
 	}
 	else if (transformation == BrickTransformation::COIN_FORM)
 	{
-		type = COIN;
-		category = ITEM;
+		type = Type::COIN;
+		category = Category::ITEM;
 	}
 	this->transformation = transformation;
 }
@@ -29,7 +29,7 @@ void CBronzeBrick::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (num_vanishPiece == 4)
 		isFinishedUsing = true;
 
-	if (transformationTime && GetTickCount64() - transformationTime > TRANSFORMATION_TIME)
+	if (transformationTime->IsTimeUp())
 		SetState(STATE_NORMAL);
 }
 
@@ -80,27 +80,27 @@ void CBronzeBrick::SetState(int state)
 	{
 		if (transformation == BrickTransformation::BRICK_FORM)
 		{
-			type = COIN;
-			category = ITEM;
+			type = Type::COIN;
+			category = Category::ITEM;
 		}
 		else if (transformation == BrickTransformation::COIN_FORM)
 		{
-			type = BRONZE_BRICK;
-			category = MISC;
+			type = Type::BRONZE_BRICK;
+			category = Category::MISC;
 		}
-		transformationTime = GetTickCount64();
+		transformationTime->Start();
 	}
 	else if (state == STATE_NORMAL)
 	{
 		if (transformation == BrickTransformation::BRICK_FORM)
 		{
-			type = BRONZE_BRICK;
-			category = MISC;
+			type = Type::BRONZE_BRICK;
+			category = Category::MISC;
 		}
 		else if (transformation == BrickTransformation::COIN_FORM)
 		{
-			type = COIN;
-			category = ITEM;
+			type = Type::COIN;
+			category = Category::ITEM;
 		}
 	}
 }

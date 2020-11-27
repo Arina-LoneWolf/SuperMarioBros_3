@@ -364,7 +364,7 @@ enum TypeOfKoopa
 };
 
 #define GCB_KOOPA_POS_X	591
-#define GCB_KOOPA_POS_Y	356
+#define GCB_KOOPA_POS_Y	355
 #define PCB_KOOPA_POS_X	1424
 #define PCB_KOOPA_POS_Y	291
 #define BB_KOOPA_POS_X	2098
@@ -454,7 +454,7 @@ enum TypeOfFirePiranha
 #define PIRANHA_MAX_EXISTING_TIME_AFTER_DEATH	500
 #define PIRANHA_FIREBALL_SPEED_X				0.05f
 
-enum Area
+enum class Area
 {
 	TOP_LEFT_FAR,
 	TOP_LEFT_NEAR,
@@ -494,7 +494,7 @@ enum Area
 #define MAX_SCENE_LINE 1024
 
 // list of object type
-enum Type
+enum class Type
 {
 	PORTAL = 55,
 	MARIO = 0,
@@ -521,7 +521,7 @@ enum Type
 	GREEN_PARAKOOPA = 21,
 };
 
-enum Category
+enum class Category
 {
 	PLAYER,
 	ENEMY,

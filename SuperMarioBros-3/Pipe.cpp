@@ -2,8 +2,8 @@
 
 CPipe::CPipe(int pipeType)
 {
-	type = PIPE;
-	category = MISC;
+	type = Type::PIPE;
+	category = Category::MISC;
 	this->pipeType = pipeType;
 }
 

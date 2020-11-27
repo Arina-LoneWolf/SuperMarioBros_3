@@ -2,8 +2,8 @@
 
 CSuperLeaf::CSuperLeaf(float brickX, float brickY)
 {
-	type = SUPER_LEAF;
-	category = ITEM;
+	type = Type::SUPER_LEAF;
+	category = Category::ITEM;
 
 	this->x = brickX;
 	this->y = brickY - SUPER_LEAF_POSITION_ADJUSTMENT_NUM_Y;
@@ -32,13 +32,13 @@ void CSuperLeaf::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		if (x <= leftLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = 0.3f * pow(35, vy);
+			vx = 0.3f * pow(35.0f, vy);
 		}
 
 		if (x >= rightLimit)
 		{
 			vy = SUPER_LEAF_SPEED_Y;
-			vx = -0.3f * pow(35, vy);
+			vx = -0.3f * pow(35.0f, vy);
 		}
 	}
 }

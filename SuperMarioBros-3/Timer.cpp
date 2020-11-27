@@ -21,7 +21,7 @@ bool CTimer::IsTimeUp()
 	return (start && GetTickCount64() - start > end);
 }
 
-bool CTimer::IsStopping()
+bool CTimer::IsStopped()
 {
 	return start == 0;
 }

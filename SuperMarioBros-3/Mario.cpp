@@ -7,8 +7,8 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	type = MARIO;
-	category = PLAYER;
+	type = Type::MARIO;
+	category = Category::PLAYER;
 
 	level = MARIO_LEVEL_SMALL;
 	untouchable = 0;
@@ -73,7 +73,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	#pragma region Update weapon and effect
 
 	// update listWeapon
-	for (int i = 0; i < listWeapons.size(); i++)
+	for (size_t i = 0; i < listWeapons.size(); i++)
 	{
 		listWeapons[i]->Update(dt, coObjects);
 		if (listWeapons[i]->isFinishedUsing)
@@ -85,7 +85,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	for (int i = 0; i < listEffects.size(); i++)
+	for (size_t i = 0; i < listEffects.size(); i++)
 	{
 		listEffects[i]->Update(dt, coObjects);
 	}
@@ -93,7 +93,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	tail->Update(dt, coObjects);
 
 	// remove weapons and effects have done
-	for (int i = 0; i < listWeapons.size(); i++)
+	for (size_t i = 0; i < listWeapons.size(); i++)
 	{
 		if (listWeapons[i]->isFinishedUsing)
 		{
@@ -101,7 +101,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	for (int i = 0; i < listEffects.size(); i++)
+	for (size_t i = 0; i < listEffects.size(); i++)
 	{
 		if (listEffects[i]->isFinishedUsing)
 		{
@@ -848,7 +848,7 @@ void CMario::Render()
 				ani = MARIO_ANI_BIG_SITTING_LEFT;
 			break;
 
-		CASE_BIG_IS_IDLING:
+		//CASE_BIG_IS_IDLING:
 		case MARIO_STATE_IDLE:
 			if (!isOnGround && isHoldingShell)
 				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
@@ -1056,18 +1056,18 @@ void CMario::Render()
 		}
 	}
 
-RENDER:
+//RENDER:
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
 	//DebugOut(L"ani id %d\n", ani);
-	for (int i = 0; i < listWeapons.size(); i++)
+	for (size_t i = 0; i < listWeapons.size(); i++)
 	{
 		listWeapons[i]->Render();
 	}
 
-	for (int i = 0; i < listEffects.size(); i++)
+	for (size_t i = 0; i < listEffects.size(); i++)
 	{
 		listEffects[i]->Render();
 	}

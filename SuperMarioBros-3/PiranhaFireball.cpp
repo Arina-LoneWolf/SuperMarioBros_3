@@ -74,35 +74,35 @@ void CPiranhaFireball::SetRoute(Area playerArea)
 {
 	switch (playerArea)
 	{
-	case TOP_LEFT_FAR:
+	case Area::TOP_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
 		vy = vx / 2.8f;
 		break;
-	case TOP_LEFT_NEAR:
+	case Area::TOP_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
 		vy = vx;
 		break;
-	case TOP_RIGHT_FAR:
+	case Area::TOP_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
 		vy = -vx / 2.8f;
 		break;
-	case TOP_RIGHT_NEAR:
+	case Area::TOP_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
 		vy = -vx;
 		break;
-	case BOTTOM_LEFT_FAR:
+	case Area::BOTTOM_LEFT_FAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
 		vy = -vx / 2.8f;
 		break;
-	case BOTTOM_LEFT_NEAR:
+	case Area::BOTTOM_LEFT_NEAR:
 		vx = -PIRANHA_FIREBALL_SPEED_X;
 		vy = -vx;
 		break;
-	case BOTTOM_RIGHT_FAR:
+	case Area::BOTTOM_RIGHT_FAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
 		vy = vx / 2.8f;
 		break;
-	case BOTTOM_RIGHT_NEAR:
+	case Area::BOTTOM_RIGHT_NEAR:
 		vx = PIRANHA_FIREBALL_SPEED_X;
 		vy = vx;
 		break;
@@ -113,16 +113,16 @@ void CPiranhaFireball::SetNx(Area playerArea)
 {
 	switch (playerArea)
 	{
-	case TOP_LEFT_FAR:
-	case TOP_LEFT_NEAR:
-	case BOTTOM_LEFT_FAR:
-	case BOTTOM_LEFT_NEAR:
+	case Area::TOP_LEFT_FAR:
+	case Area::TOP_LEFT_NEAR:
+	case Area::BOTTOM_LEFT_FAR:
+	case Area::BOTTOM_LEFT_NEAR:
 		nx = -1;
 		break;
-	case TOP_RIGHT_FAR:
-	case TOP_RIGHT_NEAR:
-	case BOTTOM_RIGHT_FAR:
-	case BOTTOM_RIGHT_NEAR:
+	case Area::TOP_RIGHT_FAR:
+	case Area::TOP_RIGHT_NEAR:
+	case Area::BOTTOM_RIGHT_FAR:
+	case Area::BOTTOM_RIGHT_NEAR:
 		nx = 1;
 		break;
 	}

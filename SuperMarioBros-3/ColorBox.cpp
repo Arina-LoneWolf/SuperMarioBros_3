@@ -3,8 +3,8 @@
 
 CColorBox::CColorBox(int width_in_units, int height_in_units) : CGameObject::CGameObject()
 {
-	type = COLOR_BOX;
-	category = MISC;
+	type = Type::COLOR_BOX;
+	category = Category::MISC;
 	this->width = width_in_units * TILESET_BBOX_SIDE_LENGTH;
 	this->height = height_in_units * TILESET_BBOX_SIDE_LENGTH;
 }

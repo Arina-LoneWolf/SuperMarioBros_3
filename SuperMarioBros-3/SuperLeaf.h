@@ -7,7 +7,7 @@ class CSuperLeaf : public CGameObject
 public:
 	float minPosY;
 	float leftLimit, rightLimit;
-	bool isFalling;
+	bool isFalling = false;
 
 	CSuperLeaf(float brickX, float brickY);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);

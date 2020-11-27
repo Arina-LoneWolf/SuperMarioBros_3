@@ -2,7 +2,7 @@
 
 CEffect::CEffect()
 {
-	category = EFFECT;
+	category = Category::EFFECT;
 	startEffect = GetTickCount64(); // i think this variable shouldn't be assigned here.
 }
 

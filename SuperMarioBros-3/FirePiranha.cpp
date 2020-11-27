@@ -2,8 +2,8 @@
 
 CFirePiranha::CFirePiranha(CMario* mario, int piranhaType)
 {
-	category = ENEMY;
-	type = FIRE_PIRANHA;
+	category = Category::ENEMY;
+	type = Type::FIRE_PIRANHA;
 	player = mario;
 	this->piranhaType = piranhaType;
 
@@ -24,12 +24,12 @@ void CFirePiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (vanish)
 	{
-		for (int i = 0; i < listFireball.size(); i++)
+		for (size_t i = 0; i < listFireball.size(); i++)
 			listFireball.erase(listFireball.begin() + i);
 		return;
 	}
 
-	for (int i = 0; i < listFireball.size(); i++)
+	for (size_t i = 0; i < listFireball.size(); i++)
 	{
 		if (listFireball[i]->isFinishedUsing)
 			listFireball.erase(listFireball.begin() + i);
@@ -45,7 +45,7 @@ void CFirePiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	for (LPGAMEOBJECT fireball : listFireball)
 		fireball->Update(dt, coObjects);
 
-	if (attackTime->IsStopping() && y <= minPosY)
+	if (attackTime->IsStopped() && y <= minPosY)
 	{
 		y = minPosY;
 		vy = 0;
@@ -53,7 +53,7 @@ void CFirePiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		delayToAttackTime->Start();
 		SetState(FIRE_PIRANHA_STATE_ATTACK);
 	}
-	else if (sleepTime->IsStopping() && y >= FIRE_PIRANHA_MAX_Y)
+	else if (sleepTime->IsStopped() && y >= FIRE_PIRANHA_MAX_Y)
 	{
 		y = FIRE_PIRANHA_MAX_Y;
 		vy = 0;
@@ -84,23 +84,23 @@ void CFirePiranha::Render()
 	{
 		switch (playerArea)
 		{
-		case TOP_LEFT_FAR:
-		case TOP_LEFT_NEAR:
+		case Area::TOP_LEFT_FAR:
+		case Area::TOP_LEFT_NEAR:
 			ani = FIRE_PIRANHA_ANI_ATTACK_UP_LEFT;
 			break;
-		case TOP_RIGHT_FAR:
-		case TOP_RIGHT_NEAR:
+		case Area::TOP_RIGHT_FAR:
+		case Area::TOP_RIGHT_NEAR:
 			ani = FIRE_PIRANHA_ANI_ATTACK_UP_RIGHT;
 			break;
-		case BOTTOM_LEFT_FAR:
-		case BOTTOM_LEFT_NEAR:
+		case Area::BOTTOM_LEFT_FAR:
+		case Area::BOTTOM_LEFT_NEAR:
 			ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_LEFT;
 			break;
-		case BOTTOM_RIGHT_FAR:
-		case BOTTOM_RIGHT_NEAR:
+		case Area::BOTTOM_RIGHT_FAR:
+		case Area::BOTTOM_RIGHT_NEAR:
 			ani = FIRE_PIRANHA_ANI_ATTACK_DOWN_RIGHT;
 			break;
-		case OUTSIDE_AREA:
+		case Area::OUTSIDE_AREA:
 			ani = last_attack_ani;
 			break;
 		}
@@ -110,23 +110,23 @@ void CFirePiranha::Render()
 	{
 		switch (playerArea)
 		{
-		case TOP_LEFT_FAR:
-		case TOP_LEFT_NEAR:
+		case Area::TOP_LEFT_FAR:
+		case Area::TOP_LEFT_NEAR:
 			ani = FIRE_PIRANHA_ANI_FACE_UP_LEFT;
 			break;
-		case TOP_RIGHT_FAR:
-		case TOP_RIGHT_NEAR:
+		case Area::TOP_RIGHT_FAR:
+		case Area::TOP_RIGHT_NEAR:
 			ani = FIRE_PIRANHA_ANI_FACE_UP_RIGHT;
 			break;
-		case BOTTOM_LEFT_FAR:
-		case BOTTOM_LEFT_NEAR:
+		case Area::BOTTOM_LEFT_FAR:
+		case Area::BOTTOM_LEFT_NEAR:
 			ani = FIRE_PIRANHA_ANI_FACE_DOWN_LEFT;
 			break;
-		case BOTTOM_RIGHT_FAR:
-		case BOTTOM_RIGHT_NEAR:
+		case Area::BOTTOM_RIGHT_FAR:
+		case Area::BOTTOM_RIGHT_NEAR:
 			ani = FIRE_PIRANHA_ANI_FACE_DOWN_RIGHT;
 			break;
-		case OUTSIDE_AREA:
+		case Area::OUTSIDE_AREA:
 			ani = last_face_ani;
 			break;
 		}

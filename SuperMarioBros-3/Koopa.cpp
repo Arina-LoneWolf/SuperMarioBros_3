@@ -2,13 +2,13 @@
 
 CKoopa::CKoopa(CMario* mario, int startingPos, int koopaType)
 {
-	if (koopaType == Type::RED_KOOPA)
-		type = RED_KOOPA;
-	else if (koopaType == Type::GREEN_KOOPA)
-		type = GREEN_KOOPA;
+	if (koopaType == static_cast<int>(Type::RED_KOOPA))
+		type = Type::RED_KOOPA;
+	else if (koopaType == static_cast<int>(Type::GREEN_KOOPA))
+		type = Type::GREEN_KOOPA;
 	else
-		type = GREEN_PARAKOOPA;
-	category = ENEMY;
+		type = Type::GREEN_PARAKOOPA;
+	category = Category::ENEMY;
 	player = mario;
 	this->startingPos = startingPos;
 	SetState(ENEMY_STATE_MOVE);
@@ -267,7 +267,7 @@ void CKoopa::Render()
 	if (effect)
 		effect->Render();
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)
@@ -332,7 +332,7 @@ void CKoopa::SetState(int state)
 		break;
 
 	case KOOPA_STATE_NORMAL:
-		type = GREEN_KOOPA;
+		type = Type::GREEN_KOOPA;
 		SetState(ENEMY_STATE_MOVE);
 		break;
 	}
@@ -371,7 +371,7 @@ void CKoopa::Reset()
 		SetPosition(GCB_KOOPA_POS_X, GCB_KOOPA_POS_Y);
 		break;
 	case ON_PURPLE_COLOR_BOX:
-		type = GREEN_PARAKOOPA;
+		type = Type::GREEN_PARAKOOPA;
 		SetPosition(PCB_KOOPA_POS_X, PCB_KOOPA_POS_Y);
 		break;
 	case ON_BRONZE_BRICK:

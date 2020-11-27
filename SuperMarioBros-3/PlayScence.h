@@ -23,8 +23,8 @@
 class CPlayScene: public CScene
 {
 protected: 
-	CMario *player;					// A play scene has to have player, right? 
-	TileMap* map;
+	CMario* player = new CMario();					// A play scene has to have player, right? 
+	TileMap* map = new TileMap();
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listBronzeBricks; // brick contains the item

@@ -4,8 +4,8 @@ CP_Switch::CP_Switch()
 {
 	x = P_SWITCH_POS_X;
 	y = P_SWITCH_POS_Y;
-	type = P_SWITCH;
-	category = ITEM;
+	type = Type::P_SWITCH;
+	category = Category::ITEM;
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(18));
 }
 

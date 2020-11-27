@@ -2,8 +2,8 @@
 
 CGoomba::CGoomba()
 {
-	type = GOOMBA;
-	category = ENEMY;
+	type = Type::GOOMBA;
+	category = Category::ENEMY;
 	SetState(ENEMY_STATE_MOVE); 
 }
 

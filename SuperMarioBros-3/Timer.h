@@ -9,7 +9,7 @@ public:
 	void Start();
 	void Stop();
 	bool IsTimeUp();
-	bool IsStopping();
+	bool IsStopped();
 
 	~CTimer();
 };

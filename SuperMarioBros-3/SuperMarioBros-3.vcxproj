@@ -129,7 +129,6 @@
     <ClCompile Include="BrokenBrickPiece.cpp" />
     <ClCompile Include="BronzeBrick.cpp" />
     <ClCompile Include="CoinEffect.cpp" />
-    <ClCompile Include="GreenKoopa.cpp" />
     <ClCompile Include="BrickContainsItem.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -139,7 +138,6 @@
     <ClCompile Include="GreenPiranha.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="IceFlower.cpp" />
-    <ClCompile Include="Item.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PiranhaFireball.cpp" />
     <ClCompile Include="P_Switch.cpp" />
@@ -169,7 +167,6 @@
     <ClInclude Include="BrokenBrickPiece.h" />
     <ClInclude Include="BronzeBrick.h" />
     <ClInclude Include="CoinEffect.h" />
-    <ClInclude Include="GreenKoopa.h" />
     <ClInclude Include="BrickContainsItem.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="define.h" />
@@ -180,7 +177,6 @@
     <ClInclude Include="GreenPiranha.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="IceFlower.h" />
-    <ClInclude Include="Item.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaFireball.h" />
     <ClInclude Include="P_Switch.h" />

@@ -1,13 +1,15 @@
 #pragma once
 #include "GameObject.h"
 #include "BrokenBrickPiece.h"
+#include "Timer.h"
 
 class CBronzeBrick : public CGameObject
 {
 public:
 	vector<LPGAMEOBJECT> listPiece;
-	ULONGLONG transformationTime;
-	bool vanish;
+	CTimer* transformationTime = new CTimer(TRANSFORMATION_TIME);
+
+	bool vanish = false;
 	int transformation;
 
 	CBronzeBrick(int transformation);

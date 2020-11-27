@@ -2,8 +2,8 @@
 
 CGreenPiranha::CGreenPiranha(CMario* mario)
 {
-	category = ENEMY;
-	type = GREEN_PIRANHA;
+	category = Category::ENEMY;
+	type = Type::GREEN_PIRANHA;
 	player = mario;
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
@@ -19,13 +19,13 @@ void CGreenPiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
 
-	if (attackTime->IsStopping() && y <= GREEN_PIRANHA_MIN_Y)
+	if (attackTime->IsStopped() && y <= GREEN_PIRANHA_MIN_Y)
 	{
 		y = GREEN_PIRANHA_MIN_Y;
 		vy = 0;
 		attackTime->Start();
 	}
-	else if (sleepTime->IsStopping() && y >= GREEN_PIRANHA_MAX_Y)
+	else if (sleepTime->IsStopped() && y >= GREEN_PIRANHA_MAX_Y)
 	{
 		y = GREEN_PIRANHA_MAX_Y;
 		vy = 0;
