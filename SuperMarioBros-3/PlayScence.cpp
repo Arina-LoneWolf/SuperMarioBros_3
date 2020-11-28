@@ -132,6 +132,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMario(x, y);
 		player = (CMario*)obj;
 
+		CRUD = new CStatusBar(player);
+
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 
@@ -397,6 +399,8 @@ void CPlayScene::Update(DWORD dt)
 		cx = player->x - (SCREEN_WIDTH / 4);
 		CGame::GetInstance()->cam_x = cx;
 	}
+
+	CRUD->Update(dt);
 }
 
 void CPlayScene::Render()
@@ -414,6 +418,8 @@ void CPlayScene::Render()
 
 	for (LPGAMEOBJECT item : listItems)
 		item->Render();
+
+	CRUD->Render(worldID, CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 }
 
 /*

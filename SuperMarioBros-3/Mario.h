@@ -30,6 +30,14 @@ public:
 	CTimer* flyTime = new CTimer(MARIO_FLYING_TIME);
 	CTimer* kickTime = new CTimer(MARIO_KICK_TIME);
 
+	int score = 100;
+	int money = 5;
+	int lives = INITIAL_PLAYER_LIVES;
+
+	int GetScore() { return score; }
+	int GetMoney() { return money; }
+	int GetLives() { return lives; }
+
 	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning;
 	bool kickShell;
 	bool isHoldingShell;

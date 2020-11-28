@@ -22,11 +22,11 @@ void CIceFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vy = 0;
 
-		if (!existingTime)
-			existingTime = GetTickCount64();
+		if (existingTime->IsStopped())
+			existingTime->Start();
 	}
-	DebugOut(L"existing time: %d\n", GetTickCount64() - existingTime);
-	if (existingTime && GetTickCount64() - existingTime > ICE_FLOWER_MAX_EXISTING_TIME)
+
+	if (existingTime->IsTimeUp())
 		isFinishedUsing = true;
 }
 

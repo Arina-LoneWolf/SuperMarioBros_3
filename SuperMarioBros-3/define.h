@@ -531,3 +531,67 @@ enum class Category
 	EFFECT,
 	SCENE,
 };
+
+// CRUD
+#define	NUM_0	1010
+#define	NUM_1	1011
+#define	NUM_2	1012
+#define	NUM_3	1013
+#define	NUM_4	1014
+#define	NUM_5	1015
+#define	NUM_6	1016
+#define	NUM_7	1017
+#define	NUM_8	1018
+#define	NUM_9	1019
+
+enum class PowerMeter
+{
+	TIER_0,
+	TIER_1,
+	TIER_2,
+	TIER_3,
+	TIER_4,
+	TIER_5,
+	TIER_6,
+	TIER_7,
+};
+
+#define SPEED_X_TIER_1	0.125f
+#define SPEED_X_TIER_2	0.140f
+#define SPEED_X_TIER_3	0.155f
+#define SPEED_X_TIER_4	0.170f
+#define SPEED_X_TIER_5	0.190f
+#define SPEED_X_TIER_6	0.210f
+#define SPEED_X_TIER_7	0.230f
+
+#define MAX_PLAY_TIME	300
+
+#define INITIAL_PLAYER_LIVES		4
+
+#define CRUD_POS_X_ADDEND			3
+#define CRUD_POS_Y_SUBTRAHEND		67
+
+#define P_METER_POS_X				52
+#define P_METER_POS_Y				7
+
+#define NUMBER_WIDTH				8
+
+#define WORLD_NUM_POS_X				37
+#define WORLD_NUM_POS_Y				7
+#define WORLD_NUM_MAX_SIZE			1
+
+#define LIVES_NUM_POS_X				29
+#define LIVES_NUM_POS_Y				15
+#define LIVES_NUM_MAX_SIZE			2
+
+#define SCORE_NUM_POS_X				52
+#define SCORE_NUM_POS_Y				15
+#define SCORE_NUM_MAX_SIZE			7
+
+#define MONEY_NUM_POS_X				132
+#define MONEY_NUM_POS_Y				7
+#define MONEY_NUM_MAX_SIZE			2
+
+#define TIME_REMAINING_NUM_POS_X	124
+#define TIME_REMAINING_NUM_POS_Y	15
+#define TIME_REMAINING_NUM_MAX_SIZE	3

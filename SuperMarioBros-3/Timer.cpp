@@ -1,29 +1,29 @@
 #include "Timer.h"
 
-CTimer::CTimer(ULONGLONG end)
+CTimer::CTimer(ULONGLONG maxTime)
 {
-	start = 0;
-	this->end = end;
+	elapsedTime = 0;
+	this->maxTime = maxTime;
 }
 
 void CTimer::Start()
 {
-	start = GetTickCount64();
+	elapsedTime = GetTickCount64();
 }
 
 void CTimer::Stop()
 {
-	start = 0;
+	elapsedTime = 0;
 }
 
 bool CTimer::IsTimeUp()
 {
-	return (start && GetTickCount64() - start > end);
+	return (elapsedTime && GetTickCount64() - elapsedTime > maxTime);
 }
 
 bool CTimer::IsStopped()
 {
-	return start == 0;
+	return elapsedTime == 0;
 }
 
 CTimer::~CTimer()

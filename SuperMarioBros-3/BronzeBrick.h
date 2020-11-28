@@ -8,7 +8,7 @@ class CBronzeBrick : public CGameObject
 public:
 	vector<LPGAMEOBJECT> listPiece;
 	CTimer* transformationTime = new CTimer(TRANSFORMATION_TIME);
-	bool vanish;
+	bool vanish = false;
 	int transformation;
 
 	CBronzeBrick(int transformation);

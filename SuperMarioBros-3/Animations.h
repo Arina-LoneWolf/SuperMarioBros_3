@@ -23,11 +23,11 @@ typedef CAnimationFrame *LPANIMATION_FRAME;
 
 class CAnimation
 {
-	DWORD aniStartTime;
+	DWORD aniStartTime = 0;
 	DWORD lastFrameTime;
 	int currentFrame;
 	int defaultTime;
-	DWORD totalFrameTime;
+	DWORD totalFrameTime = 0;
 	vector<LPANIMATION_FRAME> frames;
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }

@@ -27,7 +27,7 @@ public:
 	CMario* player;
 	CMoneyEffect* effect;
 	float minPosY;
-	bool vanish;
+	bool vanish = false;
 
 	CFirePiranha(CMario* mario, int piranhaType);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

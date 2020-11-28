@@ -11,7 +11,7 @@ class CGoomba : public CGameObject
 	
 public:
 	CTimer* deadTime = new CTimer(GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH);
-	bool died;
+	bool died = false;
 
 	CMoneyEffect* effect;
 

@@ -30,12 +30,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_FLY_GRAVITY * dt;
 	else
 		vy += MARIO_GRAVITY * dt;
-
-	/*if (koopaIsReset)
-	{
-		isHoldingShell = false;
-		koopaIsReset = false;
-	}*/
 	
 	#pragma region Wait for animation
 
@@ -169,7 +163,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.1f;
 
 		//DebugOut(L"y = %f\n", y);
-		//DebugOut(L"vx = %f\n", vx);
+		DebugOut(L"vx = %f\n", vx);
 		if (nx != 0)
 		{
 			vx = last_vx;

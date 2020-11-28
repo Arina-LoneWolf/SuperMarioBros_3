@@ -18,6 +18,7 @@
 #include "IceFlower.h"
 #include "CoinEffect.h"
 #include "P_Switch.h"
+#include "StatusBar.h"
 
 
 class CPlayScene: public CScene
@@ -25,6 +26,8 @@ class CPlayScene: public CScene
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
 	TileMap* map;
+	CStatusBar* CRUD;
+	int worldID = 1;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listBronzeBricks; // brick contains the item

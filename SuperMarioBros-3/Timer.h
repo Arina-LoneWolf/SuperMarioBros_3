@@ -2,7 +2,7 @@
 #include "Windows.h"
 class CTimer
 {
-	ULONGLONG start, end;
+	ULONGLONG elapsedTime, maxTime;
 public:
 	CTimer(ULONGLONG end);
 
@@ -10,6 +10,8 @@ public:
 	void Stop();
 	bool IsTimeUp();
 	bool IsStopped();
+
+	ULONGLONG GetElapsedTime() { return elapsedTime; }
 
 	~CTimer();
 };
