@@ -9,7 +9,7 @@ class CNumber
 	LPSPRITE num;
 public:
 	CNumber();
-	string ConvertToCorrectNumber(int number, int max_num_size);
+	string ConvertToCorrectNumString(int number, int max_num_size);
 	void Render(float x, float y, int number, int max_num_size);
 	~CNumber();
 };

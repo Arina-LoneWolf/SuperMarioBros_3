@@ -4,7 +4,7 @@ CNumber::CNumber()
 {
 }
 
-string CNumber::ConvertToCorrectNumber(int number, int max_num_size)
+string CNumber::ConvertToCorrectNumString(int number, int max_num_size)
 {
 	string num = to_string(number);
 
@@ -23,7 +23,7 @@ string CNumber::ConvertToCorrectNumber(int number, int max_num_size)
 
 void CNumber::Render(float x, float y, int number, int max_num_size)
 {
-	string num_str = ConvertToCorrectNumber(number, max_num_size);
+	string num_str = ConvertToCorrectNumString(number, max_num_size);
 
 	for (UINT i = 0; i < num_str.size(); i++)
 	{

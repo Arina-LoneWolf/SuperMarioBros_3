@@ -8,7 +8,7 @@
 
 class CStatusBar
 {
-	LPANIMATION_SET crud;
+	LPANIMATION_SET CRUD;
 	CNumber number;
 	CP_Meter* p_meter;
 	CTimer* playTime = new CTimer(MAX_PLAY_TIME);
