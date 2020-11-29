@@ -1,9 +1,9 @@
 ﻿#include "Goomba.h"
 
-CGoomba::CGoomba()
+CGoomba::CGoomba(CMario* player)
 {
-	type = Type::GOOMBA;
 	category = Category::ENEMY;
+	this->player = player;
 	SetState(ENEMY_STATE_MOVE); 
 }
 

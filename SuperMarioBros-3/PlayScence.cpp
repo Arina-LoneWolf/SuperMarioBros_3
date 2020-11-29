@@ -110,7 +110,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
-	int object_type = atoi(tokens[0].c_str());
+	Type object_type = static_cast<Type>(atoi(tokens[0].c_str()));
 	float x = atof(tokens[1].c_str());
 	float y = atof(tokens[2].c_str());
 
@@ -121,7 +121,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CGameObject* obj = NULL;
 	CBronzeBrick* brick = NULL;
 
-	switch (static_cast<Type>(object_type))
+	switch (object_type)
 	{
 	case Type::MARIO:
 		if (player != NULL)
@@ -177,6 +177,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
+
 	case Type::PIPE:
 	{
 		int pipeType = atoi(tokens[4].c_str());
@@ -188,13 +190,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::GREEN_KOOPA:
 	case Type::GREEN_PARAKOOPA:
 	{
-		int koopaType = object_type;
-		int startingPos = atoi(tokens[4].c_str());
-		obj = new CKoopa(player, startingPos, koopaType);
+		obj = new CKoopa(player, x, y);
 		break;
 	}
-
-	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	
 	case Type::COIN:
 	case Type::BRONZE_BRICK:
@@ -204,7 +202,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case Type::GOOMBA: obj = new CGoomba(); break;
+	case Type::YELLOW_GOOMBA: 
+	case Type::RED_PARAGOOMBA:
+		obj = new CGoomba(player); break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -216,12 +216,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	if (obj)
 	{
+		obj->SetType(object_type);
 		obj->SetPosition(x, y);
 		obj->SetAnimationSet(ani_set);
 		objects.push_back(obj);
 	}
 	else if (brick)
 	{
+		brick->SetType(object_type);
 		brick->SetPosition(x, y);
 		brick->SetAnimationSet(ani_set);
 		listBronzeBricks.push_back(brick);

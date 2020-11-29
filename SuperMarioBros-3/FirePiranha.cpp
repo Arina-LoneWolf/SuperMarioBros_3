@@ -3,7 +3,6 @@
 CFirePiranha::CFirePiranha(CMario* mario, int piranhaType)
 {
 	category = Category::ENEMY;
-	type = Type::FIRE_PIRANHA;
 	player = mario;
 	this->piranhaType = piranhaType;
 

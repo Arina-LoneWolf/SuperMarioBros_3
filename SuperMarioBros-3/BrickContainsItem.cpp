@@ -3,7 +3,6 @@
 CBrickContainsItem::CBrickContainsItem(int brickType, int itemType, float originalPosY)
 {
 	category = Category::MISC;
-	type = Type::BRICK_CONTAINS_ITEM;
 	this->brickType = brickType;
 	this->itemType = itemType;
 	this->originalPosY = originalPosY;

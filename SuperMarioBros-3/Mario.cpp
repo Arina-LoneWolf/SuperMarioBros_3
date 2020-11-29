@@ -7,7 +7,6 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	type = Type::MARIO;
 	category = Category::PLAYER;
 
 	level = MARIO_LEVEL_SMALL;
@@ -163,7 +162,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.1f;
 
 		//DebugOut(L"y = %f\n", y);
-		DebugOut(L"vx = %f\n", vx);
+		//DebugOut(L"vx = %f\n", vx);
 		if (nx != 0)
 		{
 			vx = last_vx;

@@ -1,16 +1,11 @@
 ﻿#include "Koopa.h"
 
-CKoopa::CKoopa(CMario* mario, int startingPos, int koopaType)
+CKoopa::CKoopa(CMario* mario, float x, float y)
 {
-	if (koopaType == static_cast<int>(Type::RED_KOOPA))
-		type = Type::RED_KOOPA;
-	else if (koopaType == static_cast<int>(Type::GREEN_KOOPA))
-		type = Type::GREEN_KOOPA;
-	else
-		type = Type::GREEN_PARAKOOPA;
 	category = Category::ENEMY;
 	player = mario;
-	this->startingPos = startingPos;
+	startingPosX = x;
+	startingPosY = y;
 	SetState(ENEMY_STATE_MOVE);
 }
 
@@ -32,30 +27,14 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	float resetPosX;
-	switch (startingPos)
-	{
-	case ON_GREEN_COLOR_BOX:
-		resetPosX = GCB_KOOPA_POS_X;
-		break;
-	case ON_PURPLE_COLOR_BOX:
-		resetPosX = PCB_KOOPA_POS_X;
-		break;
-	case ON_BRONZE_BRICK:
-		resetPosX = BB_KOOPA_POS_X;
-		break;
-	case ON_GROUND:
-		resetPosX = G_KOOPA_POS_X;
-		break;
-	}
 	if (type == Type::RED_KOOPA)
 	{
 		if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2)
 		{
-			if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < resetPosX)
+			if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < startingPosX)
 				Reset();
 		}
-		else if (CGame::GetInstance()->GetCamPosX() > resetPosX + KOOPA_BBOX_HEIGHT)
+		else if (CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
 		{
 			if (CGame::GetInstance()->GetCamPosX() > x + KOOPA_BBOX_WIDTH)
 				Reset();
@@ -68,7 +47,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (type != Type::RED_KOOPA && reset)
 	{
-		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < resetPosX || CGame::GetInstance()->GetCamPosX() > resetPosX + KOOPA_BBOX_HEIGHT)
+		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < startingPosX || CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
 			Reset();
 	}
 
@@ -78,7 +57,7 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			object_colliding_nx = 1;
 		else
 			object_colliding_nx = -1;
-		x += 6 * object_colliding_nx;
+		x += 6 * object_colliding_nx; // define plz!
 
 		player->kickShell = true;
 		player->kickTime->Start();
@@ -362,23 +341,7 @@ void CKoopa::SetPositionAccordingToPlayer()
 
 void CKoopa::Reset()
 {
-	switch (startingPos)
-	{
-	case ON_GREEN_COLOR_BOX:
-		SetPosition(GCB_KOOPA_POS_X, GCB_KOOPA_POS_Y);
-		break;
-	case ON_PURPLE_COLOR_BOX:
-		type = Type::GREEN_PARAKOOPA;
-		SetPosition(PCB_KOOPA_POS_X, PCB_KOOPA_POS_Y);
-		break;
-	case ON_BRONZE_BRICK:
-		SetPosition(BB_KOOPA_POS_X, BB_KOOPA_POS_Y);
-		break;
-	case ON_GROUND:
-		SetPosition(G_KOOPA_POS_X, G_KOOPA_POS_Y);
-		break;
-	}
-
+	SetPosition(startingPosX, startingPosY);
 	SetState(ENEMY_STATE_MOVE);
 	isSupine = false;
 	reset = false;

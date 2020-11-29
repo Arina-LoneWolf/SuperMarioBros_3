@@ -3,7 +3,6 @@
 CGreenPiranha::CGreenPiranha(CMario* mario)
 {
 	category = Category::ENEMY;
-	type = Type::GREEN_PIRANHA;
 	player = mario;
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }

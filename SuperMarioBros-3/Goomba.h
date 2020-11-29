@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MoneyEffect.h"
+#include "Mario.h"
 #include "Timer.h"
 
 class CGoomba : public CGameObject
@@ -14,7 +15,8 @@ public:
 	bool died = false;
 
 	CMoneyEffect* effect;
+	CMario* player;
 
-	CGoomba();
+	CGoomba(CMario* player);
 	virtual void SetState(int state);
 };

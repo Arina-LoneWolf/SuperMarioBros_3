@@ -79,6 +79,7 @@ public:
 		return (l_a < r_b && r_a > l_b && t_a < b_b && b_a > t_b);
 	}
 
+	void SetType(Type type) { this->type = type; }
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }

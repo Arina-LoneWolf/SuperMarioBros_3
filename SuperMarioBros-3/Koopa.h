@@ -20,14 +20,13 @@ public:
 	CTimer* vibrationTime = new CTimer(KOOPA_VIBRATION_TIME);
 
 	float lastMoveSpeed = KOOPA_MOVE_SPEED_X;
-	int startingPos;
+	float startingPosX, startingPosY;
 	
 	CMario* player;
 	CMoneyEffect* effect;
 	
-	CKoopa(CMario* mario, int startingPos, int koopaType);
+	CKoopa(CMario* mario, float x, float y);
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
-	void Revive();
 };
