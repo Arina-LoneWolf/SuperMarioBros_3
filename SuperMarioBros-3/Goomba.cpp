@@ -24,7 +24,7 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	vy += MARIO_GRAVITY * dt;
+	vy += MARIO_GRAVITY * dt; // cho gravity nhỏ lại
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
@@ -123,6 +123,7 @@ void CGoomba::SetState(int state)
 			effect = new CMoneyEffect({ x + 8, y - 7 });
 		died = true;
 		break;
+
 	case ENEMY_STATE_ATTACKED_BY_TAIL:
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
@@ -132,14 +133,24 @@ void CGoomba::SetState(int state)
 			effect = new CMoneyEffect({ x - 7, y - 3 });
 		died = true;
 		break;
+
 	case ENEMY_STATE_MOVE:
 		vx = -GOOMBA_MOVE_SPEED_X;
 		nx = -1;
 		break;
+
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
 		deadTime->Start();
 		effect = new CMoneyEffect({ x + 3, y - 7 });
+		break;
+
+	case GOOMBA_STATE_FLY_LOW:
+		vy = -0.05f;
+		break;
+
+	case GOOMBA_STATE_FLY_HIGH:
+		vy = -0.5;
 		break;
 	}
 }

@@ -11,8 +11,7 @@ class CStatusBar
 	LPANIMATION_SET CRUD;
 	CNumber number;
 	CP_Meter* p_meter;
-	CTimer* playTime = new CTimer(MAX_PLAY_TIME);
-	//ULONGLONG timeRemaining;
+	CTimer* playTime = new CTimer(MAX_PLAY_TIME * CLOCKS_PER_SEC);
 	ULONGLONG countdown;
 
 public:

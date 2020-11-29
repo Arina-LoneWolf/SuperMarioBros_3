@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "map"
+
 // Tileset
 #define TILESET_BBOX_SIDE_LENGTH	16
 
@@ -326,7 +328,6 @@ enum TypeOfPipe
 
 
 // ENEMIES
-// cho enemies xài chung deflect speed x và y?
 #define ENEMY_STATE_ATTACKED_BY_TAIL			188  // lead to die or sleep
 #define ENEMY_STATE_DIE_BY_WEAPON				199
 #define ENEMY_STATE_MOVE						200
@@ -344,8 +345,11 @@ enum TypeOfPipe
 #define GOOMBA_ANI_MOVE							0
 #define GOOMBA_ANI_DIE_BY_CRUSH					1
 #define GOOMBA_ANI_DIE_BY_ATTACK_TOOL			2
-#define GOOMBA_STATE_DIE_BY_CRUSH				299
 #define GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH	250
+
+#define GOOMBA_STATE_DIE_BY_CRUSH				299
+#define GOOMBA_STATE_FLY_LOW					298
+#define GOOMBA_STATE_FLY_HIGH					297
 
 // Koopa
 #define GREEN_PARAKOOPA_DEFLECT_SPEED_Y		0.22f

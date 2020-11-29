@@ -128,6 +128,7 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BrokenBrickPiece.cpp" />
     <ClCompile Include="BronzeBrick.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoinEffect.cpp" />
     <ClCompile Include="BrickContainsItem.cpp" />
     <ClCompile Include="ColorBox.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BrokenBrickPiece.h" />
     <ClInclude Include="BronzeBrick.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CoinEffect.h" />
     <ClInclude Include="BrickContainsItem.h" />
     <ClInclude Include="ColorBox.h" />

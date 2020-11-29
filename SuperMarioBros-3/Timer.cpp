@@ -2,28 +2,33 @@
 
 CTimer::CTimer(ULONGLONG maxTime)
 {
-	elapsedTime = 0;
+	startTime = 0;
 	this->maxTime = maxTime;
 }
 
 void CTimer::Start()
 {
-	elapsedTime = GetTickCount64();
+	startTime = GetTickCount64();
 }
 
 void CTimer::Stop()
 {
-	elapsedTime = 0;
+	startTime = 0;
 }
 
 bool CTimer::IsTimeUp()
 {
-	return (elapsedTime && GetTickCount64() - elapsedTime > maxTime);
+	return (startTime && GetTickCount64() - startTime > maxTime);
 }
 
 bool CTimer::IsStopped()
 {
-	return elapsedTime == 0;
+	return startTime == 0;
+}
+
+ULONGLONG CTimer::GetElapsedTime()
+{
+	return GetTickCount64() - startTime;
 }
 
 CTimer::~CTimer()

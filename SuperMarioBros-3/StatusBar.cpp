@@ -3,15 +3,14 @@
 CStatusBar::CStatusBar(CMario* player)
 {
 	this->player = player;
-	playTime->Start(); // đặt tạm ở đây
+	playTime->Start(); // đặt tạm ở đây.
 	p_meter = new CP_Meter(player);
 	CRUD = CAnimationSets::GetInstance()->Get(21);
 }
 
 void CStatusBar::Update(DWORD dt)
 {
-	ULONGLONG now = GetTickCount64();
-	countdown = MAX_PLAY_TIME - ((now - playTime->GetElapsedTime()) / CLOCKS_PER_SEC);
+	countdown = MAX_PLAY_TIME - (playTime->GetElapsedTime() / CLOCKS_PER_SEC);
 	p_meter->Update();
 }
 
