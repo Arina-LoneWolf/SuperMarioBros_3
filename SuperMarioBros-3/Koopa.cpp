@@ -23,7 +23,7 @@ void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
 }
 
-void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 

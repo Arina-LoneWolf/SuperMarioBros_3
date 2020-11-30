@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "define.h"
 #include "string"
+#include "map"
 
 class CNumber
 {

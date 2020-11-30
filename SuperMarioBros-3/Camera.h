@@ -11,7 +11,7 @@ public:
 
 	Camera(CMario* player);
 
-	void Update(DWORD dt);
+	void Update(ULONGLONG dt);
 
 	void SetCamPos(float x, float y) { this->x = x; this->y = y; }
 	float GetCamPosX() { return x; }

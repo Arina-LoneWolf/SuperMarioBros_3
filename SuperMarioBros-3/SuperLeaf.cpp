@@ -16,7 +16,7 @@ CSuperLeaf::CSuperLeaf(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(5));
 }
 
-void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CSuperLeaf::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (y > CGame::GetInstance()->GetCamPosY() + SCREEN_HEIGHT / 2)
 		isFinishedUsing = true;

@@ -12,14 +12,14 @@ class CStatusBar
 	CNumber number;
 	CP_Meter* p_meter;
 	CTimer* playTime = new CTimer(MAX_PLAY_TIME * CLOCKS_PER_SEC);
-	ULONGLONG countdown;
+	int countdown;
 
 public:
 	CMario* player;
 
 	CStatusBar(CMario* player);
 
-	void Update(DWORD dt); // ghi tạm, suy nghĩ xem thêm cái gì vào nữa
+	void Update();
 	void Render(int worldID, float camX, float camY);
 
 	~CStatusBar();

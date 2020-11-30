@@ -56,7 +56,7 @@ public:
 	float vx;
 	float vy;
 
-	bool isFinishedUsing;
+	bool isFinishedUsing = false;
 	Type type;
 	Category category;
 	int object_colliding_nx;
@@ -67,7 +67,7 @@ public:
 
 	int state;
 
-	DWORD dt; 
+	ULONGLONG dt; 
 
 	LPANIMATION_SET animation_set;
 
@@ -106,7 +106,7 @@ public:
 	CGameObject();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
+	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
 	void ResetAni();

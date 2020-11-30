@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "map"
 
 // Tileset
 #define TILESET_BBOX_SIDE_LENGTH	16

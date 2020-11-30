@@ -12,7 +12,7 @@ CCoinEffect::CCoinEffect(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(16));
 }
 
-void CCoinEffect::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CCoinEffect::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	CEffect::Update(dt, coObjects);

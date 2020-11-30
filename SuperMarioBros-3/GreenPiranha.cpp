@@ -7,7 +7,7 @@ CGreenPiranha::CGreenPiranha(CMario* mario)
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
 
-void CGreenPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CGreenPiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;

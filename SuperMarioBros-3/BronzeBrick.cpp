@@ -15,7 +15,7 @@ CBronzeBrick::CBronzeBrick(int transformation)
 	this->transformation = transformation;
 }
 
-void CBronzeBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CBronzeBrick::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	int num_vanishPiece = 0;
 

@@ -10,7 +10,7 @@ CFirePiranha::CFirePiranha(CMario* mario, int piranhaType)
 	SetState(FIRE_PIRANHA_STATE_MOVE_UP);
 }
 
-void CFirePiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CFirePiranha::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	y += dy;

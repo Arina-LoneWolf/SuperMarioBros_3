@@ -111,8 +111,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	Type object_type = static_cast<Type>(atoi(tokens[0].c_str()));
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -305,7 +305,7 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
-void CPlayScene::Update(DWORD dt)
+void CPlayScene::Update(ULONGLONG dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
@@ -402,7 +402,7 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->cam_x = cx;
 	}
 
-	CRUD->Update(dt);
+	CRUD->Update();
 }
 
 void CPlayScene::Render()

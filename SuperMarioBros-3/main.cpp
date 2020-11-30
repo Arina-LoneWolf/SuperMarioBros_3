@@ -47,7 +47,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
-void Update(DWORD dt)
+void Update(ULONGLONG dt)
 {
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
@@ -61,7 +61,7 @@ void Render()
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
 
-	if (d3ddv->BeginScene())
+	if (SUCCEEDED(d3ddv->BeginScene()))
 	{
 		// Clear back buffer with a color
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
@@ -115,7 +115,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	if (!hWnd) 
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
-		DWORD ErrCode = GetLastError();
+		ULONGLONG ErrCode = GetLastError();
 		return FALSE;
 	}
 
@@ -129,8 +129,8 @@ int Run()
 {
 	MSG msg;
 	int done = 0;
-	DWORD frameStart = GetTickCount64();
-	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
+	ULONGLONG frameStart = GetTickCount64();
+	ULONGLONG tickPerFrame = 1000 / MAX_FRAME_RATE;
 
 	while (!done)
 	{
@@ -142,11 +142,11 @@ int Run()
 			DispatchMessage(&msg);
 		}
 
-		DWORD now = GetTickCount64();
+		ULONGLONG now = GetTickCount64();
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
-		DWORD dt = now - frameStart;
+		ULONGLONG dt = now - frameStart;
 
 		if (dt >= tickPerFrame)
 		{
@@ -158,13 +158,13 @@ int Run()
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(DWORD(tickPerFrame - dt));	
 	}
 
 	return 1;
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 
