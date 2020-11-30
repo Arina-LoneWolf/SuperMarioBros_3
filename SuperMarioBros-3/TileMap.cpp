@@ -71,9 +71,6 @@ void TileMap::Draw()
 	int firstcol = (int)CGame::GetInstance()->GetCamPosX() / tileset_width;
 	int lastcol = firstcol + (SCREEN_WIDTH / tileset_width);
 
-	int firstRow = (int)CGame::GetInstance()->GetCamPosY() / tileset_height;
-	int lastRow = firstRow + (SCREEN_HEIGHT / tileset_height);
-
 	for (UINT i = 0; i < num_row_on_tilemap; i++)
 	{
 		for (UINT j = firstcol; j <= lastcol; j++)

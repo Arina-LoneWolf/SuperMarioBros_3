@@ -8,7 +8,6 @@ class Camera
 
 public:
 	CMario* player;
-	float lastPlayerX;
 
 	Camera(CMario* player, float playerX);
 

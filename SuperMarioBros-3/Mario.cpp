@@ -25,10 +25,18 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if (canFly)
+	/*if (isWaggingTail)
+	{
+		DebugOut(L"22222222222\n");
+		vy += 0.00001f * dt;
+	}
+	else*/ if (canFly)
 		vy += MARIO_FLY_GRAVITY * dt;
 	else
+	{
+		//DebugOut(L"666666666\n");
 		vy += MARIO_GRAVITY * dt;
+	}
 	
 	#pragma region Wait for animation
 
@@ -1161,6 +1169,7 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_JUMP_HIGH:
 		if (isWaggingTail)
+			//return;
 			vy = -MARIO_GRAVITY * dt / 2;
 		else if (isOnGround)
 		{

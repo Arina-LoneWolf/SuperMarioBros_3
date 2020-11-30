@@ -10,26 +10,12 @@ Camera::Camera(CMario* player, float playerX)
 
 void Camera::Update(ULONGLONG dt)
 {
-	//camX = CGame::GetInstance()->GetCamPosX();
-	//camY = CGame::GetInstance()->GetCamPosY();
-	
-	DebugOut(L"MARIO speed y: %f\n", player->vy);
-	DebugOut(L"CAM speed y: %f\n", camSpeedY);
-
+	//DebugOut(L"CAM y: %f\n", camY);
+	//DebugOut(L"isWaggingTail = %d\n", player->isWaggingTail);
+	//DebugOut(L"mario vy: %f\n", player->vy);
 	float left, top, right, bottom;
 	
 	player->GetBoundingBox(left, top, right, bottom);
-
-	//if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < 2816)
-	//{
-	//	/*if (player->immovable)
-	//	{
-	//		camSpeedX = 0;
-	//		goto SET_CAM;
-	//	}
-	//	camSpeedX = player->vx;*/
-	//	camX = player->x - (SCREEN_WIDTH / 4);
-	//}
 
 	if (player->isOnGround)
 	{
@@ -52,21 +38,22 @@ void Camera::Update(ULONGLONG dt)
 	}
 	else
 	{
-		if (top + 7 < round(camY + SCREEN_HEIGHT / 4 - 20) && camY <= 200)
+		if (player->vy < 0 && top + 13 < round(camY + SCREEN_HEIGHT / 6) && camY <= 200)
 		{
 			camSpeedY = player->vy;
 		}
+		else if (player->vy > 0 && top + 7 > round(camY + SCREEN_HEIGHT / 4 - 20) && camY <= 200)
+			camSpeedY = player->vy;
 		else
 			camSpeedY = 0;
 	}
 
-	lastPlayerX = player->x;
+SET_CAM:
 
-	SET_CAM:
-	//camX += camSpeedX * dt;
 	camY += camSpeedY * dt;
+	if (camY <= 0 || camY > 200)
+		return;
 
-	//CGame::GetInstance()->SetCamPos(camX, camY);
 	CGame::GetInstance()->SetCamPosY(camY);
 }
 
