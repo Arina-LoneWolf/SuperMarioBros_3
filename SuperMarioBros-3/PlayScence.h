@@ -19,6 +19,7 @@
 #include "CoinEffect.h"
 #include "P_Switch.h"
 #include "StatusBar.h"
+#include "Camera.h"
 
 
 class CPlayScene: public CScene
@@ -26,6 +27,7 @@ class CPlayScene: public CScene
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
 	TileMap* map;
+	Camera* cam;
 	CStatusBar* CRUD;
 	int worldID = 1;
 

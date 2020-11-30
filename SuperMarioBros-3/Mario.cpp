@@ -131,7 +131,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	}*/
 
 	// No collision occured, proceed normally
-	DebugOut(L"coEvent size: %d\n", coEvents.size());
+	//DebugOut(L"coEvent size: %d\n", coEvents.size());
 	if (coEvents.size() == 0)
 	{
 		x += dx;

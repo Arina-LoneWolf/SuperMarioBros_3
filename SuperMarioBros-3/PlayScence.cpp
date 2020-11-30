@@ -133,6 +133,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 
 		CRUD = new CStatusBar(player);
+		cam = new Camera(player, x);
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -321,6 +322,8 @@ void CPlayScene::Update(ULONGLONG dt)
 		coObjects.push_back(listBronzeBricks[i]);
 	}
 
+	cam->Update(dt);
+
 	for (LPGAMEOBJECT item : priorityListItems)
 		item->Update(dt, &coObjects);
 
@@ -395,7 +398,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	// Update camera to follow mario
 	float cx, cy;
 
-	CGame::GetInstance()->cam_y = 200;
+	//CGame::GetInstance()->cam_y = 200;
 	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
 	{
 		cx = player->x - (SCREEN_WIDTH / 4);

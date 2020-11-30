@@ -2,15 +2,14 @@
 #include "Windows.h"
 class CTimer
 {
-	ULONGLONG startTime, maxTime;
+	ULONGLONG startTime, limitedTime;
 public:
-	CTimer(ULONGLONG end);
+	CTimer(ULONGLONG limitedTime);
 
 	void Start();
 	void Stop();
 	bool IsTimeUp();
 	bool IsStopped();
-
 	ULONGLONG GetElapsedTime();
 
 	~CTimer();

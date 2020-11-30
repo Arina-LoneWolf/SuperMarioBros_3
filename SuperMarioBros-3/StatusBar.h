@@ -12,7 +12,7 @@ class CStatusBar
 	CNumber number;
 	CP_Meter* p_meter;
 	CTimer* playTime = new CTimer(MAX_PLAY_TIME * CLOCKS_PER_SEC);
-	int countdown;
+	int countdown = 0;
 
 public:
 	CMario* player;

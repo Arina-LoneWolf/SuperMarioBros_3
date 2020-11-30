@@ -1,9 +1,9 @@
 #include "Timer.h"
 
-CTimer::CTimer(ULONGLONG maxTime)
+CTimer::CTimer(ULONGLONG limitedTime)
 {
 	startTime = 0;
-	this->maxTime = maxTime;
+	this->limitedTime = limitedTime;
 }
 
 void CTimer::Start()
@@ -18,7 +18,7 @@ void CTimer::Stop()
 
 bool CTimer::IsTimeUp()
 {
-	return (startTime && GetTickCount64() - startTime > maxTime);
+	return (startTime && GetTickCount64() - startTime > limitedTime);
 }
 
 bool CTimer::IsStopped()

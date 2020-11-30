@@ -93,6 +93,8 @@ public:
 		cam_x = a;
 	}
 
+	void SetCamPosY(float b) { cam_y = b; }
+
 	static CGame * GetInstance();
 
 	~CGame();
