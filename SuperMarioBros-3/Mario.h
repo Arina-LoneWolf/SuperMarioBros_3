@@ -41,7 +41,8 @@ public:
 	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning;
 	bool kickShell;
 	bool isHoldingShell;
-	bool canFly;
+	bool canFly; // only for Raccoon
+	bool grounded;
 	bool isOnGround = true;
 	bool immovable;
 	bool isWaitingForAni;
@@ -49,6 +50,7 @@ public:
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
 	float last_vy;
+	float y_when_started_to_jump;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);

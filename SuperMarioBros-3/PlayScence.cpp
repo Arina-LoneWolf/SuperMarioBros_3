@@ -488,15 +488,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+
 	switch (KeyCode)
 	{
+	case DIK_SPACE: // reset the game starting as small mario
+		mario->Reset();
+		break;
+
+	if (mario->GetState() == MARIO_STATE_DIE)
+		return;
+
 	case DIK_S: // high jump
-		if (mario->canFly)
+		if (mario->canFly && mario->GetLevel() == MARIO_RACCOON)
 		{
-			if (mario->GetLevel() == MARIO_RACCOON)
-			{
-				mario->Fly();
-			}
+			mario->Fly();
 		}
 		else
 		{
@@ -508,7 +513,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 
 	case DIK_A: // attack enemies while in Fire or Raccoon transformation
-		if (mario->GetLevel() == MARIO_FIRE || mario->GetLevel() == MARIO_RACCOON)
+		if ((mario->GetLevel() == MARIO_FIRE || mario->GetLevel() == MARIO_RACCOON) && !mario->isSitting)
 			mario->Attack();
 		break;
 
@@ -529,10 +534,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_B: // turn into big mario
 		mario->SetLevel(MARIO_LEVEL_BIG);
-		break;
-
-	case DIK_SPACE: // reset the game starting as small mario
-		mario->Reset();
 		break;
 
 	case DIK_1:
@@ -556,17 +557,21 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+
+	if (mario->GetState() == MARIO_STATE_DIE)
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_S:
 		if (mario->canFly)
 			return;
-		if (!(mario->isOnGround || mario->isFalling))
+		//if (!(mario->isOnGround || mario->isFalling))
+		if (mario->vy < 0 && !mario->isWaggingTail && !mario->isFlying)
 		{
-			if (mario->y > MARIO_TOO_HIGH_ABOVE)
-				mario->vy += MARIO_GRAVITY * 15 * mario->dt;
-			else
-				mario->vy += MARIO_GRAVITY * 11 * mario->dt;
+			DebugOut(L"+ vyyyyyyy\n");
+			float factor = 15 - ((mario->y_when_started_to_jump - mario->y) / 10) * 2;
+			mario->vy += MARIO_GRAVITY * factor * mario->dt;
 		}
 		break;
 
@@ -604,7 +609,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_RIGHT))
 	{
 		mario->isRunning = true;
-		if (!mario->immovable)
+		if (mario->vx < 0 && mario->isOnGround)
+			mario->SetState(MARIO_STATE_STOP);
+		else if (!mario->immovable)
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
@@ -612,7 +619,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	else if (game->IsKeyDown(DIK_A) && game->IsKeyDown(DIK_LEFT))
 	{
 		mario->isRunning = true;
-		if (!mario->immovable)
+		if (mario->vx > 0 && mario->isOnGround)
+			mario->SetState(MARIO_STATE_STOP);
+		else if (!mario->immovable)
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
@@ -641,6 +650,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		{
 			mario->Sit();
 		}
+		else if (mario->isOnGround)
+			mario->SetState(MARIO_STATE_IDLE);
 	}
 	else if (game->IsKeyDown(DIK_X))
 	{

@@ -25,25 +25,30 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	/*if (isWaggingTail)
+	if (isWaggingTail && isFalling)
 	{
-		DebugOut(L"22222222222\n");
-		vy += 0.00001f * dt;
+		DebugOut(L"slowwwwww\n");
+		vy += 0.00003f * dt;
 	}
-	else*/ if (canFly)
+	else if (canFly)
+	{
 		vy += MARIO_FLY_GRAVITY * dt;
+	}
 	else
 	{
 		//DebugOut(L"666666666\n");
 		vy += MARIO_GRAVITY * dt;
 	}
-	
-	#pragma region Wait for animation
+
+	if (level != MARIO_RACCOON)
+		canFly = false;
+
+#pragma region Wait for animation
 
 	//DebugOut(L"fly time: %d\n", flyTime->GetElapsedTime() / CLOCKS_PER_SEC);
-	DebugOut(L"state: %d\n", state);
-	DebugOut(L"is on ground = %d\n", isOnGround);
-	if (canFly && flyTime->IsTimeUp()) // có cần xét canFly?
+	//DebugOut(L"state: %d\n", state);
+	//DebugOut(L"is wagging tail = %d\n", isWaggingTail);
+	if (/*canFly && */flyTime->IsTimeUp()) // có cần xét canFly?
 	{
 		canFly = false;
 		flyTime->Stop();
@@ -70,7 +75,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		kickTime->Stop();
 		kickShell = false;
 	}
-	#pragma endregion
+#pragma endregion
 
 	if (level == MARIO_FIRE && isAttacking)
 	{
@@ -81,7 +86,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		isAttacking = false;
 	}
 
-	#pragma region Update weapon and effect
+#pragma region Update weapon and effect
 
 	// update listWeapon
 	for (int i = 0; i < listWeapons.size(); i++)
@@ -119,7 +124,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			listEffects.erase(listEffects.begin() + i);
 		}
 	}
-	#pragma endregion
+#pragma endregion
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -175,7 +180,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.1f;
 
 		//DebugOut(L"y = %f\n", y);
-		//DebugOut(L"vx = %f\n", vx);
+		//DebugOut(L"vy = %f\n", vy);
 		//DebugOut(L"dt: %d", dt);
 		if (nx != 0)
 		{
@@ -191,6 +196,8 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isFalling = false;
 				isOnGround = true;
+				if (canFly)
+					isFlying = false;
 			}
 			vy = 0;
 		}
@@ -243,7 +250,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 						CollideWithEnemy();
 					break;
 				}
-				
+
 				if (koopa->GetState() == ENEMY_STATE_MOVE || koopa->GetState() == KOOPA_STATE_SPIN_AND_MOVE)
 				{
 					if (ny < 0 && nx == 0)
@@ -343,6 +350,8 @@ void CMario::Render()
 		case MARIO_STATE_STOP:
 			if (!isOnGround)
 				goto CASE_FIRE_IS_FALLING;
+			if (isHoldingShell)
+				goto CASE_FIRE_WALK_AND_HOLD_SHELL;
 			if (nx > 0)
 				ani = MARIO_FIRE_ANI_STOP_RIGHT;
 			else
@@ -378,7 +387,7 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_RIGHT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_FIRE_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_FIRE_ON_AIR_AND_HOLD_SHELL;
@@ -393,7 +402,7 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_LEFT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_FIRE_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_FIRE_ON_AIR_AND_HOLD_SHELL;
@@ -531,8 +540,10 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_STOP:
-			if (!isOnGround)
+			if (!isOnGround && !canFly)
 				goto CASE_RACCOON_IS_FALLING;
+			if (isHoldingShell)
+				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
 			if (nx > 0)
 				ani = MARIO_RACCOON_ANI_STOP_RIGHT;
 			else
@@ -546,11 +557,11 @@ void CMario::Render()
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (canFly && !isOnGround)
+			if (canFly && !isOnGround && isFlying)
 				goto CASE_RACCOON_IS_FLYING;
 			if (isWaggingTail)
 				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
-			if (!isOnGround)
+			if (!isOnGround && !canFly)
 				goto CASE_RACCOON_IS_FALLING;
 			if (kickShell)
 				goto CASE_RACCOON_IS_KICKING;
@@ -560,15 +571,18 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_LEFT:
 			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
-			if (canFly && !isOnGround)
+			if (canFly && !isOnGround && isFlying)
+			{
+				//DebugOut(L"flyyyyyyyy\n");
 				goto CASE_RACCOON_IS_FLYING;
+			}
 			if (!isOnGround && isHoldingShell)
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
 			if (isWaggingTail)
 				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
-			if (!isOnGround)
+			if (!isOnGround && !canFly)
 				goto CASE_RACCOON_IS_FALLING;
 			if (kickShell)
 				goto CASE_RACCOON_IS_KICKING;
@@ -576,13 +590,15 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_RIGHT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (!isOnGround)
+			if (canFly && !isOnGround && isFlying)
+				goto CASE_RACCOON_IS_FLYING;
+			if (!isOnGround && !canFly)
 				goto CASE_RACCOON_IS_FALLING;
 			if (vx < MARIO_RUNNING_SPEED)
 				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
@@ -591,13 +607,15 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_LEFT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (!isOnGround)
+			if (canFly && !isOnGround && isFlying)
+				goto CASE_RACCOON_IS_FLYING;
+			if (!isOnGround && !canFly)
 				goto CASE_RACCOON_IS_FALLING;
 			if (vx > -MARIO_RUNNING_SPEED)
 				ani = MARIO_RACCOON_ANI_WALK_LEFT;
@@ -688,7 +706,7 @@ void CMario::Render()
 				goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
 			if (!isOnGround && !canFly)
 			{
-				DebugOut(L"3333333333\n");
+				//DebugOut(L"3333333333\n");
 				goto CASE_RACCOON_IS_FALLING;
 			}
 			if (kickShell)
@@ -768,6 +786,8 @@ void CMario::Render()
 		case MARIO_STATE_STOP:
 			if (!isOnGround)
 				goto CASE_BIG_IS_FALLING;
+			if (isHoldingShell)
+				goto CASE_BIG_WALK_AND_HOLD_SHELL;
 			if (nx > 0)
 				ani = MARIO_ANI_BIG_STOP_RIGHT;
 			else
@@ -803,7 +823,7 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_RIGHT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_BIG_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
@@ -818,7 +838,7 @@ void CMario::Render()
 			break;
 
 		case MARIO_STATE_RUNNING_LEFT:
-			if (isSitting)
+			if (isSitting && !isOnGround)
 				goto CASE_BIG_IS_SITTING;
 			if (!isOnGround && isHoldingShell)
 				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
@@ -864,7 +884,7 @@ void CMario::Render()
 				ani = MARIO_ANI_BIG_SITTING_LEFT;
 			break;
 
-		//CASE_BIG_IS_IDLING:
+			//CASE_BIG_IS_IDLING:
 		case MARIO_STATE_IDLE:
 			if (!isOnGround && isHoldingShell)
 				goto CASE_BIG_ON_AIR_AND_HOLD_SHELL;
@@ -907,7 +927,7 @@ void CMario::Render()
 		case MARIO_IDLE_WHILE_HOLDING_SHELL:
 			if (nx > 0)
 				ani = MARIO_ANI_BIG_IDLE_HOLD_SHELL_RIGHT;
-			else					
+			else
 				ani = MARIO_ANI_BIG_IDLE_HOLD_SHELL_LEFT;
 			break;
 
@@ -940,6 +960,8 @@ void CMario::Render()
 		case MARIO_STATE_STOP:
 			if (!isOnGround)
 				goto CASE_SMALL_IS_FALLING;
+			if (isHoldingShell)
+				goto CASE_SMALL_WALK_AND_HOLD_SHELL;
 			if (nx > 0)
 				ani = MARIO_ANI_SMALL_STOP_RIGHT;
 			else
@@ -1072,7 +1094,7 @@ void CMario::Render()
 		}
 	}
 
-//RENDER:
+	//RENDER:
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
@@ -1123,7 +1145,8 @@ void CMario::SetState(int state)
 		if (vx >= MARIO_RUNNING_SPEED)
 		{
 			vx = MARIO_RUNNING_SPEED;
-			canFly = true;
+			if (level == MARIO_RACCOON)
+				canFly = true;
 		}
 		nx = 1;
 		last_vx = vx;
@@ -1134,7 +1157,8 @@ void CMario::SetState(int state)
 		if (vx <= -MARIO_RUNNING_SPEED)
 		{
 			vx = -MARIO_RUNNING_SPEED;
-			canFly = true;
+			if (level == MARIO_RACCOON)
+				canFly = true;
 		}
 		nx = -1;
 		last_vx = vx;
@@ -1177,10 +1201,10 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_JUMP_HIGH:
 		if (isWaggingTail)
-			//return;
-			vy = -MARIO_GRAVITY * dt / 2;
-		else if (isOnGround)
+			return;
+		if (isOnGround)
 		{
+			y_when_started_to_jump = y;
 			vy = -MARIO_HIGH_JUMP_SPEED_Y;
 			isOnGround = false;
 		}
@@ -1208,7 +1232,7 @@ void CMario::SetState(int state)
 		break;
 	}
 
-	#pragma region Spin tail to attack
+#pragma region Spin tail to attack
 	if (GetAni() == MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT
 		|| GetAni() == MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT)
 	{
@@ -1248,7 +1272,7 @@ void CMario::SetState(int state)
 	}
 	else
 		tail->appear = false;
-	#pragma endregion
+#pragma endregion
 
 }
 
@@ -1300,17 +1324,35 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 void CMario::DecelerateSharply()
 {
-	if (vx > 0) {
-		vx -= MARIO_LARGE_ACCELERATION_SUBTRAHEND * dt;
-		last_vx = vx;
-		if (vx < 0)
-			vx = 0;
+	if (isHoldingShell)
+	{
+		if (vx > 0) {
+			vx -= MARIO_LARGEST_ACCELERATION_SUBTRAHEND * dt;
+			last_vx = vx;
+			if (vx < 0)
+				vx = 0;
+		}
+		else if (vx < 0) {
+			vx += MARIO_LARGEST_ACCELERATION_SUBTRAHEND * dt;
+			last_vx = vx;
+			if (vx > 0)
+				vx = 0;
+		}
 	}
-	else if (vx < 0) {
-		vx += MARIO_LARGE_ACCELERATION_SUBTRAHEND * dt;
-		last_vx = vx;
-		if (vx > 0)
-			vx = 0;
+	else
+	{
+		if (vx > 0) {
+			vx -= MARIO_LARGE_ACCELERATION_SUBTRAHEND * dt;
+			last_vx = vx;
+			if (vx < 0)
+				vx = 0;
+		}
+		else if (vx < 0) {
+			vx += MARIO_LARGE_ACCELERATION_SUBTRAHEND * dt;
+			last_vx = vx;
+			if (vx > 0)
+				vx = 0;
+		}
 	}
 }
 
@@ -1344,9 +1386,16 @@ void CMario::Sit()
 
 void CMario::Fly()
 {
+	//DebugOut(L"fly function\n");
 	isWaggingTail = true;
+	if (canFly)
+		isFlying = true;
 	if (isOnGround && flyTime->IsStopped())
+	{
+		DebugOut(L"START FLY\n");
+		isFlying = true;
 		flyTime->Start();
+	}
 	SetState(MARIO_STATE_FLYING);
 	waggingTailStartTime = GetTickCount64();
 }
