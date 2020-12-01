@@ -9,7 +9,7 @@ class Camera
 public:
 	CMario* player;
 
-	Camera(CMario* player, float playerX);
+	Camera(CMario* player);
 
 	void Update(ULONGLONG dt);
 

@@ -40,9 +40,13 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	#pragma region Wait for animation
 
+	//DebugOut(L"fly time: %d\n", flyTime->GetElapsedTime() / CLOCKS_PER_SEC);
+	DebugOut(L"state: %d\n", state);
+	DebugOut(L"is on ground = %d\n", isOnGround);
 	if (canFly && flyTime->IsTimeUp()) // có cần xét canFly?
 	{
 		canFly = false;
+		flyTime->Stop();
 	}
 
 	if (level == MARIO_RACCOON && attackStartTime
@@ -172,6 +176,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 		//DebugOut(L"y = %f\n", y);
 		//DebugOut(L"vx = %f\n", vx);
+		//DebugOut(L"dt: %d", dt);
 		if (nx != 0)
 		{
 			vx = last_vx;
@@ -681,8 +686,11 @@ void CMario::Render()
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
-			if (!isOnGround)
+			if (!isOnGround && !canFly)
+			{
+				DebugOut(L"3333333333\n");
 				goto CASE_RACCOON_IS_FALLING;
+			}
 			if (kickShell)
 				goto CASE_RACCOON_IS_KICKING;
 			if (vx > 0)
@@ -1337,7 +1345,7 @@ void CMario::Sit()
 void CMario::Fly()
 {
 	isWaggingTail = true;
-	if (isOnGround)
+	if (isOnGround && flyTime->IsStopped())
 		flyTime->Start();
 	SetState(MARIO_STATE_FLYING);
 	waggingTailStartTime = GetTickCount64();

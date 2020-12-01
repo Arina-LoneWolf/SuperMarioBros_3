@@ -133,7 +133,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 
 		CRUD = new CStatusBar(player);
-		cam = new Camera(player, x);
+		cam = new Camera(player);
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;

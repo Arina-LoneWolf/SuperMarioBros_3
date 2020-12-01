@@ -1,9 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera(CMario* player, float playerX)
+Camera::Camera(CMario* player)
 {
 	this->player = player;
-	camX = playerX - (SCREEN_WIDTH / 4);
+	//camX = playerX - (SCREEN_WIDTH / 4);
 	camY = 200;
 	CGame::GetInstance()->SetCamPos(camX, camY);
 }
