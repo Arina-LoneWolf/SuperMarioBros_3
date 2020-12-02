@@ -360,7 +360,7 @@ void CKoopa::Reset()
 
 void CKoopa::CreateEffect(float x, float y)
 {
-	effect->effectTime = 200;
+	//effect->effectTime = 200;
 	effect = new CMoneyEffect({ x, y });
 }
 
