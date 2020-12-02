@@ -46,7 +46,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 #pragma region Wait for animation
 
 	//DebugOut(L"fly time: %d\n", flyTime->GetElapsedTime() / CLOCKS_PER_SEC);
-	//DebugOut(L"state: %d\n", state);
+	DebugOut(L"state: %d\n", state);
 	//DebugOut(L"is wagging tail = %d\n", isWaggingTail);
 	if (/*canFly && */flyTime->IsTimeUp()) // có cần xét canFly?
 	{
@@ -75,6 +75,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		kickTime->Stop();
 		kickShell = false;
 	}
+
 #pragma endregion
 
 	if (level == MARIO_FIRE && isAttacking)
@@ -338,7 +339,8 @@ void CMario::Render()
 	//DebugOut(L"ani id khi vừa vào render %d\n", ani);
 	/*if (isWaitingForAni)
 		goto RENDER;*/
-		// Fire
+
+	// Fire
 	if (level == MARIO_FIRE)
 	{
 		switch (state)
@@ -541,9 +543,15 @@ void CMario::Render()
 
 		case MARIO_STATE_STOP:
 			if (!isOnGround && !canFly)
+			{
+				DebugOut(L"falling\n");
 				goto CASE_RACCOON_IS_FALLING;
+			}
 			if (isHoldingShell)
+			{
+				DebugOut(L"hold shell\n");
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+			}
 			if (nx > 0)
 				ani = MARIO_RACCOON_ANI_STOP_RIGHT;
 			else
@@ -571,15 +579,15 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_LEFT:
 			if (isSitting && !isOnGround)
 				goto CASE_RACCOON_IS_SITTING;
+			if (!isOnGround && isHoldingShell)
+				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+			if (isHoldingShell)
+				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
 			if (canFly && !isOnGround && isFlying)
 			{
 				//DebugOut(L"flyyyyyyyy\n");
 				goto CASE_RACCOON_IS_FLYING;
 			}
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
 			if (isWaggingTail)
 				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
 			if (!isOnGround && !canFly)
@@ -625,6 +633,8 @@ void CMario::Render()
 
 		CASE_RACCOON_IS_FLYING:
 		case MARIO_STATE_FLYING:
+			if (isHoldingShell)
+				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isWaggingTail)
 			{
 				//DebugOut(L"ani = wagging\n");
@@ -1094,12 +1104,12 @@ void CMario::Render()
 		}
 	}
 
-	//RENDER:
+	RENDER:
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-	//DebugOut(L"ani id %d\n", ani);
+	DebugOut(L"ani id %d\n", ani);
 	for (int i = 0; i < listWeapons.size(); i++)
 	{
 		listWeapons[i]->Render();
@@ -1118,6 +1128,7 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	CGameObject::SetState(state);
+
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:

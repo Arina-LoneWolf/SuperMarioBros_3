@@ -59,12 +59,12 @@ public:
 	//friend class CPlayScenceKeyHandler;
 };
 
-class CPlayScenceKeyHandler : public CScenceKeyHandler
+class CPlaySceneKeyHandler : public CSceneKeyHandler
 {
 public:
 	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
-	CPlayScenceKeyHandler(CScene *s) :CScenceKeyHandler(s) {};
+	CPlaySceneKeyHandler(CScene *s) :CSceneKeyHandler(s) {};
 };
 

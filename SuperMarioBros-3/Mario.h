@@ -29,6 +29,7 @@ public:
 	CTimer* jumpTime = new CTimer(MARIO_LOW_JUMP_TIME);
 	CTimer* flyTime = new CTimer(MARIO_FLYING_TIME);
 	CTimer* kickTime = new CTimer(MARIO_KICK_TIME);
+	CTimer* stopTime = new CTimer(200);
 
 	int score = 100;
 	int money = 5;
@@ -38,7 +39,7 @@ public:
 	int GetMoney() { return money; }
 	int GetLives() { return lives; }
 
-	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning;
+	bool isFalling, isSitting, isWaggingTail, isFlying, isAttacking, isRunning, isStopping;
 	bool kickShell;
 	bool isHoldingShell;
 	bool canFly; // only for Raccoon

@@ -8,7 +8,7 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
-	key_handler = new CPlayScenceKeyHandler(this);
+	key_handler = new CPlaySceneKeyHandler(this);
 }
 
 /*
@@ -483,11 +483,11 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 }
 
-void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
+void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
 	switch (KeyCode)
 	{
@@ -554,9 +554,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 }
 
-void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
+void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
-	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;
@@ -569,7 +569,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		//if (!(mario->isOnGround || mario->isFalling))
 		if (mario->vy < 0 && !mario->isWaggingTail && !mario->isFlying)
 		{
-			DebugOut(L"+ vyyyyyyy\n");
+			//DebugOut(L"+ vyyyyyyy\n");
 			float factor = 15 - ((mario->y_when_started_to_jump - mario->y) / 10) * 2;
 			mario->vy += MARIO_GRAVITY * factor * mario->dt;
 		}
@@ -591,10 +591,10 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 }
 
-void CPlayScenceKeyHandler::KeyState(BYTE* states)
+void CPlaySceneKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
-	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;

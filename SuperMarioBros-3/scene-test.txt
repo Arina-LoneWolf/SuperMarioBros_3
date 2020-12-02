@@ -32,7 +32,7 @@
 10005	286	321	312	351	0
 # jump right
 10006	325	240	351	270	0
-# stop and to right
+# stop right
 10007	165	281	191	311	0
 # sit down right
 10008	365	236	390	266	0
@@ -54,7 +54,7 @@
 10024	164	320	193	350	0
 10025	124	320	153	350	0
 10026	84	321	113	351	0
-# stop and to left
+# stop left
 10027	205	281	231	311	0
 # sit down left
 10028	7	236	30	266	0
@@ -79,7 +79,7 @@
 # jump small right 
 10045	325	75	351	105	0
 # stop right
-10046	204	115	230	145	0
+10046	168	115	190	145	0
 # kick right
 10047	245	115	271	145	0
 # hold shell right
@@ -96,7 +96,7 @@
 # jump left
 10065	46	75	71	105	0
 # stop left
-10066	168	115	190	145	0
+10066	204	115	230	145	0
 # kick left
 10067	127	115	151	145	0
 # hold shell left
@@ -115,7 +115,7 @@
 10105	289	521	315	551	0
 # jump right
 10106	329	440	354	470	0
-# stop to right
+# stop right
 10107	166	482	191	512	0
 # spin tail idle right
 10108	234	441	259	471	0
@@ -149,7 +149,7 @@
 10125	52	1560	85	1590	0
 # jump left
 10126	44	440	75	470	0
-# stop to left
+# stop left
 10127	208	482	231	512	0
 # spin tail idle left
 10128	6	2	38	32	999
@@ -520,7 +520,7 @@
 # sit down right
 104	10008	100
 # stop right
-105	10007	150
+105	10007	200
 # falling right
 106	10002	100
 # kick right
@@ -528,7 +528,7 @@
 # idle hold shell right
 108	10010	100
 # walk hold shell right
-109	10010	100	10011	100	10012	100	10011	100
+109	10010	65	10011	65	10012	65	10011	65
 # on air hold shell right
 110	10012	100
 
@@ -543,7 +543,7 @@
 # sit down left
 124	10028	100
 # stop left
-125	10027	150
+125	10027	200
 # falling left
 126	10022	100
 # kick left
@@ -551,7 +551,7 @@
 # idle hold shell left
 128	10030	100
 # walk hold shell left
-129	10030	100	10031	100	10032	100	10031	100
+129	10030	65	10031	65	10032	65	10031	65
 # on air hold shell left
 130	10032	100
 
@@ -571,7 +571,7 @@
 # idle hold shell right
 146	10048	100
 # walk hold shell right
-147	10048	100	10049	100
+147	10048	65	10049	65
 # on air hold shell right
 148	10049	100
 
@@ -590,7 +590,7 @@
 # idle hold shell left
 166	10068	100
 # walk hold shell left
-167	10068	100	10069	100
+167	10068	65	10069	65
 # on air hold shell left
 168	10069	100
 
@@ -627,7 +627,7 @@
 # idle hold shell right
 213	10119	100
 # walk hold shell right
-214	10119	100	11120	100	11121	100	11120	100
+214	10119	65	11120	65	11121	65	11120	65
 # on air hold shell right
 215	11121	100
 
@@ -661,7 +661,7 @@
 # idle hold shell left
 233	10139	100
 # walk hold shell left
-234	10139	100	10140	100	10141	100	10140	100
+234	10139	65	10140	65	10141	65	10140	65
 # on air hold shell left
 235	10141	100
 
@@ -689,7 +689,7 @@
 # idle hold shell right
 310	10215	100
 # walk hold shell right
-311	10215	100	10216	100	10217	100	10216	100
+311	10215	65	10216	65	10217	65	10216	65
 # on air hold shell right
 312	10217	100
 
@@ -716,7 +716,7 @@
 # idle hold shell left
 330	10235	100
 # walk hold shell left
-331	10235	100	10236	100	10237	100	10236	100
+331	10235	65	10236	65	10237	65	10236	65
 # on air hold shell left
 332	10237	100
 
