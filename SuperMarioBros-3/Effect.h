@@ -5,8 +5,10 @@ class CEffect : public CGameObject
 {
 protected:
 	ULONGLONG startEffect;
-	int effectTime;
+	
 public:
+	int effectTime;
+
 	CEffect();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* objects);
