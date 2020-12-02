@@ -28,7 +28,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isWaggingTail && isFalling)
 	{
 		DebugOut(L"slowwwwww\n");
-		vy += 0.00003f * dt;
+		vy += 0.000035f * dt;
 	}
 	else if (canFly)
 	{
@@ -43,10 +43,13 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (level != MARIO_RACCOON)
 		canFly = false;
 
+	if (unpressDown && isOnGround)
+		isSitting = false;
+
 #pragma region Wait for animation
 
 	//DebugOut(L"fly time: %d\n", flyTime->GetElapsedTime() / CLOCKS_PER_SEC);
-	DebugOut(L"state: %d\n", state);
+	//DebugOut(L"state: %d\n", state);
 	//DebugOut(L"is wagging tail = %d\n", isWaggingTail);
 	if (/*canFly && */flyTime->IsTimeUp()) // có cần xét canFly?
 	{
@@ -560,7 +563,10 @@ void CMario::Render()
 
 		case MARIO_STATE_WALKING_RIGHT:
 			if (isSitting && !isOnGround)
+			{
+				DebugOut(L"sittttttttt\n");
 				goto CASE_RACCOON_IS_SITTING;
+			}
 			if (!isOnGround && isHoldingShell)
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
@@ -776,10 +782,20 @@ void CMario::Render()
 
 		CASE_RACCOON_IS_FALLING:
 		default:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_FALLING_RIGHT;
+			if (vy < 0)
+			{
+				if (nx > 0)
+					ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
+				else
+					ani = MARIO_RACCOON_ANI_JUMP_LEFT;
+			}
 			else
-				ani = MARIO_RACCOON_ANI_FALLING_LEFT;
+			{
+				if (nx > 0)
+					ani = MARIO_RACCOON_ANI_FALLING_RIGHT;
+				else
+					ani = MARIO_RACCOON_ANI_FALLING_LEFT;
+			}
 		}
 
 	}
@@ -1109,7 +1125,7 @@ void CMario::Render()
 	if (untouchable) alpha = 128;
 
 	animation_set->at(ani)->Render(x, y, alpha);
-	DebugOut(L"ani id %d\n", ani);
+	//DebugOut(L"ani id %d\n", ani);
 	for (int i = 0; i < listWeapons.size(); i++)
 	{
 		listWeapons[i]->Render();
@@ -1426,6 +1442,9 @@ void CMario::Attack()
 */
 void CMario::Reset()
 {
+	if (lives < 1)
+		return;
+	lives--;
 	SetLevel(MARIO_LEVEL_SMALL);
 	SetState(MARIO_STATE_IDLE);
 	SetPosition(start_x, start_y);

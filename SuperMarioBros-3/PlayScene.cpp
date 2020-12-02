@@ -1,12 +1,11 @@
 ﻿#include <iostream>
 #include <fstream>
 
-#include "PlayScence.h"
+#include "PlayScene.h"
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
-	CScene(id, filePath)
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
 	key_handler = new CPlaySceneKeyHandler(this);
 }
@@ -191,7 +190,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::GREEN_KOOPA:
 	case Type::GREEN_PARAKOOPA:
 	{
-		obj = new CKoopa(player, x, y, &listBronzeBricks);
+		obj = new CKoopa(player, x, y);
 		break;
 	}
 	
@@ -517,6 +516,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 			mario->Attack();
 		break;
 
+	case DIK_DOWN:
+		mario->unpressDown = false;
+		break;
+
 		/*case DIK_X:
 			if (mario->canFly)
 			{
@@ -566,10 +569,8 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		if (mario->canFly)
 			return;
-		//if (!(mario->isOnGround || mario->isFalling))
-		if (mario->vy < 0 && !mario->isWaggingTail && !mario->isFlying)
+		if (mario->vy < 0 && !mario->isWaggingTail)
 		{
-			//DebugOut(L"+ vyyyyyyy\n");
 			float factor = 15 - ((mario->y_when_started_to_jump - mario->y) / 10) * 2;
 			mario->vy += MARIO_GRAVITY * factor * mario->dt;
 		}
@@ -587,6 +588,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_DOWN:
 		if (mario->isOnGround)
 			mario->isSitting = false;
+		mario->unpressDown = true;
 		break;
 	}
 }

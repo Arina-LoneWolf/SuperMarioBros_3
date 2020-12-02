@@ -18,7 +18,6 @@ public:
 
 	CTimer* sleepTime = new CTimer(KOOPA_SLEEP_TIME);
 	CTimer* vibrationTime = new CTimer(KOOPA_VIBRATION_TIME);
-	vector<LPGAMEOBJECT>* listBricks;
 
 	float lastMoveSpeed = KOOPA_MOVE_SPEED_X;
 	float startingPosX, startingPosY;
@@ -26,11 +25,8 @@ public:
 	CMario* player;
 	CMoneyEffect* effect;
 	
-	CKoopa(CMario* mario, float x, float y, vector<LPGAMEOBJECT>* listBricks);
+	CKoopa(CMario* mario, float x, float y);
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
-	void CreateEffect(float x, float y);
-	bool DetectEdge(vector<LPGAMEOBJECT>* listBricks);
-	void GetLeftBottomBBOX(float &l, float &b);
 };

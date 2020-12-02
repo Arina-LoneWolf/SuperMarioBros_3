@@ -46,6 +46,7 @@ public:
 	bool grounded;
 	bool isOnGround = true;
 	bool immovable;
+	bool unpressDown;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;

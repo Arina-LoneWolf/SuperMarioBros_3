@@ -9,6 +9,7 @@
 class CStatusBar
 {
 	LPANIMATION_SET CRUD;
+	LPSPRITE blackBG;
 	CNumber number;
 	CP_Meter* p_meter;
 	CTimer* playTime = new CTimer(MAX_PLAY_TIME * CLOCKS_PER_SEC);

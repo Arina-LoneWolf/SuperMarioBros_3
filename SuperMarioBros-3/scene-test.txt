@@ -17,6 +17,7 @@
 54	textures\enemies-5_2.png	0	255	255
 55	textures\status_bar.png	255	0	255
 56	textures\power_state.png	175	232	226
+1	textures\black-background.png	255	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -505,6 +506,9 @@
 # tier_7
 1027	2	65	66	72	56
 
+#=============BLACK BACKGROUND============
+11111	0	0	400	32	1
+
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # =========================== MARIO ============================
@@ -961,13 +965,13 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-#0	17	100	1
+0	17	100	1
 # at cloud
 #0	1302	100	1
 #0	672	100	1
 #0	325	100	1
 # start at bronze brick position
-0	1912	100	1
+#0	1912	100	1
 # start at koopa position
 #0	465	100	1
 #0	1460	245	1

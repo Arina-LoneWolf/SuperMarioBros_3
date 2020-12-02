@@ -17,7 +17,7 @@
 
 #include "Utils.h"
 #include "Game.h"
-#include "PlayScence.h"
+#include "PlayScene.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"SUPER MARIO BROS 3"
@@ -62,7 +62,7 @@ void Render()
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
 
-	if (SUCCEEDED(d3ddv->BeginScene()))
+	if (d3ddv->BeginScene())
 	{
 		// Clear back buffer with a color
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);

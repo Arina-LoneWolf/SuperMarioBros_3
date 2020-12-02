@@ -10,9 +10,7 @@ void CP_Meter::Update()
 {
 	float playerSpeed = abs(player->vx);
 
-	if (player->canFly)
-		powerState = PowerMeter::TIER_7;
-	else if (playerSpeed < SPEED_X_TIER_1)
+	if (playerSpeed < SPEED_X_TIER_1)
 		powerState = PowerMeter::TIER_0;
 	else if (playerSpeed < SPEED_X_TIER_2)
 		powerState = PowerMeter::TIER_1;
