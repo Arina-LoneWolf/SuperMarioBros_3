@@ -6,6 +6,7 @@ CStatusBar::CStatusBar(CMario* player)
 	playTime->Start();
 	p_meter = new CP_Meter(player);
 	CRUD = CAnimationSets::GetInstance()->Get(21);
+	blackBG = CSprites::GetInstance()->Get(11111);
 }
 
 void CStatusBar::Update()
@@ -18,6 +19,8 @@ void CStatusBar::Render(int worldID, float camX, float camY)
 {
 	float CRUDPosX = camX + CRUD_POS_X_ADDEND;
 	float CRUDPosY = camY + SCREEN_HEIGHT / 2 - CRUD_POS_Y_SUBTRAHEND;
+
+	//blackBG->Draw(camX, CRUDPosY - 1);
 
 	CRUD->at(0)->Render(CRUDPosX, CRUDPosY);
 
