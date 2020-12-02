@@ -191,7 +191,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::GREEN_KOOPA:
 	case Type::GREEN_PARAKOOPA:
 	{
-		obj = new CKoopa(player, x, y);
+		obj = new CKoopa(player, x, y, &listBronzeBricks);
 		break;
 	}
 	

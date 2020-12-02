@@ -1,9 +1,10 @@
 ﻿#include "Koopa.h"
 
-CKoopa::CKoopa(CMario* mario, float x, float y)
+CKoopa::CKoopa(CMario* mario, float x, float y, vector<LPGAMEOBJECT>* listBricks)
 {
 	category = Category::ENEMY;
 	player = mario;
+	this->listBricks = listBricks;
 	startingPosX = x;
 	startingPosY = y;
 	SetState(ENEMY_STATE_MOVE);
@@ -145,10 +146,18 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						vx = -vx;
 					}
-					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (x <= e->obj->x || x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH))
+
+					if (type == Type::RED_KOOPA)
 					{
-						if (type == Type::RED_KOOPA)
+						if (DetectEdge(listBricks) && startingPosX == 2097)
+						{
 							vx = -vx;
+						}
+						else if (e->ny != 0 && state == ENEMY_STATE_MOVE && (x <= e->obj->x || x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH))
+						{
+							if (type == Type::RED_KOOPA)
+								vx = -vx;
+						}
 					}
 				}
 				if (e->obj->category == Category::ENEMY && state == KOOPA_STATE_SPIN_AND_MOVE)
@@ -347,4 +356,40 @@ void CKoopa::Reset()
 	reset = false;
 	sleepTime->Stop();
 	vibrationTime->Stop();
+}
+
+void CKoopa::CreateEffect(float x, float y)
+{
+	effect->effectTime = 200;
+	effect = new CMoneyEffect({ x, y });
+}
+
+bool CKoopa::DetectEdge(vector<LPGAMEOBJECT>* listBricks)
+{
+	float l, t, r, b, bl, bt, br, bb;
+	GetLeftBottomBBOX(l, b);
+
+	if (vx < 0)
+		l = l + 6;
+	else
+		l = l + 10;
+
+	t = b + 1;
+	r = l + 2;
+	b = t + 2;
+
+	for (UINT i = 0; i < listBricks->size(); i++)
+	{
+		LPGAMEOBJECT e = listBricks->at(i);
+		e->GetBoundingBox(bl, bt, br, bb);
+		return !CGameObject::CheckAABB(l, t, r, b, bl, bt, br, bb);
+	}
+
+	return false;
+}
+
+void CKoopa::GetLeftBottomBBOX(float& l, float& b)
+{
+	l = x + KOOPA_LEFT_ADDEND;
+	b = y + KOOPA_BBOX_HEIGHT;
 }
