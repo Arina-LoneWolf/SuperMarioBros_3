@@ -5,7 +5,6 @@ class CEffect : public CGameObject
 {
 protected:
 	ULONGLONG startEffect;
-	
 public:
 	int effectTime;
 
