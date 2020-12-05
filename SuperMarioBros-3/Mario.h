@@ -47,6 +47,7 @@ public:
 	bool isOnGround = true;
 	bool immovable;
 	bool unpressDown;
+	bool renderBBOX;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;
@@ -72,6 +73,8 @@ public:
 	void CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem);
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	float GetLeft();
+	float GetTop();
 
 	void DecelerateSharply();
 	void DecelerateSlightly();

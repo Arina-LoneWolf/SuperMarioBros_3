@@ -398,9 +398,11 @@ void CPlayScene::Update(ULONGLONG dt)
 	float cx, cy;
 
 	//CGame::GetInstance()->cam_y = 200;
-	if (player->x > (SCREEN_WIDTH / 4) && player->x + (SCREEN_WIDTH / 4) < map->GetWidthTileMap())
+	float playerLeft = player->x + 11;
+
+	if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
-		cx = player->x - (SCREEN_WIDTH / 4);
+		cx = playerLeft - (5 * SCREEN_WIDTH / 28);
 		CGame::GetInstance()->cam_x = cx;
 	}
 
@@ -553,6 +555,13 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_4:
 		mario->SetLevel(MARIO_FIRE);
+		break;
+
+	case DIK_5:
+		mario->renderBBOX ^= true; // x ^= a <=>  x = x ^ a and '^' <=> XOR
+		//mario->renderBBOX = !mario->renderBBOX;
+		//mario->renderBBOX = mario->renderBBOX == false;
+		//mario->renderBBOX = abs(mario->renderBBOX - 1);
 		break;
 	}
 }

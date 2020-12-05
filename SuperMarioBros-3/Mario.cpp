@@ -1138,7 +1138,8 @@ void CMario::Render()
 
 	tail->Render();
 
-	//RenderBoundingBox();
+	if (renderBBOX)
+		RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -1349,6 +1350,63 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	bottom = y + MARIO_BBOX_HEIGHT;
 }
 
+float CMario::GetLeft()
+{
+	float left = 0.0f;
+
+	if (level == MARIO_LEVEL_SMALL)
+	{
+		if (nx > 0)
+			left = x + MARIO_SMALL_LEFT_SUBTRAHEND_R;
+		else
+			left = x + MARIO_SMALL_LEFT_SUBTRAHEND_L;
+	}
+
+	else if (level == MARIO_LEVEL_BIG || level == MARIO_FIRE)
+	{
+		if (nx > 0)
+			left = x + MARIO_BIG_LEFT_SUBTRAHEND_R;
+		else
+			left = x + MARIO_BIG_LEFT_SUBTRAHEND_L;
+	}
+
+	else if (level == MARIO_RACCOON)
+	{
+		if (nx > 0)
+			left = x + MARIO_RACCOON_LEFT_SUBTRAHEND_R;
+		else
+			left = x + MARIO_RACCOON_LEFT_SUBTRAHEND_L;
+	}
+
+	return left;
+}
+
+float CMario::GetTop()
+{
+	float top = 0.0f;
+
+	if (level == MARIO_LEVEL_SMALL)
+		top = y + MARIO_SMALL_TOP_ADDEND;
+
+	else if (level == MARIO_LEVEL_BIG || level == MARIO_FIRE)
+	{
+		if (isSitting)
+			top = y + MARIO_SIT_BBOX_DIFFERENCE_NUM;
+		else
+			top = y + MARIO_BIG_TOP_ADDEND;
+	}
+
+	else if (level == MARIO_RACCOON)
+	{
+		if (isSitting)
+			top = y + MARIO_SIT_BBOX_DIFFERENCE_NUM;
+		else
+			top = y + MARIO_RACCOON_TOP_ADDEND;
+	}
+
+	return top;
+}
+
 void CMario::DecelerateSharply()
 {
 	if (isHoldingShell)
@@ -1450,7 +1508,7 @@ void CMario::Reset()
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 	CGame::GetInstance()->cam_x = 0;
-	CGame::GetInstance()->cam_y = 200;
+	CGame::GetInstance()->cam_y = CAMERA_INITIAL_Y;
 }
 
 void CMario::CreateFireball()

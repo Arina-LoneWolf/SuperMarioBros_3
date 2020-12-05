@@ -18,9 +18,9 @@ void CStatusBar::Update()
 void CStatusBar::Render(int worldID, float camX, float camY)
 {
 	float CRUDPosX = camX + CRUD_POS_X_ADDEND;
-	float CRUDPosY = camY + SCREEN_HEIGHT / 2 - CRUD_POS_Y_SUBTRAHEND;
+	float CRUDPosY = camY + SCREEN_HEIGHT / SCREEN_DIVISOR - CRUD_POS_Y_SUBTRAHEND;
 
-	//blackBG->Draw(camX, CRUDPosY - 1);
+	blackBG->Draw(camX, CRUDPosY - 1);
 
 	CRUD->at(0)->Render(CRUDPosX, CRUDPosY);
 

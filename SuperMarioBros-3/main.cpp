@@ -23,9 +23,7 @@
 #define MAIN_WINDOW_TITLE L"SUPER MARIO BROS 3"
 #define WINDOW_ICON_PATH L"mario-2.ico" 
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 0, 0)
 
 #define MAX_FRAME_RATE 120
 
@@ -166,7 +164,7 @@ int Run()
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH / SCREEN_DIVISOR, SCREEN_HEIGHT / SCREEN_DIVISOR);
 
 	game = CGame::GetInstance();
 	game->Init(hWnd);
@@ -174,7 +172,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	game->Load(L"mario-sample.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH / 1.2, SCREEN_HEIGHT / 1.2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

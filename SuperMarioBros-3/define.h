@@ -548,8 +548,8 @@ enum class PowerMeter
 
 #define INITIAL_PLAYER_LIVES		4
 
-#define CRUD_POS_X_ADDEND			3
-#define CRUD_POS_Y_SUBTRAHEND		67
+#define CRUD_POS_X_ADDEND			4
+#define CRUD_POS_Y_SUBTRAHEND		69
 
 #define P_METER_POS_X				52
 #define P_METER_POS_Y				7
@@ -575,3 +575,10 @@ enum class PowerMeter
 #define TIME_REMAINING_NUM_POS_X	124
 #define TIME_REMAINING_NUM_POS_Y	15
 #define TIME_REMAINING_NUM_MAX_SIZE	3
+
+// Camera
+#define CAMERA_INITIAL_Y	238
+
+
+// Screen
+#define SCREEN_DIVISOR	2.8
