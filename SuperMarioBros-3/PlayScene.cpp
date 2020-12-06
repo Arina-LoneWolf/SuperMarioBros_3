@@ -301,6 +301,7 @@ void CPlayScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_DARKEN, L"textures\\darken-the-screen.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -426,6 +427,9 @@ void CPlayScene::Render()
 		item->Render();
 
 	CRUD->Render(worldID, CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+
+	/*if (player->goIntoPipe)
+		DarkenTheScreen();*/
 }
 
 /*
@@ -484,6 +488,53 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 }
 
+void CPlayScene::DarkenTheScreen()
+{
+	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
+	RECT rect;
+
+	float l = CGame::GetInstance()->GetCamPosX();
+	float t = CGame::GetInstance()->GetCamPosY();
+
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = ceil(5 * SCREEN_WIDTH / 14);
+	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
+
+	colorSubtrahend += 0.1;
+	alpha = floor(alpha + colorSubtrahend);
+	if (alpha > 255)
+	{
+		alpha = 255;
+	}
+
+	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
+}
+
+void CPlayScene::LightenTheScreen()
+{
+	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
+	RECT rect;
+
+	float l = CGame::GetInstance()->GetCamPosX();
+	float t = CGame::GetInstance()->GetCamPosY();
+
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = ceil(5 * SCREEN_WIDTH / 14);
+	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
+
+	colorSubtrahend += 0.1;
+	alpha = floor(alpha - colorSubtrahend);
+	if (alpha < 0)
+	{
+		alpha = 0;
+		lighteningIsDone = true;
+	}
+
+	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
+}
+
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -520,6 +571,11 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_DOWN:
 		mario->unpressDown = false;
+		if (mario->GetBottom() >= 111 && mario->GetLevel() == MARIO_RACCOON)
+		{
+			mario->goIntoPipe = true;
+			mario->SetState(MARIO_STATE_GO_INTO_PIPE);
+		}
 		break;
 
 		/*case DIK_X:
@@ -562,6 +618,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		//mario->renderBBOX = !mario->renderBBOX;
 		//mario->renderBBOX = mario->renderBBOX == false;
 		//mario->renderBBOX = abs(mario->renderBBOX - 1);
+		break;
+
+	case DIK_K:
+		mario->goIntoPipe = true;
 		break;
 	}
 }
@@ -609,10 +669,12 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;
-	if (mario->isWaitingForAni)
+	if (mario->GetState() == MARIO_STATE_GO_INTO_PIPE || mario->GetState() == MARIO_STATE_OUT_OF_PIPE)
 		return;
+	/*if (mario->isWaitingForAni)
+		return;*/
 
-	else if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
+	if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))
 	{
 		mario->Idle();

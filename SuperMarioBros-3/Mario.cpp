@@ -25,9 +25,13 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if (isWaggingTail && isFalling)
+	if (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE) // sửa lại thành 2 dòng if riêng
 	{
-		DebugOut(L"slowwwwww\n");
+		vy = 0.03f;
+	}
+	else if (isWaggingTail && isFalling)
+	{
+		//DebugOut(L"slowwwwww\n");
 		vy += 0.000035f * dt;
 	}
 	else if (canFly)
@@ -45,6 +49,18 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (unpressDown && isOnGround)
 		isSitting = false;
+
+	if (goIntoPipe && GetTop() >= 112)
+	{
+		vy = 0;
+		outOfPipe = true;
+		goIntoPipe = false;
+	}
+
+	if (state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= 496)
+	{
+		SetState(MARIO_STATE_IDLE);
+	}
 
 #pragma region Wait for animation
 
@@ -314,6 +330,10 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				vy = last_vy;
 				e->obj->isFinishedUsing = true;
 			}
+			else if (e->obj->type == Type::FLOOR && state == MARIO_STATE_GO_INTO_PIPE)
+			{
+				y += dy;
+			}
 			else if (dynamic_cast<CColorBox*>(e->obj))
 			{
 				if (e->nx != 0)
@@ -343,7 +363,7 @@ void CMario::Render()
 	/*if (isWaitingForAni)
 		goto RENDER;*/
 
-	// Fire
+		// Fire
 	if (level == MARIO_FIRE)
 	{
 		switch (state)
@@ -740,6 +760,11 @@ void CMario::Render()
 			}
 			break;
 
+		case MARIO_STATE_GO_INTO_PIPE:
+		case MARIO_STATE_OUT_OF_PIPE:
+			ani = MARIO_RACCOON_ANI_GO_PIPE;
+			break;
+
 		CASE_RACCOON_IS_KICKING:
 		case MARIO_KICK:
 			if (nx > 0)
@@ -1120,7 +1145,7 @@ void CMario::Render()
 		}
 	}
 
-	RENDER:
+RENDER:
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
@@ -1257,6 +1282,14 @@ void CMario::SetState(int state)
 
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		break;
+
+	case MARIO_STATE_GO_INTO_PIPE:
+		vy = 0.03f;
+		break;
+
+	case MARIO_STATE_OUT_OF_PIPE:
+		vy = -0.03f;
 		break;
 	}
 

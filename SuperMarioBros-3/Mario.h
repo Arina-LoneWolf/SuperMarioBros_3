@@ -48,6 +48,9 @@ public:
 	bool immovable;
 	bool unpressDown;
 	bool renderBBOX;
+	bool autoGoRight;
+	bool goIntoPipe;
+	bool outOfPipe;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;
@@ -75,6 +78,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	float GetLeft();
 	float GetTop();
+	float GetBottom() { return y + MARIO_BBOX_HEIGHT; }
 
 	void DecelerateSharply();
 	void DecelerateSlightly();

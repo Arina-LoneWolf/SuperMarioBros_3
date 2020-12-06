@@ -4,7 +4,8 @@ Camera::Camera(CMario* player)
 {
 	this->player = player;
 	//camX = playerX - (SCREEN_WIDTH / 4);
-	camY = CAMERA_INITIAL_Y;
+	//camY = CAMERA_INITIAL_Y;
+	camY = 50;
 	CGame::GetInstance()->SetCamPos(camX, camY);
 }
 
@@ -15,10 +16,30 @@ void Camera::Update(ULONGLONG dt)
 	//DebugOut(L"mario vy: %f\n", player->vy);
 	float playerTop = player->GetTop();
 
+	if (inHiddenArea)
+		return;
+
 	if (player->isOnGround)
 	{
 		camSpeedY = 0;
 		goto SET_CAM;
+	}
+
+	if (player->outOfPipe)
+	{
+		goToHiddenArea = true;
+	}
+
+	if (goToHiddenArea)
+	{
+		CGame::GetInstance()->SetCamPosY(CAMERA_HIDDEN_AREA_Y);
+		player->y = MARIO_READY_TO_OUT_OF_PIPE_POS_Y;
+		player->x = 2095;
+		player->SetState(MARIO_STATE_GO_INTO_PIPE);
+		player->outOfPipe = false;
+		inHiddenArea = true;
+		goToHiddenArea = false;
+		return;
 	}
 
 	if (player->canFly && !player->isOnGround)

@@ -9,6 +9,10 @@ class Camera
 public:
 	CMario* player;
 
+	bool goToHiddenArea = false;
+	bool backFromHiddenArea = false;
+	bool inHiddenArea = false;
+
 	Camera(CMario* player);
 
 	void Update(ULONGLONG dt);

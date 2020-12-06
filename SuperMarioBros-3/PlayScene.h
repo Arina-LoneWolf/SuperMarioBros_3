@@ -36,6 +36,11 @@ protected:
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> priorityListItems;
 
+	double colorSubtrahend;
+	int alpha = 0;
+	bool darkeningIsDone = false;
+	bool lighteningIsDone = false;
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -53,6 +58,8 @@ public:
 	virtual void Unload();
 
 	void DropItem(int itemType, float x, float y);
+	void DarkenTheScreen();
+	void LightenTheScreen();
 
 	CMario * GetPlayer() { return player; } 
 
