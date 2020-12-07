@@ -255,6 +255,8 @@
 2003	472	157	504	365	21
 # hidden pipe
 2004	433	223	465	255	21
+# short pipe pair with long one
+2005	433	157	465	205	21
 
 #============RED FIRE PIRANHA=============
 # face up left
@@ -751,6 +753,8 @@
 402	2003	100
 # hidden pipe
 399	2004	100
+# short pipe pair with long one
+398	2005	100
 
 # ======== COIN ========
 # idle coin
@@ -934,7 +938,7 @@
 # ICE BRICK
 33	610
 # PIPE
-40	400	401	402	399
+40	400	401	402	399	398
 # GOOMBA
 3	702	703	704
 # RED KOOPA
@@ -980,6 +984,8 @@
 12	1792	384	40	1
 12	1856	368	40	2
 12	2256	112	40	3
+12	2256	368	40	5
+12	2320	384	40	1
 12	2096	464	40	4
 12	2320	464	40	4
 
@@ -991,9 +997,9 @@
 #0	672	100	1
 #0	325	100	1
 # start at bronze brick position
-0	1912	100	1
+#0	1912	100	1
 # start at koopa position
-#0	465	100	1
+#30	465	100	1
 #0	1460	245	1
 # start at red fire piranha position
 #0	320	100	1

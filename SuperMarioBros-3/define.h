@@ -89,12 +89,12 @@ enum TypeOfBrickContainsItem
 #define SHORT_PIPE_HEIGHT	32
 #define MEDIUM_PIPE_HEIGHT	48
 #define LONG_PIPE_HEIGHT	208
-#define HIDDEN_PIPE_HEIGHT	32
 
-#define SHORT_PIPE_ANI		0
-#define MEDIUM_PIPE_ANI		1
-#define LONG_PIPE_ANI		2
-#define HIDDEN_PIPE_ANI		3
+#define SHORT_PIPE_ANI						0
+#define MEDIUM_PIPE_ANI						1
+#define LONG_PIPE_ANI						2
+#define HIDDEN_PIPE_ANI						3
+#define MEDIUM_PIPE_PAIR_WITH_LONG_ONE_ANI	4
 
 enum TypeOfPipe
 {
@@ -102,6 +102,7 @@ enum TypeOfPipe
 	MEDIUM_PIPE = 2,
 	LONG_PIPE = 3,
 	HIDDEN_PIPE = 4,
+	MEDIUM_PIPE_PAIR_WITH_LONG_ONE = 5,
 };
 
 // Effect
@@ -160,11 +161,14 @@ enum TypeOfPipe
 #define INITIAL_LAST_Y							134.0f
 
 #define MARIO_READY_TO_OUT_OF_PIPE_POS_Y		466.0f
+#define MARIO_READY_TO_OUT_OF_PIPE_POS_X		2095.0f
 #define MARIO_UNDER_TOP_OF_PIPE					112.0f
 #define MARIO_UNDER_END_OF_PIPE					490.0f // 496.0f
 #define MARIO_AT_HIDDEN_AREA_ENTRANCE			111
 #define MARIO_GO_INTO_PIPE_SPEED_Y				0.04f
 #define MARIO_OUT_OF_PIPE_SPEED_Y				0.08f
+#define MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_Y	383.0f
+#define MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_X	2319.0f
 
 // Mario time limit
 #define	MARIO_WAGGING_TAIL_TIME			150
@@ -591,8 +595,8 @@ enum class PowerMeter
 #define TIME_REMAINING_NUM_MAX_SIZE	3
 
 // Camera
-#define CAMERA_INITIAL_Y		238
-#define CAMERA_HIDDEN_AREA_Y	464
+#define CAMERA_INITIAL_Y		238.0f
+#define CAMERA_HIDDEN_AREA_Y	464.0f
 
 // Screen
 #define SCREEN_DIVISOR			2.8

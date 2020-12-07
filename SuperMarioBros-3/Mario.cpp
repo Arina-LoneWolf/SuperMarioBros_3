@@ -54,22 +54,26 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (unpressDown && isOnGround)
 		isSitting = false;
 
-	if (inTopOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE)
+	if ((inStartOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE && GetTop() < MARIO_UNDER_TOP_OF_PIPE + 1)
+		|| (inStartOfPipe && GetBottom() <= 465 && GetBottom() > 464))
 	{
 		vy = 0;
 		screenDim = true;
 		//readyToOutOfPipe = true;
-		//inTopOfPipe = false;
+		//inStartOfPipe = false;
 	}
 
 	if (inEndOfPipe)
 		vy = 0;
 
-	if (state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
+	if ((state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
+		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 386.5))
 	{
-		DebugOut(L"set idle\n");
+		backIdle = true;
 		SetState(MARIO_STATE_IDLE);
 	}
+	/*else
+		backIdle = false;*/
 
 #pragma region Wait for animation
 
@@ -228,7 +232,8 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				if (canFly)
 					isFlying = false;
 			}
-			vy = 0;
+			//if (state != MARIO_STATE_OUT_OF_PIPE)
+				vy = 0;
 		}
 
 		//
@@ -237,7 +242,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-
+			
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -339,7 +344,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				vy = last_vy;
 				e->obj->isFinishedUsing = true;
 			}
-			else if (e->obj->type == Type::PIPE && state == MARIO_STATE_GO_INTO_PIPE)
+			else if (e->obj->type == Type::PIPE && (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE))
 			{
 				y += dy;
 			}
@@ -749,9 +754,9 @@ void CMario::Render()
 				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
 			if (isHoldingShell)
 				goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
-			if (!isOnGround && !canFly)
+			if (!isOnGround && !canFly && !backIdle)
 			{
-				//DebugOut(L"3333333333\n");
+				DebugOut(L"3333333333\n");
 				goto CASE_RACCOON_IS_FALLING;
 			}
 			if (kickShell)

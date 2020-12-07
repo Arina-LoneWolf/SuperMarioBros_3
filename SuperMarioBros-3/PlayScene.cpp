@@ -510,8 +510,17 @@ void CPlayScene::DarkenTheScreen(CMario* player, Camera* cam)
 	{
 		alpha = 255;
 		player->screenDim = false;
-		player->inTopOfPipe = false;
-		cam->goToHiddenArea = true;
+		player->inStartOfPipe = false;
+		if (player->goHiddenArea)
+		{
+			cam->goToHiddenArea = true;
+			player->goHiddenArea = false;
+		}
+		else if (player->leaveHiddenArea)
+		{
+			cam->backFromHiddenArea = true;
+			player->leaveHiddenArea = false;
+		}
 		colorSubtrahend = 0;
 		lighteningIsDone = false;
 	}
@@ -539,6 +548,7 @@ void CPlayScene::LightenTheScreen(CMario* player)
 		alpha = 0;
 		player->readyToOutOfPipe = true;
 		lighteningIsDone = true;
+		colorSubtrahend = 0;
 	}
 
 	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
@@ -560,6 +570,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		return;
 
 	case DIK_S: // high jump
+		if (mario->onPressUp)
+			return;
+
 		if (mario->canFly && mario->GetLevel() == MARIO_RACCOON)
 		{
 			mario->Fly();
@@ -582,9 +595,14 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		mario->unpressDown = false;
 		if ((int)mario->GetBottom() == MARIO_AT_HIDDEN_AREA_ENTRANCE && mario->GetLevel() == MARIO_RACCOON)
 		{
-			mario->inTopOfPipe = true;
+			mario->goHiddenArea = true;
+			mario->inStartOfPipe = true;
 			mario->SetState(MARIO_STATE_GO_INTO_PIPE);
 		}
+		break;
+
+	case DIK_UP:
+		mario->onPressUp = true;
 		break;
 
 	case DIK_R: // turn into raccoon mario
@@ -621,10 +639,6 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		//mario->renderBBOX = mario->renderBBOX == false;
 		//mario->renderBBOX = abs(mario->renderBBOX - 1);
 		break;
-
-	case DIK_K:
-		mario->inTopOfPipe = true;
-		break;
 	}
 }
 
@@ -640,6 +654,8 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_S:
 		if (mario->canFly)
 			return;
+		if (mario->onPressUp)
+			return;
 		if (mario->vy < 0 && !mario->isWaggingTail)
 		{
 			float factor = 15 - ((mario->y_when_started_to_jump - mario->y) / 10) * 2;
@@ -649,6 +665,10 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 
 	case DIK_X:
 		mario->vy += MARIO_GRAVITY * 7 * mario->dt;
+		break;
+
+	case DIK_UP:
+		mario->onPressUp = false;
 		break;
 
 	case DIK_A:
@@ -727,6 +747,16 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		}
 		else if (mario->isOnGround)
 			mario->SetState(MARIO_STATE_IDLE);
+	}
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		if (game->IsKeyDown(DIK_S) && mario->GetLevel() == MARIO_RACCOON && mario->isOnGround
+			&& mario->GetLeft() > 2321 && mario->GetLeft() < 2333)
+		{
+			mario->leaveHiddenArea = true;
+			mario->inStartOfPipe = true;
+			mario->SetState(MARIO_STATE_OUT_OF_PIPE);
+		}
 	}
 	else if (game->IsKeyDown(DIK_X))
 	{

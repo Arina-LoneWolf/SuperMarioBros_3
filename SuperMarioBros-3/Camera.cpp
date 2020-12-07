@@ -3,10 +3,8 @@
 Camera::Camera(CMario* player)
 {
 	this->player = player;
-	//camX = playerX - (SCREEN_WIDTH / 4);
-	//camY = CAMERA_INITIAL_Y;
-	camY = 50;
-	CGame::GetInstance()->SetCamPos(camX, camY);
+	camY = CAMERA_INITIAL_Y;
+	CGame::GetInstance()->SetCamPosY(camY);
 }
 
 void Camera::Update(ULONGLONG dt)
@@ -20,24 +18,46 @@ void Camera::Update(ULONGLONG dt)
 	{
 		CGame::GetInstance()->SetCamPosY(CAMERA_HIDDEN_AREA_Y);
 		player->y = MARIO_READY_TO_OUT_OF_PIPE_POS_Y;
-		player->x = 2095;
+		player->x = MARIO_READY_TO_OUT_OF_PIPE_POS_X;
 		player->inEndOfPipe = true;
 		inHiddenArea = true;
 	}
 
+	if (backFromHiddenArea)
+	{
+		CGame::GetInstance()->SetCamPosY(CAMERA_INITIAL_Y);
+		player->y = MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_Y;
+		player->x = MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_X;
+		player->inEndOfPipe = true;
+		//inHiddenArea = false;
+	}
+
 	if (player->readyToOutOfPipe)
 	{
-		DebugOut(L"set pos MARIO\n");
 		player->inEndOfPipe = false;
-		player->SetState(MARIO_STATE_GO_INTO_PIPE);
+		if (goToHiddenArea)
+			player->SetState(MARIO_STATE_GO_INTO_PIPE);
+		else if (backFromHiddenArea)
+			player->SetState(MARIO_STATE_OUT_OF_PIPE);
+		if (backFromHiddenArea)
+			inHiddenArea = false;
 		player->readyToOutOfPipe = false;
 		goToHiddenArea = false;
-		inHiddenArea = true;
+		backFromHiddenArea = false;
 		return;
 	}
 
 	if (inHiddenArea)
 		return;
+
+	if (!goToHiddenArea && player->GetState() == MARIO_STATE_GO_INTO_PIPE)
+		return;
+
+	if (player->GetState() == MARIO_STATE_OUT_OF_PIPE)
+	{
+		camY = CAMERA_INITIAL_Y;
+		return;
+	}
 
 	if (player->isOnGround)
 	{
@@ -73,8 +93,12 @@ void Camera::Update(ULONGLONG dt)
 SET_CAM:
 
 	camY += camSpeedY * dt;
-	if (camY <= 0 || camY > CAMERA_INITIAL_Y)
-		return;
+	/*if (camY <= 0 || camY > CAMERA_INITIAL_Y)
+		return;*/
+	if (camY < 0)
+		camY = 0;
+	if (camY > CAMERA_INITIAL_Y)
+		camY = CAMERA_INITIAL_Y;
 
 	CGame::GetInstance()->SetCamPosY(camY);
 }

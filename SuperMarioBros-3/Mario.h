@@ -47,14 +47,16 @@ public:
 	bool isOnGround = true;
 	bool immovable;
 	bool unpressDown;
+	bool onPressUp;
 	bool renderBBOX;
 	bool autoGoRight;
-	bool inTopOfPipe;
+	bool inStartOfPipe;
 	bool inEndOfPipe;
 	bool readyToOutOfPipe;
-	bool goPipeToEscape;
-	bool backFromPipe;
+	bool goHiddenArea;
+	bool leaveHiddenArea;
 	bool screenDim;
+	bool backIdle;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;
