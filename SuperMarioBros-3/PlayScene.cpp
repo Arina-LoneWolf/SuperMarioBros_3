@@ -513,6 +513,7 @@ void CPlayScene::DarkenTheScreen(CMario* player, Camera* cam)
 		player->inTopOfPipe = false;
 		cam->goToHiddenArea = true;
 		colorSubtrahend = 0;
+		lighteningIsDone = false;
 	}
 
 	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);

@@ -339,7 +339,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				vy = last_vy;
 				e->obj->isFinishedUsing = true;
 			}
-			else if (e->obj->type == Type::FLOOR && state == MARIO_STATE_GO_INTO_PIPE)
+			else if (e->obj->type == Type::PIPE && state == MARIO_STATE_GO_INTO_PIPE)
 			{
 				y += dy;
 			}

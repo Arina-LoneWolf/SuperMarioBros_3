@@ -89,16 +89,19 @@ enum TypeOfBrickContainsItem
 #define SHORT_PIPE_HEIGHT	32
 #define MEDIUM_PIPE_HEIGHT	48
 #define LONG_PIPE_HEIGHT	208
+#define HIDDEN_PIPE_HEIGHT	32
 
 #define SHORT_PIPE_ANI		0
 #define MEDIUM_PIPE_ANI		1
-#define LONG_PIPE_ANI		2 
+#define LONG_PIPE_ANI		2
+#define HIDDEN_PIPE_ANI		3
 
 enum TypeOfPipe
 {
 	SHORT_PIPE = 1,
 	MEDIUM_PIPE = 2,
 	LONG_PIPE = 3,
+	HIDDEN_PIPE = 4,
 };
 
 // Effect
@@ -158,7 +161,7 @@ enum TypeOfPipe
 
 #define MARIO_READY_TO_OUT_OF_PIPE_POS_Y		466.0f
 #define MARIO_UNDER_TOP_OF_PIPE					112.0f
-#define MARIO_UNDER_END_OF_PIPE					476.0f // 496.0f
+#define MARIO_UNDER_END_OF_PIPE					490.0f // 496.0f
 #define MARIO_AT_HIDDEN_AREA_ENTRANCE			111
 #define MARIO_GO_INTO_PIPE_SPEED_Y				0.04f
 #define MARIO_OUT_OF_PIPE_SPEED_Y				0.08f
@@ -593,4 +596,4 @@ enum class PowerMeter
 
 // Screen
 #define SCREEN_DIVISOR			2.8
-#define COLOR_ADDEND_LEVEL_UP	1.0
+#define COLOR_ADDEND_LEVEL_UP	1.4
