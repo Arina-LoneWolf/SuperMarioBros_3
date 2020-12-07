@@ -49,8 +49,12 @@ public:
 	bool unpressDown;
 	bool renderBBOX;
 	bool autoGoRight;
-	bool goIntoPipe;
-	bool outOfPipe;
+	bool inTopOfPipe;
+	bool inEndOfPipe;
+	bool readyToOutOfPipe;
+	bool goPipeToEscape;
+	bool backFromPipe;
+	bool screenDim;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;
@@ -78,7 +82,7 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	float GetLeft();
 	float GetTop();
-	float GetBottom() { return y + MARIO_BBOX_HEIGHT; }
+	float GetBottom();
 
 	void DecelerateSharply();
 	void DecelerateSlightly();

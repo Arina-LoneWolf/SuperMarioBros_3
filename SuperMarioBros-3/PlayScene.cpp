@@ -428,8 +428,11 @@ void CPlayScene::Render()
 
 	CRUD->Render(worldID, CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 
-	/*if (player->goIntoPipe)
-		DarkenTheScreen();*/
+	if (player->screenDim)
+		DarkenTheScreen(player, cam);
+
+	if (cam->inHiddenArea && !lighteningIsDone)
+		LightenTheScreen(player);
 }
 
 /*
@@ -488,7 +491,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 }
 
-void CPlayScene::DarkenTheScreen()
+void CPlayScene::DarkenTheScreen(CMario* player, Camera* cam)
 {
 	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
 	RECT rect;
@@ -501,17 +504,21 @@ void CPlayScene::DarkenTheScreen()
 	rect.right = ceil(5 * SCREEN_WIDTH / 14);
 	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
 
-	colorSubtrahend += 0.1;
+	colorSubtrahend += COLOR_ADDEND_LEVEL_UP;
 	alpha = floor(alpha + colorSubtrahend);
 	if (alpha > 255)
 	{
 		alpha = 255;
+		player->screenDim = false;
+		player->inTopOfPipe = false;
+		cam->goToHiddenArea = true;
+		colorSubtrahend = 0;
 	}
 
 	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
 }
 
-void CPlayScene::LightenTheScreen()
+void CPlayScene::LightenTheScreen(CMario* player)
 {
 	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
 	RECT rect;
@@ -524,11 +531,12 @@ void CPlayScene::LightenTheScreen()
 	rect.right = ceil(5 * SCREEN_WIDTH / 14);
 	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
 
-	colorSubtrahend += 0.1;
+	colorSubtrahend += COLOR_ADDEND_LEVEL_UP;
 	alpha = floor(alpha - colorSubtrahend);
 	if (alpha < 0)
 	{
 		alpha = 0;
+		player->readyToOutOfPipe = true;
 		lighteningIsDone = true;
 	}
 
@@ -571,19 +579,12 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_DOWN:
 		mario->unpressDown = false;
-		if (mario->GetBottom() >= 111 && mario->GetLevel() == MARIO_RACCOON)
+		if ((int)mario->GetBottom() == MARIO_AT_HIDDEN_AREA_ENTRANCE && mario->GetLevel() == MARIO_RACCOON)
 		{
-			mario->goIntoPipe = true;
+			mario->inTopOfPipe = true;
 			mario->SetState(MARIO_STATE_GO_INTO_PIPE);
 		}
 		break;
-
-		/*case DIK_X:
-			if (mario->canFly)
-			{
-				if (mario->GetLevel() == MARIO_RACCOON)
-					mario->Fly();
-			}*/
 
 	case DIK_R: // turn into raccoon mario
 		mario->SetLevel(MARIO_RACCOON);
@@ -621,7 +622,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 
 	case DIK_K:
-		mario->goIntoPipe = true;
+		mario->inTopOfPipe = true;
 		break;
 	}
 }

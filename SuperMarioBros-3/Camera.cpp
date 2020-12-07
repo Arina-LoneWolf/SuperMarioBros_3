@@ -16,6 +16,26 @@ void Camera::Update(ULONGLONG dt)
 	//DebugOut(L"mario vy: %f\n", player->vy);
 	float playerTop = player->GetTop();
 
+	if (goToHiddenArea)
+	{
+		CGame::GetInstance()->SetCamPosY(CAMERA_HIDDEN_AREA_Y);
+		player->y = MARIO_READY_TO_OUT_OF_PIPE_POS_Y;
+		player->x = 2095;
+		player->inEndOfPipe = true;
+		inHiddenArea = true;
+	}
+
+	if (player->readyToOutOfPipe)
+	{
+		DebugOut(L"set pos MARIO\n");
+		player->inEndOfPipe = false;
+		player->SetState(MARIO_STATE_GO_INTO_PIPE);
+		player->readyToOutOfPipe = false;
+		goToHiddenArea = false;
+		inHiddenArea = true;
+		return;
+	}
+
 	if (inHiddenArea)
 		return;
 
@@ -23,23 +43,6 @@ void Camera::Update(ULONGLONG dt)
 	{
 		camSpeedY = 0;
 		goto SET_CAM;
-	}
-
-	if (player->outOfPipe)
-	{
-		goToHiddenArea = true;
-	}
-
-	if (goToHiddenArea)
-	{
-		CGame::GetInstance()->SetCamPosY(CAMERA_HIDDEN_AREA_Y);
-		player->y = MARIO_READY_TO_OUT_OF_PIPE_POS_Y;
-		player->x = 2095;
-		player->SetState(MARIO_STATE_GO_INTO_PIPE);
-		player->outOfPipe = false;
-		inHiddenArea = true;
-		goToHiddenArea = false;
-		return;
 	}
 
 	if (player->canFly && !player->isOnGround)

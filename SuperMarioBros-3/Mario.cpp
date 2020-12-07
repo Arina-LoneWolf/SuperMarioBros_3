@@ -25,9 +25,13 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE) // sửa lại thành 2 dòng if riêng
+	if (state == MARIO_STATE_GO_INTO_PIPE) // sửa lại thành 2 dòng if riêng
 	{
-		vy = 0.03f;
+		vy = MARIO_GO_INTO_PIPE_SPEED_Y;
+	}
+	else if (state == MARIO_STATE_OUT_OF_PIPE)
+	{
+		vy = -MARIO_GO_INTO_PIPE_SPEED_Y;
 	}
 	else if (isWaggingTail && isFalling)
 	{
@@ -50,15 +54,20 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (unpressDown && isOnGround)
 		isSitting = false;
 
-	if (goIntoPipe && GetTop() >= 112)
+	if (inTopOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE)
 	{
 		vy = 0;
-		outOfPipe = true;
-		goIntoPipe = false;
+		screenDim = true;
+		//readyToOutOfPipe = true;
+		//inTopOfPipe = false;
 	}
 
-	if (state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= 496)
+	if (inEndOfPipe)
+		vy = 0;
+
+	if (state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
 	{
+		DebugOut(L"set idle\n");
 		SetState(MARIO_STATE_IDLE);
 	}
 
@@ -1285,11 +1294,8 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_GO_INTO_PIPE:
-		vy = 0.03f;
-		break;
-
 	case MARIO_STATE_OUT_OF_PIPE:
-		vy = -0.03f;
+		isSitting = false;
 		break;
 	}
 
@@ -1438,6 +1444,12 @@ float CMario::GetTop()
 	}
 
 	return top;
+}
+
+float CMario::GetBottom()
+{
+	float bottom = y + MARIO_BBOX_HEIGHT;
+	return bottom;
 }
 
 void CMario::DecelerateSharply()

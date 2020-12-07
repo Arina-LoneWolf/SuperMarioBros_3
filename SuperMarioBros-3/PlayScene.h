@@ -38,7 +38,7 @@ protected:
 
 	double colorSubtrahend;
 	int alpha = 0;
-	bool darkeningIsDone = false;
+	//bool darkeningIsDone = false;
 	bool lighteningIsDone = false;
 
 	void _ParseSection_TEXTURES(string line);
@@ -58,8 +58,8 @@ public:
 	virtual void Unload();
 
 	void DropItem(int itemType, float x, float y);
-	void DarkenTheScreen();
-	void LightenTheScreen();
+	void DarkenTheScreen(CMario* player, Camera* cam);
+	void LightenTheScreen(CMario* player);
 
 	CMario * GetPlayer() { return player; } 
 
