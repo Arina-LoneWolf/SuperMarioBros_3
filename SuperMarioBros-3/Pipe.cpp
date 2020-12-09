@@ -22,7 +22,7 @@ void CPipe::Render()
 
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -30,7 +30,7 @@ void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)
 	l = x;
 	t = y;
 	r = x + PIPE_WIDTH;
-	
+
 	if (pipeType == TypeOfPipe::LONG_PIPE)
 		b = y + LONG_PIPE_HEIGHT;
 	else if (pipeType == TypeOfPipe::MEDIUM_PIPE || pipeType == TypeOfPipe::MEDIUM_PIPE_PAIR_WITH_LONG_ONE)

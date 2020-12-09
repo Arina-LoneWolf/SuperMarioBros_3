@@ -56,7 +56,6 @@ public:
 	bool goHiddenArea;
 	bool leaveHiddenArea;
 	bool screenDim;
-	bool backIdle;
 	bool isWaitingForAni;
 
 	float last_y = INITIAL_LAST_Y;

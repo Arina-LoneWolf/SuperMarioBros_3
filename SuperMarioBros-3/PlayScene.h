@@ -32,9 +32,10 @@ protected:
 	int worldID = 1;
 
 	vector<LPGAMEOBJECT> objects;
-	vector<LPGAMEOBJECT> listBronzeBricks; // brick contains the item
+	vector<LPGAMEOBJECT> listBronzeBricks;
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> priorityListItems;
+	vector<LPGAMEOBJECT> listPipes;
 
 	double colorSubtrahend;
 	int alpha = 0;

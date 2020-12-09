@@ -25,7 +25,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	if (state == MARIO_STATE_GO_INTO_PIPE) // sửa lại thành 2 dòng if riêng
+	if (state == MARIO_STATE_GO_INTO_PIPE)
 	{
 		vy = MARIO_GO_INTO_PIPE_SPEED_Y;
 	}
@@ -55,7 +55,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		isSitting = false;
 
 	if ((inStartOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE && GetTop() < MARIO_UNDER_TOP_OF_PIPE + 1)
-		|| (inStartOfPipe && GetBottom() <= 465 && GetBottom() > 464))
+		|| (inStartOfPipe && GetBottom() <= 495 && GetBottom() > 494))
 	{
 		vy = 0;
 		screenDim = true;
@@ -67,13 +67,10 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = 0;
 
 	if ((state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
-		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 386.5))
+		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 385))
 	{
-		backIdle = true;
 		SetState(MARIO_STATE_IDLE);
 	}
-	/*else
-		backIdle = false;*/
 
 #pragma region Wait for animation
 
@@ -232,8 +229,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				if (canFly)
 					isFlying = false;
 			}
-			//if (state != MARIO_STATE_OUT_OF_PIPE)
-				vy = 0;
+			vy = 0;
 		}
 
 		//
@@ -242,7 +238,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			
+
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -572,261 +568,164 @@ void CMario::Render()
 	// Raccoon
 	else if (level == MARIO_RACCOON)
 	{
-		switch (state)
+	switch (state)
+	{
+	case MARIO_STATE_DIE:
+		ani = MARIO_ANI_DIE;
+		break;
+
+	case MARIO_STATE_STOP:
+		if (!isOnGround && !canFly)
 		{
-		case MARIO_STATE_DIE:
-			ani = MARIO_ANI_DIE;
-			break;
+			DebugOut(L"falling\n");
+			goto CASE_RACCOON_IS_FALLING;
+		}
+		if (isHoldingShell)
+		{
+			DebugOut(L"hold shell\n");
+			goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+		}
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_STOP_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_STOP_LEFT;
+		break;
 
-		case MARIO_STATE_STOP:
-			if (!isOnGround && !canFly)
-			{
-				DebugOut(L"falling\n");
-				goto CASE_RACCOON_IS_FALLING;
-			}
-			if (isHoldingShell)
-			{
-				DebugOut(L"hold shell\n");
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			}
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_STOP_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_STOP_LEFT;
-			break;
+	case MARIO_STATE_WALKING_RIGHT:
+		if (isSitting && !isOnGround)
+		{
+			DebugOut(L"sittttttttt\n");
+			goto CASE_RACCOON_IS_SITTING;
+		}
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isHoldingShell)
+			goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+		if (canFly && !isOnGround && isFlying)
+			goto CASE_RACCOON_IS_FLYING;
+		if (isWaggingTail)
+			goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
+		if (!isOnGround && !canFly)
+			goto CASE_RACCOON_IS_FALLING;
+		if (kickShell)
+			goto CASE_RACCOON_IS_KICKING;
+		ani = MARIO_RACCOON_ANI_WALK_RIGHT;
+		break;
 
-		case MARIO_STATE_WALKING_RIGHT:
-			if (isSitting && !isOnGround)
-			{
-				DebugOut(L"sittttttttt\n");
-				goto CASE_RACCOON_IS_SITTING;
-			}
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (canFly && !isOnGround && isFlying)
-				goto CASE_RACCOON_IS_FLYING;
-			if (isWaggingTail)
-				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
-			if (!isOnGround && !canFly)
-				goto CASE_RACCOON_IS_FALLING;
-			if (kickShell)
-				goto CASE_RACCOON_IS_KICKING;
+	case MARIO_STATE_WALKING_LEFT:
+		if (isSitting && !isOnGround)
+			goto CASE_RACCOON_IS_SITTING;
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isHoldingShell)
+			goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+		if (canFly && !isOnGround && isFlying)
+		{
+			//DebugOut(L"flyyyyyyyy\n");
+			goto CASE_RACCOON_IS_FLYING;
+		}
+		if (isWaggingTail)
+			goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
+		if (!isOnGround && !canFly)
+			goto CASE_RACCOON_IS_FALLING;
+		if (kickShell)
+			goto CASE_RACCOON_IS_KICKING;
+		ani = MARIO_RACCOON_ANI_WALK_LEFT;
+		break;
+
+	case MARIO_STATE_RUNNING_RIGHT:
+		if (isSitting && !isOnGround)
+			goto CASE_RACCOON_IS_SITTING;
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isHoldingShell)
+			goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+		if (canFly && !isOnGround && isFlying)
+			goto CASE_RACCOON_IS_FLYING;
+		if (!isOnGround && !canFly)
+			goto CASE_RACCOON_IS_FALLING;
+		if (vx < MARIO_RUNNING_SPEED)
 			ani = MARIO_RACCOON_ANI_WALK_RIGHT;
-			break;
+		else
+			ani = MARIO_RACCOON_ANI_RUNNING_RIGHT;
+		break;
 
-		case MARIO_STATE_WALKING_LEFT:
-			if (isSitting && !isOnGround)
-				goto CASE_RACCOON_IS_SITTING;
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (canFly && !isOnGround && isFlying)
-			{
-				//DebugOut(L"flyyyyyyyy\n");
-				goto CASE_RACCOON_IS_FLYING;
-			}
-			if (isWaggingTail)
-				goto CASE_RACCOON_WAG_TAIL_WHILE_FALLING;
-			if (!isOnGround && !canFly)
-				goto CASE_RACCOON_IS_FALLING;
-			if (kickShell)
-				goto CASE_RACCOON_IS_KICKING;
+	case MARIO_STATE_RUNNING_LEFT:
+		if (isSitting && !isOnGround)
+			goto CASE_RACCOON_IS_SITTING;
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isHoldingShell)
+			goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
+		if (canFly && !isOnGround && isFlying)
+			goto CASE_RACCOON_IS_FLYING;
+		if (!isOnGround && !canFly)
+			goto CASE_RACCOON_IS_FALLING;
+		if (vx > -MARIO_RUNNING_SPEED)
 			ani = MARIO_RACCOON_ANI_WALK_LEFT;
-			break;
+		else
+			ani = MARIO_RACCOON_ANI_RUNNING_LEFT;
+		break;
 
-		case MARIO_STATE_RUNNING_RIGHT:
-			if (isSitting && !isOnGround)
-				goto CASE_RACCOON_IS_SITTING;
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (canFly && !isOnGround && isFlying)
-				goto CASE_RACCOON_IS_FLYING;
-			if (!isOnGround && !canFly)
-				goto CASE_RACCOON_IS_FALLING;
-			if (vx < MARIO_RUNNING_SPEED)
-				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
+	CASE_RACCOON_IS_FLYING:
+	case MARIO_STATE_FLYING:
+		if (isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isWaggingTail)
+		{
+			//DebugOut(L"ani = wagging\n");
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT;
 			else
-				ani = MARIO_RACCOON_ANI_RUNNING_RIGHT;
-			break;
-
-		case MARIO_STATE_RUNNING_LEFT:
-			if (isSitting && !isOnGround)
-				goto CASE_RACCOON_IS_SITTING;
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
-			if (canFly && !isOnGround && isFlying)
-				goto CASE_RACCOON_IS_FLYING;
-			if (!isOnGround && !canFly)
-				goto CASE_RACCOON_IS_FALLING;
-			if (vx > -MARIO_RUNNING_SPEED)
-				ani = MARIO_RACCOON_ANI_WALK_LEFT;
+				ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_LEFT;
+		}
+		else
+		{
+			if (vy < 0)
+			{
+				if (nx > 0)
+					ani = MARIO_RACCOON_ANI_FLYING_UP_RIGHT;
+				else
+					ani = MARIO_RACCOON_ANI_FLYING_UP_LEFT;
+			}
 			else
-				ani = MARIO_RACCOON_ANI_RUNNING_LEFT;
-			break;
+			{
+				if (nx > 0)
+					ani = MARIO_RACCOON_ANI_FLYING_DOWN_RIGHT;
+				else
+					ani = MARIO_RACCOON_ANI_FLYING_DOWN_LEFT;
+			}
+		}
+		break;
 
-		CASE_RACCOON_IS_FLYING:
-		case MARIO_STATE_FLYING:
-			if (isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+	case MARIO_STATE_ATTACK:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT;
+		break;
+
+	case MARIO_STATE_JUMP_HIGH:
+	case MARIO_STATE_JUMP_LOW:
+		if (isSitting)
+			goto CASE_RACCOON_IS_SITTING;
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (vy < 0)
+		{
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_JUMP_LEFT;
+		}
+		else
+		{
 			if (isWaggingTail)
 			{
-				//DebugOut(L"ani = wagging\n");
 				if (nx > 0)
-					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_RIGHT;
+					ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT;
 				else
-					ani = MARIO_RACCOON_ANI_WAG_TAIL_WHILE_FLYING_LEFT;
-			}
-			else
-			{
-				if (vy < 0)
-				{
-					if (nx > 0)
-						ani = MARIO_RACCOON_ANI_FLYING_UP_RIGHT;
-					else
-						ani = MARIO_RACCOON_ANI_FLYING_UP_LEFT;
-				}
-				else
-				{
-					if (nx > 0)
-						ani = MARIO_RACCOON_ANI_FLYING_DOWN_RIGHT;
-					else
-						ani = MARIO_RACCOON_ANI_FLYING_DOWN_LEFT;
-				}
-			}
-			break;
-
-		case MARIO_STATE_ATTACK:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_SPIN_TAIL_IDLE_LEFT;
-			break;
-
-		case MARIO_STATE_JUMP_HIGH:
-		case MARIO_STATE_JUMP_LOW:
-			if (isSitting)
-				goto CASE_RACCOON_IS_SITTING;
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (vy < 0)
-			{
-				if (nx > 0)
-					ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
-				else
-					ani = MARIO_RACCOON_ANI_JUMP_LEFT;
-			}
-			else
-			{
-				if (isWaggingTail)
-				{
-					if (nx > 0)
-						ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT;
-					else
-						ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT;
-				}
-				else
-				{
-					if (nx > 0)
-						ani = MARIO_RACCOON_ANI_FALLING_RIGHT;
-					else
-						ani = MARIO_RACCOON_ANI_FALLING_LEFT;
-				}
-			}
-			break;
-
-		CASE_RACCOON_IS_SITTING:
-		case MARIO_STATE_SIT_DOWN:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_SITTING_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_SITTING_LEFT;
-			break;
-
-		case MARIO_STATE_IDLE:
-			if (!isOnGround && isHoldingShell)
-				goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
-			if (isHoldingShell)
-				goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
-			if (!isOnGround && !canFly && !backIdle)
-			{
-				DebugOut(L"3333333333\n");
-				goto CASE_RACCOON_IS_FALLING;
-			}
-			if (kickShell)
-				goto CASE_RACCOON_IS_KICKING;
-			if (vx > 0)
-				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
-			else if (vx < 0)
-				ani = MARIO_RACCOON_ANI_WALK_LEFT;
-			else
-			{
-				if (nx > 0)
-					ani = MARIO_RACCOON_ANI_IDLE_RIGHT;
-				else
-					ani = MARIO_RACCOON_ANI_IDLE_LEFT;
-			}
-			break;
-
-		case MARIO_STATE_GO_INTO_PIPE:
-		case MARIO_STATE_OUT_OF_PIPE:
-			ani = MARIO_RACCOON_ANI_GO_PIPE;
-			break;
-
-		CASE_RACCOON_IS_KICKING:
-		case MARIO_KICK:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_KICK_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_KICK_LEFT;
-			break;
-
-		CASE_RACCOON_WALK_AND_HOLD_SHELL:
-		case MARIO_WALKING_WHILE_HOLDING_SHELL:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_WALKING_HOLD_SHELL_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_WALKING_HOLD_SHELL_LEFT;
-			break;
-
-		CASE_RACCOON_IDLE_AND_HOLD_SHELL:
-		case MARIO_IDLE_WHILE_HOLDING_SHELL:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_IDLE_HOLD_SHELL_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_IDLE_HOLD_SHELL_LEFT;
-			break;
-
-		CASE_RACCOON_ON_AIR_AND_HOLD_SHELL:
-		case MARIO_ON_AIR_WHILE_HOLDING_SHELL:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_ON_AIR_HOLD_SHELL_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_ON_AIR_HOLD_SHELL_LEFT;
-			break;
-
-		CASE_RACCOON_WAG_TAIL_WHILE_FALLING:
-		case MARIO_WAG_TAIL_WHILE_FALLING:
-			if (nx > 0)
-				ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT;
-			else
-				ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT;
-			break;
-
-		CASE_RACCOON_IS_FALLING:
-		default:
-			if (vy < 0)
-			{
-				if (nx > 0)
-					ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
-				else
-					ani = MARIO_RACCOON_ANI_JUMP_LEFT;
+					ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT;
 			}
 			else
 			{
@@ -836,6 +735,103 @@ void CMario::Render()
 					ani = MARIO_RACCOON_ANI_FALLING_LEFT;
 			}
 		}
+		break;
+
+	CASE_RACCOON_IS_SITTING:
+	case MARIO_STATE_SIT_DOWN:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_SITTING_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_SITTING_LEFT;
+		break;
+
+	case MARIO_STATE_IDLE:
+		if (!isOnGround && isHoldingShell)
+			goto CASE_RACCOON_ON_AIR_AND_HOLD_SHELL;
+		if (isHoldingShell)
+			goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
+		if (!isOnGround && !canFly)
+		{
+			DebugOut(L"3333333333\n");
+			goto CASE_RACCOON_IS_FALLING;
+		}
+		if (kickShell)
+			goto CASE_RACCOON_IS_KICKING;
+		if (vx > 0)
+			ani = MARIO_RACCOON_ANI_WALK_RIGHT;
+		else if (vx < 0)
+			ani = MARIO_RACCOON_ANI_WALK_LEFT;
+		else
+		{
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_IDLE_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_IDLE_LEFT;
+		}
+		break;
+
+	case MARIO_STATE_GO_INTO_PIPE:
+	case MARIO_STATE_OUT_OF_PIPE:
+		ani = MARIO_RACCOON_ANI_GO_PIPE;
+		break;
+
+	CASE_RACCOON_IS_KICKING:
+	case MARIO_KICK:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_KICK_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_KICK_LEFT;
+		break;
+
+	CASE_RACCOON_WALK_AND_HOLD_SHELL:
+	case MARIO_WALKING_WHILE_HOLDING_SHELL:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_WALKING_HOLD_SHELL_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_WALKING_HOLD_SHELL_LEFT;
+		break;
+
+	CASE_RACCOON_IDLE_AND_HOLD_SHELL:
+	case MARIO_IDLE_WHILE_HOLDING_SHELL:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_IDLE_HOLD_SHELL_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_IDLE_HOLD_SHELL_LEFT;
+		break;
+
+	CASE_RACCOON_ON_AIR_AND_HOLD_SHELL:
+	case MARIO_ON_AIR_WHILE_HOLDING_SHELL:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_ON_AIR_HOLD_SHELL_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_ON_AIR_HOLD_SHELL_LEFT;
+		break;
+
+	CASE_RACCOON_WAG_TAIL_WHILE_FALLING:
+	case MARIO_WAG_TAIL_WHILE_FALLING:
+		if (nx > 0)
+			ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_RIGHT;
+		else
+			ani = MARIO_RACCOON_ANI_FALLING_WAG_TAIL_LEFT;
+		break;
+
+	CASE_RACCOON_IS_FALLING:
+	default:
+		if (vy < 0)
+		{
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_JUMP_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_JUMP_LEFT;
+		}
+		else
+		{
+			if (nx > 0)
+				ani = MARIO_RACCOON_ANI_FALLING_RIGHT;
+			else
+				ani = MARIO_RACCOON_ANI_FALLING_LEFT;
+		}
+	}
 
 	}
 
@@ -1234,7 +1230,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLYING:
 		if (vx > 0)
 		{
-			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
+			vy = -(MARIO_GRAVITY + 0.004f * 4) * dt;
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
 				vx = MARIO_MAX_WALKING_SPEED;
@@ -1245,7 +1241,7 @@ void CMario::SetState(int state)
 		}
 		else
 		{
-			vy = -(MARIO_GRAVITY + 0.002f * 4) * dt;
+			vy = -(MARIO_GRAVITY + 0.004f * 4) * dt;
 			vx -= MARIO_WALKING_ACCELERATION * dt;
 			if (vx < -MARIO_MAX_WALKING_SPEED)
 				vx = -MARIO_MAX_WALKING_SPEED;

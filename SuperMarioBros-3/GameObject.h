@@ -63,8 +63,6 @@ public:
 	int object_colliding_nx;
 	int width;
 	int height;
-	int alpha = 0;
-	double color = 0;
 
 	int nx;	 
 

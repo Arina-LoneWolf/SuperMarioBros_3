@@ -214,19 +214,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	// General object setup
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
-	if (obj)
-	{
-		obj->SetType(object_type);
-		obj->SetPosition(x, y);
-		obj->SetAnimationSet(ani_set);
-		objects.push_back(obj);
-	}
-	else if (brick)
+	if (brick)
 	{
 		brick->SetType(object_type);
 		brick->SetPosition(x, y);
 		brick->SetAnimationSet(ani_set);
 		listBronzeBricks.push_back(brick);
+	}
+	else
+	{
+		obj->SetType(object_type);
+		obj->SetPosition(x, y);
+		obj->SetAnimationSet(ani_set);
+		objects.push_back(obj);
 	}
 }
 
@@ -312,8 +312,10 @@ void CPlayScene::Update(ULONGLONG dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (dynamic_cast<CMario*>(objects[i]))
+			continue;
 		coObjects.push_back(objects[i]);
 	}
 
@@ -566,8 +568,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		mario->Reset();
 		break;
 
-	if (mario->GetState() == MARIO_STATE_DIE)
-		return;
+		if (mario->GetState() == MARIO_STATE_DIE)
+			return;
 
 	case DIK_S: // high jump
 		if (mario->onPressUp)
@@ -602,7 +604,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		break;
 
 	case DIK_UP:
-		mario->onPressUp = true;
+		if (mario->GetTop() > 495 && mario->GetLeft() > 2321 && mario->GetLeft() < 2333)
+			mario->onPressUp = true;
 		break;
 
 	case DIK_R: // turn into raccoon mario
@@ -748,11 +751,13 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		else if (mario->isOnGround)
 			mario->SetState(MARIO_STATE_IDLE);
 	}
-	else if (game->IsKeyDown(DIK_UP))
+	else if (game->IsKeyDown(DIK_UP) && mario->GetTop() > 495)
 	{
 		if (game->IsKeyDown(DIK_S) && mario->GetLevel() == MARIO_RACCOON && mario->isOnGround
 			&& mario->GetLeft() > 2321 && mario->GetLeft() < 2333)
 		{
+			if (mario->GetState() == MARIO_STATE_OUT_OF_PIPE)
+				return;
 			mario->leaveHiddenArea = true;
 			mario->inStartOfPipe = true;
 			mario->SetState(MARIO_STATE_OUT_OF_PIPE);

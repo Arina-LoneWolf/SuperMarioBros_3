@@ -93,12 +93,8 @@ void Camera::Update(ULONGLONG dt)
 SET_CAM:
 
 	camY += camSpeedY * dt;
-	/*if (camY <= 0 || camY > CAMERA_INITIAL_Y)
-		return;*/
-	if (camY < 0)
-		camY = 0;
-	if (camY > CAMERA_INITIAL_Y)
-		camY = CAMERA_INITIAL_Y;
+	if (camY <= 0 || camY > CAMERA_INITIAL_Y)
+		return;
 
 	CGame::GetInstance()->SetCamPosY(camY);
 }
