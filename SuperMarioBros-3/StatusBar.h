@@ -21,7 +21,7 @@ public:
 	CStatusBar(CMario* player);
 
 	void Update();
-	void Render(int worldID, float camX, float camY);
+	void Render(float camX, float camY);
 
 	~CStatusBar();
 };

@@ -469,6 +469,14 @@
 # left white
 1008	68	299	84	315	33
 
+#===========RANDOM ITEM OF BOX============
+# star
+1028	94	159	108	173	21
+# mushroom
+1029	132	159	146	173	21
+# flower
+1030	113	159	127	173	21
+
 #=================CRUD BAR================
 1009	3	3	155	31	55
 
@@ -895,6 +903,11 @@
 # ======== COIN EFFECT =======
 903	63	35	64	35	65	35	66	35
 
+# ======= RANDOM ITEM OF BOX =======
+928	1028	100
+929	1029	100
+930	1030	100
+
 # ======= MONEY EFFECT =======
 911	100	100
 912	200	100
@@ -975,6 +988,8 @@
 20	920	921	922	923	924	925	926	927
 # CRUD BAR
 21	919
+# RANDOM ITEM OF BOX
+23	928	929	930
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -997,7 +1012,7 @@
 #0	672	100	1
 #0	325	100	1
 # start at bronze brick position
-#0	1912	100	1
+0	1912	100	1
 # start at koopa position
 #30	465	100	1
 #0	1460	245	1
@@ -1024,6 +1039,9 @@
 
 # GREEN PIRANHA
 7	1800	384	15
+
+# RANDOM ITEM BOX
+22	2689.5	337	23
 
 # BRICK CONTAINS ITEM
 1	176	352	22	1	1

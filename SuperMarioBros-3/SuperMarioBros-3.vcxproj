@@ -139,7 +139,10 @@
     <ClCompile Include="GreenPiranha.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="IceFlower.cpp" />
+    <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="MapPoint.cpp" />
     <ClCompile Include="Number.cpp" />
+    <ClCompile Include="OverworldMapScene.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="PiranhaFireball.cpp" />
     <ClCompile Include="P_Meter.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="Koopa.cpp" />
     <ClCompile Include="MoneyEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="RandomItemBox.cpp" />
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="SuperMushroom.cpp" />
@@ -181,7 +185,10 @@
     <ClInclude Include="GreenPiranha.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="IceFlower.h" />
+    <ClInclude Include="MapObject.h" />
+    <ClInclude Include="MapPoint.h" />
     <ClInclude Include="Number.h" />
+    <ClInclude Include="OverworldMapScene.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PiranhaFireball.h" />
     <ClInclude Include="P_Meter.h" />
@@ -189,6 +196,7 @@
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="MoneyEffect.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="RandomItemBox.h" />
     <ClInclude Include="StatusBar.h" />
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="SuperMushroom.h" />

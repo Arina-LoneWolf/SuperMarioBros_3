@@ -9,7 +9,7 @@ CFloor::CFloor(int width_in_units, int height_in_units)
 
 void CFloor::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CFloor::GetBoundingBox(float& l, float& t, float& r, float& b)

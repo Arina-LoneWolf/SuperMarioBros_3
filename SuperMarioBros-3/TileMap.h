@@ -1,3 +1,4 @@
+#pragma once
 #include "Sprites.h"
 #include "Textures.h"
 #include "Utils.h"

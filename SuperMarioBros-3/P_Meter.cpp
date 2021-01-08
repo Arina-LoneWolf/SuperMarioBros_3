@@ -1,4 +1,4 @@
-#include "P_Meter.h"
+﻿#include "P_Meter.h"
 
 CP_Meter::CP_Meter(CMario* player)
 {
@@ -8,7 +8,7 @@ CP_Meter::CP_Meter(CMario* player)
 
 void CP_Meter::Update()
 {
-	float playerSpeed = abs(player->vx);
+	float playerSpeed = abs(player->vx); // bỏ hết cái đống này vô hàm Render
 
 	if (player->canFly)
 		powerState = PowerMeter::TIER_7;

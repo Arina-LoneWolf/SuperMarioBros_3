@@ -39,9 +39,6 @@ enum ItemOfBrick
 {
 	ITEM_RANDOM = 0,
 	ITEM_MONEY = 1,
-	//ITEM_SUPER_MUSHROOM = 2,
-	//ITEM_SUPER_LEAF = 3,
-	//ITEM_FIRE_FLOWER = 4,
 	ITEM_UP_MUSHROOM = 5,
 	ITEM_P_SWITCH = 6,
 };
@@ -187,6 +184,8 @@ enum TypeOfPipe
 #define MARIO_DIE_DEFLECT_SPEED		0.5f
 #define MARIO_FLY_SPEED_Y			0.25f
 
+#define MARIO_SPEED_ON_MAP	0.05f
+
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
@@ -200,6 +199,10 @@ enum TypeOfPipe
 #define MARIO_STATE_ATTACK			1000
 #define MARIO_STATE_GO_INTO_PIPE	1100
 #define MARIO_STATE_OUT_OF_PIPE		1200
+//#define MARIO_STATE_GO_LEFT_ON_MAP	1300
+//#define MARIO_STATE_GO_RIGHT_ON_MAP	1400
+//#define MARIO_STATE_GO_UP_ON_MAP	1500
+//#define MARIO_STATE_GO_DOWN_ON_MAP	1600
 
 #define MARIO_KICK							1111
 #define MARIO_WAG_TAIL_WHILE_FALLING		1112
@@ -318,6 +321,16 @@ enum TypeOfPipe
 #define MARIO_FIRE_ANI_ON_AIR_HOLD_SHELL_LEFT				98
 
 #define MARIO_ANI_DIE		62
+
+#define MARIO_ON_OVERWORLD_MAP_ANI_SMALL	0
+#define MARIO_ON_OVERWORLD_MAP_ANI_BIG		1
+#define MARIO_ON_OVERWORLD_MAP_ANI_RACCOON	2
+#define MARIO_ON_OVERWORLD_MAP_ANI_FIRE		3
+
+#define MARIO_ON_OVERWORLD_MAP_SMALL_BBOX_ADDEND	1
+#define MARIO_ON_OVERWORLD_MAP_BIG_BBOX_ADDEND		5
+#define MARIO_ON_OVERWORLD_MAP_RACCOON_BBOX_ADDEND	8
+#define MARIO_ON_OVERWORLD_MAP_BBOX_SIDE_LENGTH		16
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -517,6 +530,11 @@ enum class Type
 	RED_KOOPA = 19,
 	GREEN_KOOPA = 20,
 	GREEN_PARAKOOPA = 21,
+	RANDOM_ITEM_BOX = 22,
+	TUSSOCK = 30,
+	HELP_BUBBLE = 31,
+	GATEKEEPER = 32,
+	MAP_POINT = 51,
 };
 
 enum class Category
@@ -574,6 +592,7 @@ enum class PowerMeter
 
 #define NUMBER_WIDTH				8
 
+#define WORLD_ID					1
 #define WORLD_NUM_POS_X				37
 #define WORLD_NUM_POS_Y				7
 #define WORLD_NUM_MAX_SIZE			1
@@ -601,3 +620,44 @@ enum class PowerMeter
 // Screen
 #define SCREEN_DIVISOR			2.8
 #define COLOR_ADDEND_LEVEL_UP	1.4
+
+// Random Item Box
+enum class ItemOfBox
+{
+	STAR = 0,
+	MUSHROOM = 1,
+	FLOWER = 2,
+	MAX_ITEM_TYPE_NUM,
+};
+
+#define ITEM_BBOX_WIDTH			14
+#define ITEM_BBOX_HEIGHT		7
+#define ITEM_POS_X				2689
+#define ITEM_POS_Y				338
+#define ITEM_CONVERSION_TIME	80
+
+// Overworld map
+#define MAP_OBJECT_ANI_TUSSOCK				0
+#define MAP_OBJECT_ANI_HELP_BUBBLE			1
+#define MAP_OBJECT_ANI_GATEKEEPER_RIGHT		2
+#define MAP_OBJECT_ANI_GATEKEEPER_LEFT		3
+
+#define GATEKEEPER_SPEED_X		0.015f
+#define GATEKEEPER_LEFT_LIMIT	153.0f
+#define GATEKEEPER_RIGHT_LIMIT	168.0f
+
+#define POINT_SIDE_LENGTH	4.0f
+
+#define ALLOWED_TO_GO_LEFT	0
+#define ALLOWED_TO_GO_RIGHT	1
+#define ALLOWED_TO_GO_UP	2
+#define ALLOWED_TO_GO_DOWN	3
+
+#define START_POINT_X	32
+#define START_POINT_Y	48
+
+//ItemOfBox operator++(ItemOfBox& item)
+//{
+//	item = static_cast<ItemOfBox>(((int)item + 1) % (int)ItemOfBox::MAX_ITEM_TYPE_NUM);
+//	return item;
+//}

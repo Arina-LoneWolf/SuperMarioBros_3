@@ -6,6 +6,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#define OVERWORLD_MAP_SCENE_ID	0
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>

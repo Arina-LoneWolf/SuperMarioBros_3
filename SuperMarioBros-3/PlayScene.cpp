@@ -116,7 +116,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	CGameObject* obj = NULL;
 	CBronzeBrick* brick = NULL;
 
@@ -128,9 +128,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x, y);
-		player = (CMario*)obj;
 
+		obj = CMario::GetInstance();
+		player = (CMario*)obj;
+		//player = CMario::GetInstance();
+		player->SetPosition(x, y);
+		//player->SetAnimationSet(ani_set);
 		CRUD = new CStatusBar(player);
 		cam = new Camera(player);
 
@@ -178,6 +181,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
+	case Type::RANDOM_ITEM_BOX: obj = new CRandomItemBox(); break;
 
 	case Type::PIPE:
 	{
@@ -212,7 +216,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+	
 
 	if (brick)
 	{
@@ -428,7 +432,7 @@ void CPlayScene::Render()
 	for (LPGAMEOBJECT item : listItems)
 		item->Render();
 
-	CRUD->Render(worldID, CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+	CRUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 
 	if (player->screenDim)
 		DarkenTheScreen(player, cam);

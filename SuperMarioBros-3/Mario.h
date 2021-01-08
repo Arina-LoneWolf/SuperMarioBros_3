@@ -7,10 +7,13 @@
 #include "Tail.h"
 #include "HitEffect.h"
 #include "Portal.h"
+#include "MapPoint.h"
 
 
 class CMario : public CGameObject
 {
+	static CMario* __instance;
+
 	int level;
 	int untouchable;
 	ULONGLONG untouchable_start;
@@ -29,11 +32,15 @@ public:
 	CTimer* jumpTime = new CTimer(MARIO_LOW_JUMP_TIME);
 	CTimer* flyTime = new CTimer(MARIO_FLYING_TIME);
 	CTimer* kickTime = new CTimer(MARIO_KICK_TIME);
-	CTimer* stopTime = new CTimer(200);
+	//CTimer* stopTime = new CTimer(200);
 
 	int score = 100;
 	int money = 5;
 	int lives = INITIAL_PLAYER_LIVES;
+	vector<ItemOfBox> itemsPickedUp;
+
+	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 1, 0, 1, 0, 0);
+	CMapPoint* nextPoint = new CMapPoint(64, 48, 0, 1, 0, 1, 0);
 
 	int GetScore() { return score; }
 	int GetMoney() { return money; }
@@ -56,7 +63,14 @@ public:
 	bool goHiddenArea;
 	bool leaveHiddenArea;
 	bool screenDim;
+	bool onOverworldMap = true;
 	bool isWaitingForAni;
+
+	vector<bool> movementPermission{ 0, 1, 0, 0 };
+	bool left = false;
+	bool right = true;
+	bool above = false;
+	bool under = false;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;
@@ -64,8 +78,12 @@ public:
 	float y_when_started_to_jump;
 
 	CMario(float x = 0.0f, float y = 0.0f);
+	void UpdateAtOverworldMap(ULONGLONG dt, vector<LPGAMEOBJECT>* coPoints = NULL);
+	void RenderAtOverworldMap();
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
+
+	static CMario* GetInstance();
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
@@ -84,6 +102,8 @@ public:
 	float GetLeft();
 	float GetTop();
 	float GetBottom();
+
+	void SetPositionAtCurrentPoint(float x, float y);
 
 	void DecelerateSharply();
 	void DecelerateSlightly();

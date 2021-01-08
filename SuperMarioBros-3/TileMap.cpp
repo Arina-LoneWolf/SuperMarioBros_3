@@ -90,5 +90,5 @@ TileMap::~TileMap()
 
 int TileMap::GetWidthTileMap()
 {
-	return (num_col_on_tilemap - 32) * tileset_width;
+	return (num_col_on_tilemap - 31) * tileset_width - 2;
 }

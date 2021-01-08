@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include "PlayScene.h"
+#include "OverworldMapScene.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -338,7 +339,17 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
-	LPSCENE scene = new CPlayScene(id, path);
+	LPSCENE scene = nullptr;
+	if (id == OVERWORLD_MAP_SCENE_ID)
+	{
+		//CMario::GetInstance()->onOverworldMap = true;
+		scene = new COverworldMapScene(id, path);
+	}
+	else
+	{
+		//CMario::GetInstance()->onOverworldMap = true;
+		scene = new CPlayScene(id, path);
+	}
 	scenes[id] = scene;
 }
 
