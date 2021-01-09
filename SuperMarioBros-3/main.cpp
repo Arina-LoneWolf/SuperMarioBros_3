@@ -170,7 +170,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	game->Init(hWnd);
 	game->InitKeyboard();
 
-	game->Load(L"mario-sample.txt");
+	game->Load(L"data\\mario-sample.txt");
 
 	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH / 1.2, SCREEN_HEIGHT / 1.2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 

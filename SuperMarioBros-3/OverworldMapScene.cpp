@@ -306,28 +306,22 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 		return;
 
 	case DIK_LEFT:
-		//if (mario->movementPermission.at(ALLOWED_TO_GO_LEFT))
-		if (mario->left)
+		if (mario->movementPermission.at(ALLOWED_TO_GO_LEFT))
 			mario->vx = -MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_RIGHT:
-		//if (mario->movementPermission.at(ALLOWED_TO_GO_RIGHT))
-		if (mario->right)
+		if (mario->movementPermission.at(ALLOWED_TO_GO_RIGHT))
 			mario->vx = MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_UP:
-		//if (mario->movementPermission.at(ALLOWED_TO_GO_UP))
-		if (mario->above)
+		if (mario->movementPermission.at(ALLOWED_TO_GO_UP))
 			mario->vy = -MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_DOWN:
-		//if (mario->movementPermission.at(ALLOWED_TO_GO_DOWN))
-		if (mario->under)
+		if (mario->movementPermission.at(ALLOWED_TO_GO_DOWN))
 			mario->vy = MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_S:
-		if (mario->vx != 0 || mario->vy != 0)
-			return;
 		mario->onOverworldMap = false;
 		CGame::GetInstance()->SwitchScene(mario->currentPoint->sceneID);
 	}

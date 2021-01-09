@@ -1,4 +1,5 @@
 #include "Tail.h"
+#include "Mario.h"
 
 void CTail::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -24,10 +25,12 @@ void CTail::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				CreateEffect();
 				e->object_colliding_nx = this->nx;
 				e->SetState(ENEMY_STATE_ATTACKED_BY_TAIL);
+				CMario::GetInstance()->score += 100;
 			}
 			else if (e->type == Type::BRONZE_BRICK)
 			{
 				e->SetState(STATE_DESTROYED);
+				CMario::GetInstance()->score += 10;
 			}
 			else if (e->type == Type::BRICK_CONTAINS_ITEM)
 			{

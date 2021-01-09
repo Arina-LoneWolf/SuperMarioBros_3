@@ -1,4 +1,5 @@
 #include "Fireball.h"
+#include "Mario.h"
 
 CFireball::CFireball(D3DXVECTOR2 position, int nx)
 {
@@ -86,6 +87,7 @@ void CFireball::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				e->obj->object_colliding_nx = this->nx;
 				e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
+				CMario::GetInstance()->score += 100;
 				isFinishedUsing = true;
 			}
 		}

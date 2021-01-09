@@ -1,8 +1,0 @@
-[SETTINGS]
-start	0
-#scene list
-[SCENES]
-0	data\scene0.txt
-3	scene1.txt
-2	scene2.txt
-1	scene-test.txt

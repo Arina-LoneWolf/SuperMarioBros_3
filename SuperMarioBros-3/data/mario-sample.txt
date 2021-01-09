@@ -1,0 +1,6 @@
+[SETTINGS]
+start	0
+#scene list
+[SCENES]
+0	data\scene-0.txt
+1	data\scene-1.txt

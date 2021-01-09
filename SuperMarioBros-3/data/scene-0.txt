@@ -102,9 +102,9 @@
 
 # ===== OVERWORLD MAP OBJECTS ====
 # TUSSOCK
-5	121	100	122	100	123	100	124	100
+5	121	200	122	200	123	200	124	200
 # HELP BUBBLE
-6	125	100	126	100
+6	125	800	126	200
 # GATEKEEPER
 # right
 7	127	100	128	100
@@ -133,7 +133,7 @@
 # tier_6
 926	1026	100
 # tier_7
-927	1027	150	1026	150
+927	1027	150
 
 #
 # id	ani1	ani2	ani3
@@ -148,6 +148,9 @@
 # OVERWORLD MAP OBJECTS
 3	5	6	7	8
 
+# P-METER
+20	920	921	922	923	924	925	926	927
+
 # CRUD BAR
 21	919
 
@@ -156,7 +159,7 @@
 
 # MARIO
 #0	1380	360	1
-0	36	48	1
+0	33	48	1
 
 # OVERWORLD MAP OBJECTS
 # help bubble
@@ -214,12 +217,12 @@
 
 # MAP POINT
 #type	x	y	aniset	sceneID	left	right	above	under
-51	32	48	2	0	0	1	0	0
+51	32	48	2	1	0	1	0	0
 51	64	16	2	1	0	1	0	1
-51	64	48	2	0	1	0	1	1
-51	64	64	2	0	0	0	0	1
+51	64	48	2	0	1	0	1	0
+#51	64	64	2	0	0	0	0	1
 51	64	80	2	0	0	1	1	1
-51	64	112	2	0	0	1	1	1
+51	64	112	2	0	0	0	1	1
 51	64	144	2	5	0	1	1	0
 51	96	16	2	0	1	1	0	0
 51	96	80	2	0	1	1	0	0
@@ -237,6 +240,5 @@
 51	192	48	2	0	1	0	1	0
 51	192	112	2	0	1	0	0	0
 
-
 [TILEMAP]
-100	textures\overworld-map.png	textures\overworld-map.txt	10	4	12	16	16	16
+100	textures\overworld-map.png	data\overworld-map.txt	10	4	12	52	16	16

@@ -7,12 +7,7 @@ CMapPoint::CMapPoint(float x, float y, int sceneID, bool left, bool right, bool 
 	leftEdge = x;
 	bottomEdge = y + 16;
 	this->sceneID = sceneID;
-	//hasPoint.insert(hasPoint.end(), { left, right, above, under });
-
-	this->left = left;
-	this->right = right;
-	this->above = above;
-	this->under = under;
+	hasPoint.insert(hasPoint.end(), { left, right, above, under });
 }
 
 void CMapPoint::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -23,15 +18,9 @@ void CMapPoint::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + POINT_SIDE_LENGTH;
 }
 
-//bool operator==(CMapPoint p1, CMapPoint p2)
-//{
-//	DebugOut(L"aaaa");
-//	return (p1.leftEdge == p2.leftEdge) && (p1.bottomEdge == p2.bottomEdge);
-//}
-
 void CMapPoint::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 CMapPoint::~CMapPoint()

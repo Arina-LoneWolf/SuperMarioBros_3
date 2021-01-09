@@ -34,8 +34,8 @@ public:
 	CTimer* kickTime = new CTimer(MARIO_KICK_TIME);
 	//CTimer* stopTime = new CTimer(200);
 
-	int score = 100;
-	int money = 5;
+	int score = 0;
+	int money = 0;
 	int lives = INITIAL_PLAYER_LIVES;
 	vector<ItemOfBox> itemsPickedUp;
 
@@ -67,10 +67,6 @@ public:
 	bool isWaitingForAni;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
-	bool left = false;
-	bool right = true;
-	bool above = false;
-	bool under = false;
 
 	float last_y = INITIAL_LAST_Y;
 	float last_vx;

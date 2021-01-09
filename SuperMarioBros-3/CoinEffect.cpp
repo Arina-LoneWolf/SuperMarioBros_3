@@ -1,4 +1,5 @@
 #include "CoinEffect.h"
+#include "Mario.h"
 
 CCoinEffect::CCoinEffect(float brickX, float brickY)
 {
@@ -30,6 +31,7 @@ void CCoinEffect::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		vanish = true;
 		isFalling = false;
 		effect = new CMoneyEffect(moneyStartingPos);
+		CMario::GetInstance()->score += 100;
 	}
 	
 	if (effect)

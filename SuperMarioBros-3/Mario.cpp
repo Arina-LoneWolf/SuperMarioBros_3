@@ -43,49 +43,36 @@ void CMario::UpdateAtOverworldMap(ULONGLONG dt, vector<LPGAMEOBJECT>* coPoints)
 		}
 	}	
 
-	if (vx > 0 && GetLeft() >= nextPoint->leftEdge+8 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge /*|| vx < 0 && GetLeft() <= nextPoint->leftEdge && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge*/)
+	if (vx > 0 && GetLeft() >= nextPoint->leftEdge + 100 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
 	{
+		DebugOut(L"GetLeft: %f\n", GetLeft());
+		DebugOut(L"left edge: %f\n", nextPoint->leftEdge);
 		vx = 0;
-		SetPositionAtCurrentPoint(nextPoint->leftEdge, y);
-		//movementPermission.assign(currentPoint->hasPoint.begin(), currentPoint->hasPoint.end());
-		left = nextPoint->left;
-		right = nextPoint->right;
-		above = nextPoint->above;
-		under = nextPoint->under;
+		SetPositionAtCurrentPoint(nextPoint->leftEdge + 1, y);
+		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
 		currentPoint = nextPoint;
 	}
 	else if (vx < 0 && GetLeft() <= nextPoint->leftEdge && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
 	{
+		DebugOut(L"GetLeft: %f\n", GetLeft());
+		DebugOut(L"left edge: %f\n", nextPoint->leftEdge);
 		vx = 0;
 		SetPositionAtCurrentPoint(nextPoint->leftEdge, y);
-		//movementPermission.assign(currentPoint->hasPoint.begin(), currentPoint->hasPoint.end());
-		left = nextPoint->left;
-		right = nextPoint->right;
-		above = nextPoint->above;
-		under = nextPoint->under;
+		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
 		currentPoint = nextPoint;
 	}
 	else if (vy < 0 && GetBottom() <= nextPoint->bottomEdge + 16 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
 	{
 		vy = 0;
 		SetPositionAtCurrentPoint(x, nextPoint->bottomEdge - 16);
-		//movementPermission.assign(currentPoint->hasPoint.begin(), currentPoint->hasPoint.end());
-		left = nextPoint->left;
-		right = nextPoint->right;
-		above = nextPoint->above;
-		under = nextPoint->under;
+		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
 		currentPoint = nextPoint;
 	}
-	else if ((vy > 0 && GetBottom() >= nextPoint->bottomEdge && nextPoint->bottomEdge!=currentPoint->bottomEdge || nextPoint->leftEdge!=currentPoint->leftEdge) 
-		/*(vy < 0 && GetBottom() <= nextPoint->bottomEdge+16 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)*/)
+	else if (vy > 0 && GetBottom() >= nextPoint->bottomEdge + 14 && nextPoint->bottomEdge!=currentPoint->bottomEdge || nextPoint->leftEdge!=currentPoint->leftEdge)
 	{
 		vy = 0;
 		SetPositionAtCurrentPoint(x, nextPoint->bottomEdge - 16);
-		//movementPermission.assign(currentPoint->hasPoint.begin(), currentPoint->hasPoint.end());
-		left = nextPoint->left;
-		right = nextPoint->right;
-		above = nextPoint->above;
-		under = nextPoint->under;
+		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
 		currentPoint = nextPoint;
 	}
 }
@@ -110,7 +97,7 @@ void CMario::RenderAtOverworldMap()
 
 	animation_set->at(ani)->Render(x, y);
 
-	//if (renderBBOX)
+	if (renderBBOX)
 		RenderBoundingBox();
 }
 
@@ -344,6 +331,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 					if (goomba->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE_BY_CRUSH);
+						score += 100;
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -434,6 +422,8 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				vy = last_vy;
 				e->obj->isFinishedUsing = true;
+				score += 50;
+				money += 1;
 			}
 			else if (e->obj->type == Type::PIPE && (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE))
 			{
