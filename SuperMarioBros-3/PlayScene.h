@@ -29,7 +29,7 @@ protected:
 	CMario *player;					// A play scene has to have player, right? 
 	TileMap* map;
 	Camera* cam;
-	CStatusBar* CRUD;
+	CStatusBar* HUD;
 	int worldID = 1;
 
 	vector<LPGAMEOBJECT> objects;

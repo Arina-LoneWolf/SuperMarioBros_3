@@ -5,7 +5,7 @@ CStatusBar::CStatusBar(CMario* player)
 	this->player = player;
 	playTime->Start();
 	p_meter = new CP_Meter(player);
-	CRUD = CAnimationSets::GetInstance()->Get(21);
+	HUD = CAnimationSets::GetInstance()->Get(21);
 	blackBG = CSprites::GetInstance()->Get(11111);
 }
 
@@ -17,20 +17,20 @@ void CStatusBar::Update()
 
 void CStatusBar::Render(float camX, float camY)
 {
-	float CRUDPosX = camX + CRUD_POS_X_ADDEND;
-	float CRUDPosY = camY + SCREEN_HEIGHT / SCREEN_DIVISOR - CRUD_POS_Y_SUBTRAHEND;
+	float HUDPosX = camX + HUD_POS_X_ADDEND;
+	float HUDPosY = camY + SCREEN_HEIGHT / SCREEN_DIVISOR - HUD_POS_Y_SUBTRAHEND;
 
-	blackBG->Draw(camX, CRUDPosY - 1);
+	blackBG->Draw(camX, HUDPosY - 1);
 
-	CRUD->at(0)->Render(CRUDPosX, CRUDPosY);
+	HUD->at(0)->Render(HUDPosX, HUDPosY);
 
-	p_meter->Render(CRUDPosX + P_METER_POS_X, CRUDPosY + P_METER_POS_Y);
+	p_meter->Render(HUDPosX + P_METER_POS_X, HUDPosY + P_METER_POS_Y);
 
-	number.Render(CRUDPosX + WORLD_NUM_POS_X, CRUDPosY + WORLD_NUM_POS_Y, WORLD_ID, WORLD_NUM_MAX_SIZE);
-	number.Render(CRUDPosX + LIVES_NUM_POS_X, CRUDPosY + LIVES_NUM_POS_Y, player->GetLives(), LIVES_NUM_MAX_SIZE);
-	number.Render(CRUDPosX + SCORE_NUM_POS_X, CRUDPosY + SCORE_NUM_POS_Y, player->GetScore(), SCORE_NUM_MAX_SIZE);
-	number.Render(CRUDPosX + MONEY_NUM_POS_X, CRUDPosY + MONEY_NUM_POS_Y, player->GetMoney(), MONEY_NUM_MAX_SIZE);
-	number.Render(CRUDPosX + TIME_REMAINING_NUM_POS_X, CRUDPosY + TIME_REMAINING_NUM_POS_Y, countdown, TIME_REMAINING_NUM_MAX_SIZE);
+	number.Render(HUDPosX + WORLD_NUM_POS_X, HUDPosY + WORLD_NUM_POS_Y, WORLD_ID, WORLD_NUM_MAX_SIZE);
+	number.Render(HUDPosX + LIVES_NUM_POS_X, HUDPosY + LIVES_NUM_POS_Y, player->GetLives(), LIVES_NUM_MAX_SIZE);
+	number.Render(HUDPosX + SCORE_NUM_POS_X, HUDPosY + SCORE_NUM_POS_Y, player->GetScore(), SCORE_NUM_MAX_SIZE);
+	number.Render(HUDPosX + MONEY_NUM_POS_X, HUDPosY + MONEY_NUM_POS_Y, player->GetMoney(), MONEY_NUM_MAX_SIZE);
+	number.Render(HUDPosX + TIME_REMAINING_NUM_POS_X, HUDPosY + TIME_REMAINING_NUM_POS_Y, countdown, TIME_REMAINING_NUM_MAX_SIZE);
 }
 
 CStatusBar::~CStatusBar()

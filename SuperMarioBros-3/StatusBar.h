@@ -8,7 +8,7 @@
 
 class CStatusBar
 {
-	LPANIMATION_SET CRUD;
+	LPANIMATION_SET HUD;
 	LPSPRITE blackBG;
 	CNumber number;
 	CP_Meter* p_meter;

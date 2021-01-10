@@ -128,7 +128,7 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		player->SetPosition(x, y);
 
-		CRUD = new CStatusBar(player);
+		HUD = new CStatusBar(player);
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -278,7 +278,7 @@ void COverworldMapScene::Render()
 		listMapObj[i]->Render();
 	}
 	player->RenderAtOverworldMap();
-	CRUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+	HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 }
 
 /*
@@ -291,7 +291,7 @@ void COverworldMapScene::Unload()
 
 	listMapObj.clear();
 	player = NULL;
-	delete CRUD;
+	delete HUD;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 

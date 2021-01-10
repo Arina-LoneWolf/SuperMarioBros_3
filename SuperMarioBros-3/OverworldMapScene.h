@@ -12,7 +12,7 @@ class COverworldMapScene : public CScene
 protected:
 	CMario* player = nullptr;					// A play scene has to have player, right? 
 	TileMap* map = nullptr;
-	CStatusBar* CRUD;
+	CStatusBar* HUD;
 	vector<LPGAMEOBJECT> listMapObj;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

@@ -133,7 +133,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		//player = CMario::GetInstance();
 		player->SetPosition(x, y);
-		CRUD = new CStatusBar(player);
+		HUD = new CStatusBar(player);
 		cam = new Camera(player);
 
 		DebugOut(L"[INFO] Player object created!\n");
@@ -412,7 +412,7 @@ void CPlayScene::Update(ULONGLONG dt)
 		CGame::GetInstance()->cam_x = cx;
 	}
 
-	CRUD->Update();
+	HUD->Update();
 }
 
 void CPlayScene::Render()
@@ -431,7 +431,7 @@ void CPlayScene::Render()
 	for (LPGAMEOBJECT item : listItems)
 		item->Render();
 
-	CRUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+	HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 
 	if (player->screenDim)
 		DarkenTheScreen(player, cam);

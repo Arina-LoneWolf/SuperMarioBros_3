@@ -552,7 +552,7 @@ enum class Category
 	SCENE,
 };
 
-// CRUD
+// HUD
 #define	NUM_0	1010
 #define	NUM_1	1011
 #define	NUM_2	1012
@@ -588,8 +588,8 @@ enum class PowerMeter
 
 #define INITIAL_PLAYER_LIVES		4
 
-#define CRUD_POS_X_ADDEND			4
-#define CRUD_POS_Y_SUBTRAHEND		69
+#define HUD_POS_X_ADDEND			4
+#define HUD_POS_Y_SUBTRAHEND		69
 
 #define P_METER_POS_X				52
 #define P_METER_POS_Y				7
