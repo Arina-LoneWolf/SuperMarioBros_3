@@ -38,8 +38,9 @@ enum BrickTransformation
 enum ItemOfBrick
 {
 	ITEM_RANDOM = 0,
-	ITEM_MONEY = 1,
-	ITEM_UP_MUSHROOM = 5,
+	ITEM_COIN_MONEY = 1,
+	ITEM_MONEY = 2,
+	ITEM_1_UP_MUSHROOM = 5,
 	ITEM_P_SWITCH = 6,
 };
 
@@ -82,24 +83,27 @@ enum TypeOfBrickContainsItem
 };
 
 // Pipe
-#define PIPE_WIDTH			32
-#define SHORT_PIPE_HEIGHT	32
-#define MEDIUM_PIPE_HEIGHT	48
-#define LONG_PIPE_HEIGHT	208
+#define PIPE_WIDTH				32
+#define SHORT_PIPE_HEIGHT		32
+#define MEDIUM_PIPE_HEIGHT		48
+#define LONG_PIPE_HEIGHT		64
+#define VERY_LONG_PIPE_HEIGHT	208
 
 #define SHORT_PIPE_ANI						0
 #define MEDIUM_PIPE_ANI						1
 #define LONG_PIPE_ANI						2
-#define HIDDEN_PIPE_ANI						3
-#define MEDIUM_PIPE_PAIR_WITH_LONG_ONE_ANI	4
+#define VERY_LONG_PIPE_ANI					3
+#define HIDDEN_PIPE_ANI						4
+#define MEDIUM_PIPE_PAIR_WITH_LONG_ONE_ANI	5
 
 enum TypeOfPipe
 {
 	SHORT_PIPE = 1,
 	MEDIUM_PIPE = 2,
 	LONG_PIPE = 3,
-	HIDDEN_PIPE = 4,
-	MEDIUM_PIPE_PAIR_WITH_LONG_ONE = 5,
+	VERY_LONG_PIPE = 4,
+	HIDDEN_PIPE = 5,
+	MEDIUM_PIPE_PAIR_WITH_LONG_ONE = 6,
 };
 
 // Effect
@@ -169,7 +173,7 @@ enum TypeOfPipe
 
 // Mario time limit
 #define	MARIO_WAGGING_TAIL_TIME			150
-#define	MARIO_SPINNING_TAIL_TIME		375
+#define	MARIO_SPINNING_TAIL_TIME		250
 #define	MARIO_SHOOTING_FIREBALL_TIME	300
 #define MARIO_FLYING_TIME				5000
 #define MARIO_KICK_TIME					200

@@ -3,7 +3,8 @@
 Camera::Camera(CMario* player)
 {
 	this->player = player;
-	camY = CAMERA_INITIAL_Y;
+	//camY = CAMERA_INITIAL_Y;
+	camY = 0;
 	CGame::GetInstance()->SetCamPosY(camY);
 }
 

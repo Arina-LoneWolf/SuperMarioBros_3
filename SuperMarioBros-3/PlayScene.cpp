@@ -133,7 +133,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		//player = CMario::GetInstance();
 		player->SetPosition(x, y);
-		//player->SetAnimationSet(ani_set);
 		CRUD = new CStatusBar(player);
 		cam = new Camera(player);
 
@@ -478,13 +477,13 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		}
 		break;
 	}
-	case ITEM_MONEY:
+	case ITEM_COIN_MONEY:
 	{
 		CCoinEffect* effect = new CCoinEffect(x, y);
 		listItems.push_back(effect);
 		break; 
 	}
-	case ITEM_UP_MUSHROOM:
+	case ITEM_1_UP_MUSHROOM:
 	{
 		CSuperMushroom* mushroom = new CSuperMushroom(x, y);
 		priorityListItems.push_back(mushroom);

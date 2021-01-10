@@ -4,3 +4,4 @@ start	0
 [SCENES]
 0	data\scene-0.txt
 1	data\scene-1.txt
+4	data\scene-4.txt

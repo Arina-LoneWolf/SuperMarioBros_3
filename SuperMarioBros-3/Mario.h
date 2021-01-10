@@ -39,7 +39,7 @@ public:
 	int lives = INITIAL_PLAYER_LIVES;
 	vector<ItemOfBox> itemsPickedUp;
 
-	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 1, 0, 1, 0, 0);
+	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 4, 0, 1, 0, 0);
 	CMapPoint* nextPoint = new CMapPoint(64, 48, 0, 1, 0, 1, 0);
 
 	int GetScore() { return score; }
@@ -64,7 +64,6 @@ public:
 	bool leaveHiddenArea;
 	bool screenDim;
 	bool onOverworldMap = true;
-	bool isWaitingForAni;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
 

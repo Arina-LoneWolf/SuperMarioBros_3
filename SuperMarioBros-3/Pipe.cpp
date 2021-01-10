@@ -15,6 +15,8 @@ void CPipe::Render()
 		ani = MEDIUM_PIPE_ANI;
 	else if (pipeType == TypeOfPipe::LONG_PIPE)
 		ani = LONG_PIPE_ANI;
+	else if (pipeType == TypeOfPipe::VERY_LONG_PIPE)
+		ani = VERY_LONG_PIPE_ANI;
 	else if (pipeType == TypeOfPipe::HIDDEN_PIPE)
 		ani = HIDDEN_PIPE_ANI;
 	else
@@ -31,7 +33,9 @@ void CPipe::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + PIPE_WIDTH;
 
-	if (pipeType == TypeOfPipe::LONG_PIPE)
+	if (pipeType == TypeOfPipe::VERY_LONG_PIPE)
+		b = y + VERY_LONG_PIPE_HEIGHT;
+	else if (pipeType == TypeOfPipe::LONG_PIPE)
 		b = y + LONG_PIPE_HEIGHT;
 	else if (pipeType == TypeOfPipe::MEDIUM_PIPE || pipeType == TypeOfPipe::MEDIUM_PIPE_PAIR_WITH_LONG_ONE)
 		b = y + MEDIUM_PIPE_HEIGHT;
