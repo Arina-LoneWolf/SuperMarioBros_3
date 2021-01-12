@@ -130,6 +130,9 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += MARIO_GRAVITY * dt;
 	}
 
+	if (autoGoRight)
+		SetState(MARIO_STATE_WALKING_RIGHT);
+
 	if (level != MARIO_RACCOON)
 		canFly = false;
 

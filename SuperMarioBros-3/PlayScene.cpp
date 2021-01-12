@@ -565,6 +565,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
+	if (mario->autoGoRight)
+		return;
+
 	switch (KeyCode)
 	{
 	case DIK_SPACE: // reset the game starting as small mario
@@ -652,7 +655,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	if (mario->GetState() == MARIO_STATE_DIE)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->autoGoRight)
 		return;
 
 	switch (KeyCode)
@@ -695,7 +698,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	if (mario->GetState() == MARIO_STATE_DIE)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->autoGoRight)
 		return;
 	if (mario->GetState() == MARIO_STATE_GO_INTO_PIPE || mario->GetState() == MARIO_STATE_OUT_OF_PIPE)
 		return;

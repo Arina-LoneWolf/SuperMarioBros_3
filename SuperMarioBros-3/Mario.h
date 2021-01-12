@@ -37,9 +37,11 @@ public:
 	int score = 0;
 	int money = 0;
 	int lives = INITIAL_PLAYER_LIVES;
-	vector<ItemOfBox> itemsPickedUp;
+	ItemOfBox hud1 = ItemOfBox::MUSHROOM;
+	ItemOfBox hud2 = ItemOfBox::STAR;
+	vector<ItemOfBox> itemsPickedUp{ hud1, hud2 };
 
-	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 4, 0, 1, 0, 0);
+	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 1, 0, 1, 0, 0);
 	CMapPoint* nextPoint = new CMapPoint(64, 48, 0, 1, 0, 1, 0);
 
 	int GetScore() { return score; }

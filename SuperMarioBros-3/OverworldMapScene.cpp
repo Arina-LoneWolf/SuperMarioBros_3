@@ -300,11 +300,12 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((COverworldMapScene*)scene)->GetPlayer();
-	switch (KeyCode)
-	{
+	
 	if (mario->vx != 0 || mario->vy != 0)
 		return;
-
+	
+	switch (KeyCode)
+	{
 	case DIK_LEFT:
 		if (mario->movementPermission.at(ALLOWED_TO_GO_LEFT))
 			mario->vx = -MARIO_SPEED_ON_MAP;

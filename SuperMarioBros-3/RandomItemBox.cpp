@@ -1,4 +1,5 @@
 #include "RandomItemBox.h"
+#include "Mario.h"
 
 CRandomItemBox::CRandomItemBox()
 {
@@ -30,6 +31,9 @@ ItemOfBox operator++(ItemOfBox& item)
 
 void CRandomItemBox::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CGameObject::Update(dt, coObjects);
+	y += dy;
+
 	if (itemTiming->IsTimeUp())
 	{
 		++itemType;
@@ -39,5 +43,49 @@ void CRandomItemBox::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRandomItemBox::Render()
 {
-	animation_set->at((int)itemType)->Render(x, y);
+	//animation_set->at((int)itemType)->Render(x, y);
+	if (state == STATE_EMPTY)
+	{
+		switch (itemType)
+		{
+		case ItemOfBox::STAR:
+			ani = ITEM_BOX_EMPTY_STAR_ANI;
+			break;
+		case ItemOfBox::MUSHROOM:
+			ani = ITEM_BOX_EMPTY_MUSHROOM_ANI;
+			break;
+		case ItemOfBox::FLOWER:
+			ani = ITEM_BOX_EMPTY_FLOWER_ANI;
+			break;
+		}
+	}
+	else
+	{
+		switch (itemType)
+		{
+		case ItemOfBox::STAR:
+			ani = ITEM_BOX_STAR_ANI;
+			break;
+		case ItemOfBox::MUSHROOM:
+			ani = ITEM_BOX_MUSHROOM_ANI;
+			break;
+		case ItemOfBox::FLOWER:
+			ani = ITEM_BOX_FLOWER_ANI;
+			break;
+		}
+	}
+
+	animation_set->at(ani)->Render(x, y);
+}
+
+void CRandomItemBox::SetState(int state)
+{
+	CGameObject::SetState(state);
+
+	if (state == STATE_EMPTY)
+	{
+		itemTiming->Stop();
+		vy = -EMPTY_ITEM_SPEED_Y;
+		CMario::GetInstance()->autoGoRight = true;
+	}
 }

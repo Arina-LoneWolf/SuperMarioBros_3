@@ -210,9 +210,9 @@ void CKoopa::Render()
 		if (type == Type::GREEN_PARAKOOPA)
 		{
 			if (vx > 0)
-				ani = GREEN_PARAKOOPA_ANI_MOVE_RIGHT;
+				ani = PARAKOOPA_ANI_MOVE_RIGHT;
 			else
-				ani = GREEN_PARAKOOPA_ANI_MOVE_LEFT;
+				ani = PARAKOOPA_ANI_MOVE_LEFT;
 		}
 		else
 		{
