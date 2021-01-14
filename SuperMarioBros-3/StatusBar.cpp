@@ -40,7 +40,7 @@ void CStatusBar::Render(float camX, float camY)
 	number.Render(HUDPosX + TIME_REMAINING_NUM_POS_X, HUDPosY + TIME_REMAINING_NUM_POS_Y, countdown, TIME_REMAINING_NUM_MAX_SIZE);
 
 	for (UINT i = 0; i < player->itemsPickedUp.size(); i++)
-	{// xét điều kiện ở đây chưa đủ
+	{
 		if (i == player->itemsPickedUp.size() - 1 && delayTimeToGotCard->IsTimeUp()) // is the item that Mario just picked up
 		{
 			switch (player->itemsPickedUp.at(i))
@@ -62,7 +62,6 @@ void CStatusBar::Render(float camX, float camY)
 		}
 		else
 		{
-			//DebugOut(L"itempick size: %d", player->itemsPickedUp.size());
 			switch (player->itemsPickedUp.at(i))
 			{
 			case ItemOfBox::STAR:
@@ -81,10 +80,8 @@ void CStatusBar::Render(float camX, float camY)
 			item->at(item_ani)->Render(itemBoxSetPosX + ITEM_POS_X_ADDEND + (ITEM_SPACE_X * i), HUDPosY + ITEM_POS_Y_ADDEND);
 	}
 
-	DebugOut(L"right edge of cam: %f\n", CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR);
 	if (player->x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR)
 	{
-		DebugOut(L"VAO\n");
 		courseClearPosX = camX + COURSE_CLEAR_POS_X_ADDEND;
 		courseClearPosY = camY + COURSE_CLEAR_POS_Y_ADDEND;
 		courseClear->Draw(courseClearPosX, courseClearPosY);

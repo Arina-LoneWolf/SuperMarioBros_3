@@ -207,7 +207,7 @@ void CKoopa::Render()
 		break;
 
 	case ENEMY_STATE_MOVE:
-		if (type == Type::GREEN_PARAKOOPA)
+		if (type == Type::GREEN_PARAKOOPA || type == Type::RED_PARAKOOPA)
 		{
 			if (vx > 0)
 				ani = PARAKOOPA_ANI_MOVE_RIGHT;
@@ -274,6 +274,11 @@ void CKoopa::SetState(int state)
 	case ENEMY_STATE_MOVE:
 		if (type == Type::GREEN_PARAKOOPA)
 			vx = -GREEN_PARAKOOPA_MOVE_SPEED_X;
+		else if (type == Type::RED_PARAKOOPA)
+		{
+			vx = 0;
+			vy = -RED_PARAKOOPA_MOVE_SPEED_Y;
+		}
 		else if (type == Type::GREEN_KOOPA)
 		{
 			if (reset)

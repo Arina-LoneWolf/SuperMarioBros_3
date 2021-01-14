@@ -142,7 +142,7 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
 		deadTime->Start();
-		effect = new CMoneyEffect({ x + 3, y - 7 });
+		effect = new CMoneyEffect({ x + 1, y - 7 });
 		break;
 
 	case GOOMBA_STATE_FLY_LOW:

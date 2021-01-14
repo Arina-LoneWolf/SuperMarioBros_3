@@ -182,6 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
 	case Type::RANDOM_ITEM_BOX: obj = new CRandomItemBox(); break;
+	case Type::FLOATING_WOOD: obj = new CFloatingWood(); break;
 
 	case Type::PIPE:
 	{
@@ -316,6 +317,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (dynamic_cast<CMario*>(objects[i]))
@@ -423,11 +425,11 @@ void CPlayScene::Render()
 	for (LPGAMEOBJECT item : priorityListItems)
 		item->Render();
 
-	for (int i = objects.size() - 1; i >= 0; i--)
-		objects[i]->Render();
-
 	for (int i = listBronzeBricks.size() - 1; i >= 0; i--)
 		listBronzeBricks[i]->Render();
+
+	for (int i = objects.size() - 1; i >= 0; i--)
+		objects[i]->Render();
 
 	for (LPGAMEOBJECT item : listItems)
 		item->Render();

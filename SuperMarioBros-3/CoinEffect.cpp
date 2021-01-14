@@ -9,7 +9,7 @@ CCoinEffect::CCoinEffect(float brickX, float brickY)
 	vy = -COIN_EFFECT_SPEED_Y;
 	minPosY = brickY - COIN_EFFECT_MIN_Y_SUBTRAHEND;
 	maxPosY = brickY - COIN_EFFECT_MAX_Y_SUBTRAHEND;
-	moneyStartingPos = { brickX + MONEY_EFFECT_X_AT_BRICK_ADDEND, maxPosY - MONEY_EFFECT_Y_AT_BRICK_SUBTRAHEND };
+	moneyStartingPos = { brickX, maxPosY - MONEY_EFFECT_Y_AT_BRICK_SUBTRAHEND };
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(16));
 }
 

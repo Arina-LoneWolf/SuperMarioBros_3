@@ -18,6 +18,7 @@
 #include "IceFlower.h"
 #include "CoinEffect.h"
 #include "P_Switch.h"
+#include "FloatingWood.h"
 #include "RandomItemBox.h"
 #include "StatusBar.h"
 #include "Camera.h"
