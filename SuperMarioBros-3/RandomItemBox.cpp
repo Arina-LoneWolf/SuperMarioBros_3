@@ -10,9 +10,12 @@ CRandomItemBox::CRandomItemBox()
 
 void CRandomItemBox::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
+	if (state == STATE_EMPTY)
+		return;
+
+	left = x + ITEM_POS_X_OFFSET;
 	top = y;
-	right = x + ITEM_BBOX_WIDTH;
+	right = left + ITEM_BBOX_WIDTH;
 	bottom = y + ITEM_BBOX_HEIGHT;
 }
 
@@ -76,6 +79,8 @@ void CRandomItemBox::Render()
 	}
 
 	animation_set->at(ani)->Render(x, y);
+
+	//RenderBoundingBox();
 }
 
 void CRandomItemBox::SetState(int state)
@@ -87,5 +92,6 @@ void CRandomItemBox::SetState(int state)
 		itemTiming->Stop();
 		vy = -EMPTY_ITEM_SPEED_Y;
 		CMario::GetInstance()->autoGoRight = true;
+		CMario::GetInstance()->itemsPickedUp.push_back(itemType);
 	}
 }

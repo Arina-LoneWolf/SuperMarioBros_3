@@ -20,10 +20,11 @@ class CStatusBar
 	CTimer* flickerTime = new CTimer(FLICKER_TIME);
 	CTimer* delayTimeToGotCard = new CTimer(GOT_CARD_DELAY_TIME);
 	int countdown = 0;
-	int item_ani;
+	int item_ani = -1;
+	int item_card_ani;
 
-	float cardPosX = YOU_GOT_A_CARD_POS_X + CARD_POS_X_ADDEND;
-	float cardPosY = YOU_GOT_A_CARD_POS_Y + CARD_POS_Y_ADDEND;
+	float courseClearPosX;
+	float courseClearPosY;
 public:
 	CMario* player;
 

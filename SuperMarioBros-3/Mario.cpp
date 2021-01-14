@@ -428,6 +428,10 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				score += 50;
 				money += 1;
 			}
+			else if (e->obj->type == Type::RANDOM_ITEM_BOX)
+			{
+				e->obj->SetState(STATE_EMPTY);
+			}
 			else if (e->obj->type == Type::PIPE && (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE))
 			{
 				y += dy;

@@ -651,10 +651,9 @@ enum class PowerMeter
 #define NORMAL_FLOWER_ANI			4
 #define FLICKER_FLOWER_ANI			5
 
-#define COURSE_CLEAR_POS_X			2615
-#define COURSE_CLEAR_POS_Y			24
-#define YOU_GOT_A_CARD_POS_X		2615
-#define YOU_GOT_A_CARD_POS_Y		37
+#define COURSE_CLEAR_POS_X_ADDEND	58
+#define COURSE_CLEAR_POS_Y_ADDEND	33
+#define YOU_GOT_A_CARD_POS_Y_ADDEND	13
 #define CARD_POS_X_ADDEND			128
 #define CARD_POS_Y_ADDEND			11
 
@@ -676,8 +675,9 @@ enum class ItemOfBox
 	MAX_ITEM_TYPE_NUM,
 };
 
-#define ITEM_BBOX_WIDTH			14
+#define ITEM_BBOX_WIDTH			6
 #define ITEM_BBOX_HEIGHT		7
+#define ITEM_POS_X_OFFSET		4
 #define ITEM_POS_X				2689
 #define ITEM_POS_Y				338
 #define ITEM_CONVERSION_TIME	80
@@ -691,7 +691,7 @@ enum class ItemOfBox
 #define ITEM_BOX_EMPTY_MUSHROOM_ANI		4
 #define ITEM_BOX_EMPTY_FLOWER_ANI		5
 
-#define EMPTY_ITEM_SPEED_Y	1.0f
+#define EMPTY_ITEM_SPEED_Y	0.1f
 
 // Overworld map
 #define MAP_OBJECT_ANI_TUSSOCK				0

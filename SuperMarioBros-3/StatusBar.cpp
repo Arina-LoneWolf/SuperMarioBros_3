@@ -41,7 +41,7 @@ void CStatusBar::Render(float camX, float camY)
 
 	for (UINT i = 0; i < player->itemsPickedUp.size(); i++)
 	{// xét điều kiện ở đây chưa đủ
-		if (i == player->itemsPickedUp.size() - 1 && 0 == 1) // is the item that Mario just picked up
+		if (i == player->itemsPickedUp.size() - 1 && delayTimeToGotCard->IsTimeUp()) // is the item that Mario just picked up
 		{
 			switch (player->itemsPickedUp.at(i))
 			{
@@ -56,8 +56,9 @@ void CStatusBar::Render(float camX, float camY)
 				break;
 			}
 		}
-		else
+		else if (i < player->itemsPickedUp.size() - 1)
 		{
+			//DebugOut(L"itempick size: %d", player->itemsPickedUp.size());
 			switch (player->itemsPickedUp.at(i))
 			{
 			case ItemOfBox::STAR:
@@ -72,20 +73,42 @@ void CStatusBar::Render(float camX, float camY)
 			}
 		}
 
-		item->at(item_ani)->Render(itemBoxSetPosX + ITEM_POS_X_ADDEND + (ITEM_SPACE_X * i), HUDPosY + ITEM_POS_Y_ADDEND);
+		if (item_ani != -1)
+			item->at(item_ani)->Render(itemBoxSetPosX + ITEM_POS_X_ADDEND + (ITEM_SPACE_X * i), HUDPosY + ITEM_POS_Y_ADDEND);
 	}
 
+	DebugOut(L"right edge of cam: %f\n", CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR);
 	if (player->x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR)
 	{
-		courseClear->Draw(COURSE_CLEAR_POS_X, COURSE_CLEAR_POS_Y);
+		DebugOut(L"VAO\n");
+		courseClearPosX = camX + COURSE_CLEAR_POS_X_ADDEND;
+		courseClearPosY = camY + COURSE_CLEAR_POS_Y_ADDEND;
+		courseClear->Draw(courseClearPosX, courseClearPosY);
 		if (delayTimeToGotCard->IsStopped())
 			delayTimeToGotCard->Start();
 	}
 
 	if (delayTimeToGotCard->IsTimeUp())
 	{
-		youGotACard->Draw(YOU_GOT_A_CARD_POS_X, YOU_GOT_A_CARD_POS_Y);
-		item->at(item_ani)->Render(cardPosX, cardPosY);
+		float gotCardMessagePosX = courseClearPosX;
+		float gotCardMessagePosY = courseClearPosY + YOU_GOT_A_CARD_POS_Y_ADDEND;
+		float cardPosX = gotCardMessagePosX + CARD_POS_X_ADDEND;
+		float cardPosY = gotCardMessagePosY + CARD_POS_Y_ADDEND;
+
+		youGotACard->Draw(gotCardMessagePosX, gotCardMessagePosY);
+		switch (player->itemsPickedUp.at(player->itemsPickedUp.size() - 1))
+		{
+		case ItemOfBox::STAR:
+			item_card_ani = NORMAL_STAR_ANI;
+			break;
+		case ItemOfBox::MUSHROOM:
+			item_card_ani = NORMAL_MUSHROOM_ANI;
+			break;
+		case ItemOfBox::FLOWER:
+			item_card_ani = NORMAL_FLOWER_ANI;
+			break;
+		}
+		item->at(item_card_ani)->Render(cardPosX, cardPosY);
 	}
 }
 
