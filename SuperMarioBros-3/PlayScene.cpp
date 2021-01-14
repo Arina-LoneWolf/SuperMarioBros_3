@@ -131,6 +131,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
+		player->justPickedReward = false;
 		//player = CMario::GetInstance();
 		player->SetPosition(x, y);
 		HUD = new CStatusBar(player);

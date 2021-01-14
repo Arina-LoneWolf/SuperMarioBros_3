@@ -56,7 +56,11 @@ void CStatusBar::Render(float camX, float camY)
 				break;
 			}
 		}
-		else if (i < player->itemsPickedUp.size() - 1)
+		else if (i == player->itemsPickedUp.size() - 1 && player->justPickedReward && !delayTimeToGotCard->IsTimeUp())
+		{
+			break;
+		}
+		else
 		{
 			//DebugOut(L"itempick size: %d", player->itemsPickedUp.size());
 			switch (player->itemsPickedUp.at(i))

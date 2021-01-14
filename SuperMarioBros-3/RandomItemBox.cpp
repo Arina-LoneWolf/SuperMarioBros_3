@@ -93,5 +93,6 @@ void CRandomItemBox::SetState(int state)
 		vy = -EMPTY_ITEM_SPEED_Y;
 		CMario::GetInstance()->autoGoRight = true;
 		CMario::GetInstance()->itemsPickedUp.push_back(itemType);
+		CMario::GetInstance()->justPickedReward = true;
 	}
 }
