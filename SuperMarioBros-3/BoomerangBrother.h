@@ -1,16 +1,18 @@
 #pragma once
 #include "GameObject.h"
+#include "Boomerang.h"
 
-class CFloatingWood : public CGameObject
+class CBoomerangBrother : public CGameObject
 {
 public:
-	bool isFloating = false;
+	vector<LPGAMEOBJECT> listBoomerang;
 
-	CFloatingWood();
+	CBoomerangBrother();
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);
-	~CFloatingWood();
+	void CreateBoomerang();
+	~CBoomerangBrother();
 };
 

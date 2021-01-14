@@ -44,6 +44,10 @@ void CFloatingWood::SetState(int state)
 	else if (state == STATE_SINKING)
 	{
 		vx = 0;
-		vy += 0.00055f * dt;
+		vy = FLOATING_WOOD_SPEED_Y;
 	}
+}
+
+CFloatingWood::~CFloatingWood()
+{
 }

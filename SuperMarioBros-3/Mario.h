@@ -67,6 +67,7 @@ public:
 	bool screenDim;
 	bool onOverworldMap = true;
 	bool justPickedReward;
+	bool isOnFloatingWood;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
 

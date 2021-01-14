@@ -1,16 +1,13 @@
 #pragma once
 #include "GameObject.h"
 
-class CFloatingWood : public CGameObject
+class CBoomerang : public CGameObject
 {
 public:
-	bool isFloating = false;
-
-	CFloatingWood();
+	CBoomerang(D3DXVECTOR2 position, int nx);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
-	virtual void SetState(int state);
-	~CFloatingWood();
+	virtual void Render();
+	~CBoomerang();
 };
 

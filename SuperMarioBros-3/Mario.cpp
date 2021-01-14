@@ -273,7 +273,10 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		if (y > last_y)
 		{
 			isFalling = true;
-			isOnGround = false;
+			if (!isOnFloatingWood)
+			{				
+				isOnGround = false;
+			}
 		}
 		else
 			isFalling = false;
@@ -436,7 +439,12 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (e->obj->type == Type::FLOATING_WOOD)
 			{
 				if (e->ny < 0)
+				{
+					vy = 0.1f;
+					isOnFloatingWood = true;
 					e->obj->SetState(STATE_SINKING);
+					
+				}
 			}
 			else if (e->obj->type == Type::PIPE && (state == MARIO_STATE_GO_INTO_PIPE || state == MARIO_STATE_OUT_OF_PIPE))
 			{
@@ -915,6 +923,7 @@ void CMario::Render()
 
 		CASE_RACCOON_IS_FALLING:
 		default:
+			//if(!isOnFloatingWood)
 			if (vy < 0)
 			{
 				if (nx > 0)
