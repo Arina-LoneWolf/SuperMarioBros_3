@@ -19,6 +19,7 @@
 #include "CoinEffect.h"
 #include "P_Switch.h"
 #include "FloatingWood.h"
+#include "BoomerangBrother.h"
 #include "RandomItemBox.h"
 #include "StatusBar.h"
 #include "Camera.h"
