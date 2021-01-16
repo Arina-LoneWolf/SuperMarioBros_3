@@ -211,7 +211,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::RED_PARAGOOMBA:
 		obj = new CGoomba(player); break;
 
-	case Type::BOOMERANG_BROTHER: obj = new CBoomerangBrother(); break;
+	case Type::BOOMERANG_BROTHER: obj = CBoomerangBrother::GetInstance(); break;
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);

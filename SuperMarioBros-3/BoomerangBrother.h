@@ -1,19 +1,24 @@
 #pragma once
 #include "GameObject.h"
 #include "Boomerang.h"
+#include "MoneyEffect.h"
 //#include "Timer.h"
 
 class CBoomerangBrother : public CGameObject
 {
+	static CBoomerangBrother* __instance;
+
 public:
 	vector<LPGAMEOBJECT> listBoomerang;
-	CTimer* delayTimeToRest = new CTimer(REST_TIME);
-	CTimer* coolDown = new CTimer(2500);
-	CTimer* delayToHurlSecBoomerang = new CTimer(1500);
+	CTimer* delayTimeToRest = new CTimer(BOOMERANG_BROTHER_REST_TIME);
+	CTimer* coolDown = new CTimer(BOOMERANG_COOLDOWN_TIME);
+	CTimer* delayToHurlSecBoomerang = new CTimer(HURLING_SEC_BOOMERANG_DELAY_TIME);
+	CMoneyEffect* effect;
 	int randTurnToJump;
 	int turnCounter;
-	bool canJump;
-	bool playerPosition = 1;
+	int playerPosition = 1;
+	bool isHoldingBoomerang;
+	bool died;
 
 	CBoomerangBrother();
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);
@@ -22,7 +27,10 @@ public:
 	virtual void SetState(int state);
 	void CreateBoomerang();
 	void GenerateRandomTurnToJump();
-	bool GetPlayerDirection();
+	int GetPlayerDirection();
+
+	static CBoomerangBrother* GetInstance();
+
 	~CBoomerangBrother();
 };
 

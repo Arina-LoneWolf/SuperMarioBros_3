@@ -1,12 +1,14 @@
 ﻿#include "BoomerangBrother.h"
 #include "Mario.h"
 
+CBoomerangBrother* CBoomerangBrother::__instance = nullptr;
+
 CBoomerangBrother::CBoomerangBrother()
 {
 	category = Category::ENEMY;
 	GenerateRandomTurnToJump();
-	SetState(BOOMERANG_BROTHER_STATE_MOVE);
-
+	SetState(ENEMY_STATE_MOVE);
+	coolDown->Start();
 }
 
 void CBoomerangBrother::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
@@ -14,19 +16,29 @@ void CBoomerangBrother::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	vy += BOOMERANG_BROTHER_GRAVITY * dt;
 
+	float camPosY = CGame::GetInstance()->GetCamPosY();
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR && listBoomerang.empty())
+		isFinishedUsing = true;
+
+	if (effect)
+		effect->Update(dt, coObjects);
+
 	if ((vx > 0 && x >= BOOMERANG_BROTHER_LIMIT_X_RIGHT) || (vx < 0 && x <= BOOMERANG_BROTHER_LIMIT_X_LEFT))
 	{
-		turnCounter++;
-		SetState(BOOMERANG_BROTHER_STATE_IDLE);
+		if (!died)
+		{
+			turnCounter++;
+			SetState(ENEMY_STATE_IDLE);
+		}
 	}
 
-	if (delayTimeToRest->IsTimeUp())
+	if (delayTimeToRest->IsTimeUp() && !died)
 	{
-		SetState(BOOMERANG_BROTHER_STATE_MOVE);
+		SetState(ENEMY_STATE_MOVE);
 		delayTimeToRest->Stop();
 	}
 
-	if (turnCounter == randTurnToJump && state != BOOMERANG_BROTHER_STATE_IDLE)
+	if (turnCounter == randTurnToJump && state != ENEMY_STATE_IDLE && !died)
 	{
 		SetState(BOOMERANG_BROTHER_STATE_JUMP);
 		turnCounter = 0;
@@ -67,9 +79,7 @@ void CBoomerangBrother::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (countUsedBoomerang == 2)
 		{
-			for (UINT i = 0; i < listBoomerang.size(); i++)
-				listBoomerang.erase(listBoomerang.begin() + 1);
-
+			listBoomerang.clear();
 			coolDown->Start();
 		}
 	}
@@ -113,9 +123,26 @@ void CBoomerangBrother::Render()
 {
 	playerPosition = GetPlayerDirection();
 
+	if (died)
+	{
+		if (playerPosition > 0)
+			ani = BOOMERANG_BROTHER_ANI_DIE_RIGHT;
+		else
+			ani = BOOMERANG_BROTHER_ANI_DIE_LEFT;
+		goto RENDER;
+	}
+	else if (isHoldingBoomerang)
+	{
+		if (playerPosition > 0)
+			ani = BOOMERANG_BROTHER_ANI_ATTACK_RIGHT;
+		else
+			ani = BOOMERANG_BROTHER_ANI_ATTACK_LEFT;
+		goto RENDER;
+	}
+
 	switch (state)
 	{
-	case BOOMERANG_BROTHER_STATE_IDLE:
+	case ENEMY_STATE_IDLE:
 		if (playerPosition > 0)
 			ani = BOOMERANG_BROTHER_ANI_IDLE_RIGHT;
 		else
@@ -123,31 +150,40 @@ void CBoomerangBrother::Render()
 		break;
 
 	case BOOMERANG_BROTHER_STATE_JUMP:
-	case BOOMERANG_BROTHER_STATE_MOVE:
+	case ENEMY_STATE_MOVE:
 		if (playerPosition > 0)
 			ani = BOOMERANG_BROTHER_ANI_MOVE_RIGHT;
 		else
 			ani = BOOMERANG_BROTHER_ANI_MOVE_LEFT;
 		break;
 
-	case BOOMERANG_BROTHER_STATE_ATTACK:
+	case ENEMY_STATE_DIE_BY_WEAPON:
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
+	case BOOMERANG_BROTHER_STATE_DIE_BY_CRUSH:
 		if (playerPosition > 0)
-			ani = BOOMERANG_BROTHER_ANI_ATTACK_RIGHT;
+			ani = BOOMERANG_BROTHER_ANI_DIE_RIGHT;
 		else
-			ani = BOOMERANG_BROTHER_ANI_ATTACK_LEFT;
+			ani = BOOMERANG_BROTHER_ANI_DIE_LEFT;
 		break;
 	}
-
+	
+	RENDER:
 	animation_set->at(ani)->Render(x, y);
 
 	for (UINT i = 0; i < listBoomerang.size(); i++)
 		listBoomerang[i]->Render();
 
-	RenderBoundingBox();
+	if (effect)
+		effect->Render();
+
+	//RenderBoundingBox();
 }
 
 void CBoomerangBrother::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
+	if (died)
+		return;
+
 	l = x;
 	t = y;
 	r = l + BOOMERANG_BROTHER_BBOX_WIDTH;
@@ -160,12 +196,12 @@ void CBoomerangBrother::SetState(int state)
 
 	switch (state)
 	{
-	case BOOMERANG_BROTHER_STATE_IDLE:
+	case ENEMY_STATE_IDLE:
 		vx = 0;
 		delayTimeToRest->Start();
 		break;
 
-	case BOOMERANG_BROTHER_STATE_MOVE:
+	case ENEMY_STATE_MOVE:
 		if (x < BOOMERANG_BROTHER_LIMIT_X_RIGHT)
 			vx = BOOMERANG_BROTHER_SPEED_X;
 		else
@@ -173,19 +209,42 @@ void CBoomerangBrother::SetState(int state)
 		break;
 
 	case BOOMERANG_BROTHER_STATE_JUMP:
-		DebugOut(L"JUMPPPP\n");
+		//DebugOut(L"JUMPPPP\n");
 		vy = -BOOMERANG_BROTHER_JUMP_SPEED_Y;
 		GenerateRandomTurnToJump();
 		break;
 
-	case BOOMERANG_BROTHER_STATE_ATTACK:
+	case ENEMY_STATE_DIE_BY_WEAPON:
+		vx = BOOMERANG_BROTHER_DEFLECT_SPEED_X * object_colliding_nx;
+		vy = -BOOMERANG_BROTHER_DEFLECT_SPEED_Y;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x - 1, y - 7 });
+		else
+			effect = new CMoneyEffect({ x + 8, y - 7 });
+		died = true;
+		break;
+
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
+		vx = BOOMERANG_BROTHER_DEFLECT_SPEED_X_BY_TAIL * object_colliding_nx;
+		vy = -BOOMERANG_BROTHER_DEFLECT_SPEED_Y_BY_TAIL;
+		if (object_colliding_nx > 0)
+			effect = new CMoneyEffect({ x + 1, y - 3 });
+		else
+			effect = new CMoneyEffect({ x - 7, y - 3 });
+		died = true;
+		break;
+
+	case BOOMERANG_BROTHER_STATE_DIE_BY_CRUSH:
+		vx = 0;
+		died = true;
+		effect = new CMoneyEffect({ x + 1, y - 7 });
 		break;
 	}
 }
 
 void CBoomerangBrother::CreateBoomerang()
 {
-	CBoomerang* boomerang = new CBoomerang({ x, y }, playerPosition);
+	CBoomerang* boomerang = new CBoomerang(playerPosition);
 	listBoomerang.push_back(boomerang);
 }
 
@@ -194,9 +253,17 @@ void CBoomerangBrother::GenerateRandomTurnToJump()
 	randTurnToJump = rand() % (MAX_TURN_TO_JUMP - MIN_TURN_TO_JUMP + 1) + MIN_TURN_TO_JUMP;
 }
 
-bool CBoomerangBrother::GetPlayerDirection()
+int CBoomerangBrother::GetPlayerDirection()
 {
-	return CMario::GetInstance()->GetLeft() >= this->x;
+	if (CMario::GetInstance()->GetLeft() >= this->x)
+		return 1;
+	return -1;
+}
+
+CBoomerangBrother* CBoomerangBrother::GetInstance()
+{
+	if (__instance == NULL) __instance = new CBoomerangBrother();
+	return __instance;
 }
 
 CBoomerangBrother::~CBoomerangBrother()

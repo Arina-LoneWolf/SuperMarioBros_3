@@ -27,7 +27,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += MARIO_GRAVITY * dt; // cho gravity nhỏ lại
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
-	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR)
 		isFinishedUsing = true;
 
 	if (deadTime->IsTimeUp())

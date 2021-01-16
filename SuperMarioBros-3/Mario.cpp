@@ -410,6 +410,19 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CollideWithEnemy();
 			}
+			else if (e->obj->type == Type::BOOMERANG_BROTHER)
+			{
+				if (e->ny < 0)
+				{
+					e->obj->SetState(BOOMERANG_BROTHER_STATE_DIE_BY_CRUSH);
+					score += 100;
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+				}
+				else if (e->nx != 0 && untouchable == 0)
+				{
+					CollideWithEnemy();
+				}
+			}
 			else if (e->obj->type == Type::BRICK_CONTAINS_ITEM)
 			{
 				if (ny > 0)

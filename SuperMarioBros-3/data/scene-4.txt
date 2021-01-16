@@ -585,6 +585,8 @@
 1047	205	171	221	195	53
 # idle right
 #1044
+# die right
+1060	301	268	317	292	52
 
 # move left
 1048	33	171	49	195	52
@@ -594,6 +596,8 @@
 1051	103	171	119	195	52
 # idle left
 #1048
+# die left
+1061	301	234	317	258	52
 
 #============BOOMERANG WEAPON=============
 # right
@@ -1067,6 +1071,8 @@
 802	1044	100	1045	100
 # attack right
 803	1046	100	1047	100
+# die right
+809	1060	100
 
 # idle left
 804	1048	100
@@ -1074,12 +1080,18 @@
 805	1048	100	1049	100
 # attack left
 806	1050	100	1051	100
+# die left
+810	1061	100
 
 # =========== BOOMERANG WEAPON ==========
-# right
-807	1052	200	1053	200	1054	200	1055	200
-# left
-808	1056	200	1057	200	1058	200	1059	200
+# move right
+807	1052	65	1053	65	1054	65	1055	65
+# move left
+808	1056	65	1057	65	1058	65	1059	65
+# idle right
+811	1052	100
+# idle left
+812	1056	100
 
 #================================#
 # id	ani1	ani2	ani3
@@ -1135,13 +1147,17 @@
 # FLOATING WOOD
 25	940
 # BOOMERANG BROTHER
-26	801	802	803	804	805	806
+26	801	802	803	804	805	806	809	810
 # BOOMERANG WEAPON
-27	807	808
+27	807	808	811	812
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+
+# BOOMERANG BROTHER
+23	2096	150	26
+
 # PIPE
 12	1936	96	40	3
 12	2192	144	40	1
@@ -1156,9 +1172,6 @@
 
 # RANDOM ITEM BOX
 #22	2689.5	337	23
-
-# BOOMERANG BROTHER
-23	2096	150	26
 
 # FLOATING WOOD
 25	368	80	25
