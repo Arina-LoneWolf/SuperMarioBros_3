@@ -11,7 +11,8 @@ class CIntroDisplay
 	LPANIMATION number_3;
 	LPSPRITE cursor;
 
-	CTimer* logoVibrateTime = new CTimer(500);
+	CTimer* logoVibrateTime = new CTimer(600);
+	CTimer* delayTimeToRevealCurtain = new CTimer(1000);
 
 	float curtainPosY;
 	float gameLogoPosY = -113;

@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#define ID_TEX_BBOX		-100	// special texture to draw object bounding box
+#define ID_TEX_DARKEN	-200	// special texture to darken the screen
+
 // Scene
 #define OVERWORLD_MAP_SCENE_ID	0
 #define INTRO_SCENE_ID			99

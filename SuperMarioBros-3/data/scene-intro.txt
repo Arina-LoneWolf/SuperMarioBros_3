@@ -2,7 +2,6 @@
 [TEXTURES]
 1	textures\curtain.png	255	255	255
 0	textures\intro-banner.png	185	214	198
-2	textures\darken-the-screen.png	255	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -10,7 +9,8 @@
 # normal
 101	12	74	252	189	0
 # vibrate
-102	12	76	252	189	0
+102	12	75	252	189	0
+109	12	76	252	189	0
 #101
 
 #============FLICKER NUMBER 3=============
@@ -25,16 +25,13 @@
 #================CURTAIN==================
 108	0	0	256	183	1
 
-#==========TRANSITION BACKGROUND==========
-99	0	0	256	185	2
-
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 # ======= SUPER MARIO BROS 3 =======
 # normal
 21	101	100
 # vibrate
-22	102	1	101	1
+22	109	1	102	1	101	1
 
 # ===== FLICKER NUMBER 3 =====
 23	103	70	104	70	105	70	106	70	105	70	104	70	103	70

@@ -8,14 +8,18 @@ CIntroDisplay::CIntroDisplay()
 	gameLogo = CAnimationSets::GetInstance()->Get(1);
 	cursor = CSprites::GetInstance()->Get(107);
 	number_3 = CAnimations::GetInstance()->Get(23);
+	delayTimeToRevealCurtain->Start();
 }
 
 void CIntroDisplay::Update(ULONGLONG dt)
 {
-	if (curtainPosY + CURTAIN_HEIGHT >= CGame::GetInstance()->GetCamPosY())
-		curtainPosY += -0.1f * dt;
-	else if (gameLogoPosY < 22)
-		gameLogoPosY += 0.15f * dt;
+	if (delayTimeToRevealCurtain->IsTimeUp())
+	{
+		if (curtainPosY + CURTAIN_HEIGHT >= CGame::GetInstance()->GetCamPosY())
+			curtainPosY += -0.11f * dt;
+		else if (gameLogoPosY < 22)
+			gameLogoPosY += 0.3f * dt;
+	}
 
 	if (gameLogoPosY > 22)
 		gameLogoPosY = 22;
@@ -55,7 +59,7 @@ void CIntroDisplay::Render()
 
 void CIntroDisplay::DisplaySelectionZone()
 {
-	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_TRANSITION_BG);
+	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
 	RECT rect;
 
 	float l = CGame::GetInstance()->GetCamPosX();
@@ -64,7 +68,7 @@ void CIntroDisplay::DisplaySelectionZone()
 	rect.left = 0;
 	rect.top = 0;
 	rect.right = ceil(5 * SCREEN_WIDTH / 14);
-	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
+	rect.bottom = 185;
 
 	if (displaySelectionZone)
 	{

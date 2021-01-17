@@ -254,6 +254,7 @@ void COverworldMapScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_DARKEN, L"textures\\darken-the-screen.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -351,13 +352,18 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 			mario->vy = MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_S:
-		mario->onOverworldMap = false;
-		CGame::GetInstance()->SwitchScene(mario->currentPoint->sceneID);
+		if (CGame::GetInstance()->GetCurrentSceneID() == OVERWORLD_MAP_SCENE_ID)
+		{
+			mario->onOverworldMap = false;
+			CGame::GetInstance()->SwitchScene(mario->currentPoint->sceneID);
+		}
+		break;
 	case DIK_W:
 		if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
 		{
 			CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
 		}
+		break;
 	}
 
 }
