@@ -6,6 +6,7 @@
 #include "TileMap.h"
 #include "StatusBar.h"
 #include "MapObject.h"
+#include "IntroDisplay.h"
 
 class COverworldMapScene : public CScene
 {
@@ -13,6 +14,7 @@ protected:
 	CMario* player = nullptr;					// A play scene has to have player, right? 
 	TileMap* map = nullptr;
 	CStatusBar* HUD;
+	CIntroDisplay* intro;
 	vector<LPGAMEOBJECT> listMapObj;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -28,6 +30,8 @@ public:
 	virtual void Update(ULONGLONG dt);
 	virtual void Render();
 	virtual void Unload();
+
+	CIntroDisplay* GetIntro() { return intro; }
 
 	CMario* GetPlayer() { return player; }
 

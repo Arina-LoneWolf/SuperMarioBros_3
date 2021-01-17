@@ -178,6 +178,8 @@ void CFirePiranha::SetState(int state)
 		break;
 	case FIRE_PIRANHA_STATE_ATTACK: // this line is just for drawing
 		break;
+	case ENEMY_STATE_ATTACKED_BY_TAIL:
+		CMario::GetInstance()->score += 100;
 	case ENEMY_STATE_DIE_BY_WEAPON:
 		effect = new CMoneyEffect({ x + 3, y - 7 });
 		vanish = true;

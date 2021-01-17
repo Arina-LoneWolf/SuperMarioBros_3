@@ -142,6 +142,7 @@
     <ClCompile Include="GreenPiranha.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="IceFlower.cpp" />
+    <ClCompile Include="IntroDisplay.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MapPoint.cpp" />
     <ClCompile Include="Number.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="GreenPiranha.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="IceFlower.h" />
+    <ClInclude Include="IntroDisplay.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MapPoint.h" />
     <ClInclude Include="Number.h" />

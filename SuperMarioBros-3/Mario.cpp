@@ -419,9 +419,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = -MARIO_JUMP_DEFLECT_SPEED;
 				}
 				else if (e->nx != 0 && untouchable == 0)
-				{
 					CollideWithEnemy();
-				}
 			}
 			else if (e->obj->type == Type::BRICK_CONTAINS_ITEM)
 			{
@@ -444,6 +442,17 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				e->obj->isFinishedUsing = true;
 				score += 50;
 				money += 1;
+			}
+			else if (e->obj->type == Type::BRONZE_BRICK)
+			{
+				if (e->ny > 0)
+				{
+					if (level != MARIO_LEVEL_SMALL)
+					{
+						e->obj->SetState(STATE_DESTROYED);
+						CMario::GetInstance()->score += 10;
+					}
+				}
 			}
 			else if (e->obj->type == Type::RANDOM_ITEM_BOX)
 			{

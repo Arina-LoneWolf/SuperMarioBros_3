@@ -165,7 +165,16 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				if (e->obj->type == Type::BRICK_CONTAINS_ITEM && state == KOOPA_STATE_SPIN_AND_MOVE)
 				{
-					e->obj->SetState(STATE_RAMMED);
+					if (e->nx != 0)
+						e->obj->SetState(STATE_RAMMED);
+				}
+				if (e->obj->type == Type::BRONZE_BRICK && state == KOOPA_STATE_SPIN_AND_MOVE)
+				{
+					if (e->nx != 0)
+					{
+						e->obj->SetState(STATE_DESTROYED);
+						CMario::GetInstance()->score += 10;
+					}
 				}
 			}
 			else if (state == ENEMY_STATE_ATTACKED_BY_TAIL)

@@ -1,0 +1,74 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+1	textures\curtain.png	255	255	255
+0	textures\intro-banner.png	185	214	198
+2	textures\darken-the-screen.png	255	255	255
+
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#===========SUPER MARIO BROS 3============
+# normal
+101	12	74	252	189	0
+# vibrate
+102	12	76	252	189	0
+#101
+
+#============FLICKER NUMBER 3=============
+103	50	4	92	45	0
+104	96	4	138	45	0
+105	143	4	185	45	0
+106	189	4	231	45	0
+
+#=================CURSOR==================
+107	51	54	58	62	0
+
+#================CURTAIN==================
+108	0	0	256	183	1
+
+#==========TRANSITION BACKGROUND==========
+99	0	0	256	185	2
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# ======= SUPER MARIO BROS 3 =======
+# normal
+21	101	100
+# vibrate
+22	102	1	101	1
+
+# ===== FLICKER NUMBER 3 =====
+23	103	70	104	70	105	70	106	70	105	70	104	70	103	70
+
+# ====== CURSOR ======
+24	107	100
+
+# ====== CURTAIN ======
+25	108	100
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# SUPER MARIO BROS 3
+1	21	22
+# FLICKER NUMBER 3
+2	23
+# CURSOR
+3	24
+# CURTAIN
+4	25
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+
+# MARIO
+0	36	56	2
+
+# CURSOR
+#41	72	144	3
+
+# CURTAIN
+#40	0	0	4
+
+[TILEMAP]
+100	textures\map-intro.png	data\map-intro.txt	15	3	14	52	16	16

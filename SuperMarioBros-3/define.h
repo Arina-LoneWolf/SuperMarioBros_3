@@ -1,5 +1,26 @@
 ﻿#pragma once
 
+// Scene
+#define OVERWORLD_MAP_SCENE_ID	0
+#define INTRO_SCENE_ID			99
+#define MAP_1_SCENE_ID			1
+#define MAP_4_SCENE_ID			4
+
+// Intro Display
+#define	CURTAIN_HEIGHT			183
+#define ID_TEX_TRANSITION_BG	99
+#define CURSOR_POS_Y_1_PLAYER	144
+#define CURSOR_POS_Y_2_PLAYER	160
+#define CURSOR_POS_X			72
+#define	NUMBER_3_POS_X			112
+#define	NUMBER_3_POS_Y			96
+
+#define LOGO_ANI_NORMAL			0
+#define LOGO_ANI_VIBRATE		1
+
+#define CURSOR_AT_1_PLAYER		0
+#define CURSOR_AT_2_PLAYER		1
+
 // Tileset
 #define TILESET_BBOX_SIDE_LENGTH	16
 
@@ -397,7 +418,7 @@ enum TypeOfPipe
 #define	RED_PARAGOOMBA_ANI_FLAP_WINGS_SLOWLY		2
 #define RED_PARAGOOMBA_ANI_MOVE_WHEN_LOSING_WINGS	3
 #define RED_PARAGOOMBA_ANI_DIE_BY_CRUSH				4
-#define RED_PARAGOOMBA_ANI_DIE_BY_ATTACK			5
+#define RED_PARAGOOMBA_ANI_DIE_BY_ATTACK_TOOL		5
 
 // Koopa
 #define GREEN_PARAKOOPA_DEFLECT_SPEED_Y		0.22f
@@ -622,6 +643,10 @@ enum class Type
 	BOOMERANG_BROTHER = 23,
 	BOOMERANG = 24,
 	FLOATING_WOOD = 25,
+	CURTAIN = 40,
+	CURSOR = 41,
+	NUMBER_3 = 42,
+	SMB3_LOGO = 43,
 };
 
 enum class Category

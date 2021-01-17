@@ -340,16 +340,18 @@ void CGame::_ParseSection_SCENES(string line)
 	LPCWSTR path = ToLPCWSTR(tokens[1]);
 
 	LPSCENE scene = nullptr;
-	if (id == OVERWORLD_MAP_SCENE_ID)
+	if (id == OVERWORLD_MAP_SCENE_ID || id == INTRO_SCENE_ID)
 	{
 		//CMario::GetInstance()->onOverworldMap = true;
 		scene = new COverworldMapScene(id, path);
 	}
-	else
+	else if (id == MAP_1_SCENE_ID || id == MAP_4_SCENE_ID)
 	{
 		//CMario::GetInstance()->onOverworldMap = true;
 		scene = new CPlayScene(id, path);
 	}
+	else
+		return;
 	scenes[id] = scene;
 }
 

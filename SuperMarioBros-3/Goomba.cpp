@@ -94,12 +94,24 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGoomba::Render()
 {
-	if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
-		ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
-	else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
-		ani = GOOMBA_ANI_DIE_BY_CRUSH;
+	if (type == Type::RED_PARAGOOMBA)
+	{
+		if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
+			ani = RED_PARAGOOMBA_ANI_DIE_BY_ATTACK_TOOL;
+		else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
+			ani = RED_PARAGOOMBA_ANI_DIE_BY_CRUSH;
+		else
+			ani = RED_PARAGOOMBA_ANI_MOVE;
+	}
 	else
-		ani = GOOMBA_ANI_MOVE;
+	{
+		if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
+			ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
+		else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
+			ani = GOOMBA_ANI_DIE_BY_CRUSH;
+		else
+			ani = GOOMBA_ANI_MOVE;
+	}
 
 	animation_set->at(ani)->Render(x, y);
 
@@ -150,7 +162,7 @@ void CGoomba::SetState(int state)
 		break;
 
 	case GOOMBA_STATE_FLY_HIGH:
-		vy = -0.5;
+		vy = -0.5f;
 		break;
 	}
 }

@@ -17,7 +17,7 @@ void CTail::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT e = coObjects->at(i);
-		e->GetBoundingBox(ol, ot, or , ob);
+		e->GetBoundingBox(ol, ot, or, ob);
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, ol, ot, or, ob))
 		{
 			if (e->category == Category::ENEMY)

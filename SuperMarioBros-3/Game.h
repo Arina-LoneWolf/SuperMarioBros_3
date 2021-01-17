@@ -6,8 +6,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#define OVERWORLD_MAP_SCENE_ID	0
-
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
@@ -66,6 +64,7 @@ public:
 
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
+	int GetCurrentSceneID() { return current_scene; }
 
 	static void SweptAABB(
 		float ml,			// move left 

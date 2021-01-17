@@ -41,7 +41,7 @@ public:
 	ItemOfBox hud2 = ItemOfBox::STAR;
 	vector<ItemOfBox> itemsPickedUp/*{ hud1, hud2 }*/;
 
-	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 4, 0, 1, 0, 0);
+	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 1, 0, 1, 0, 0);
 	CMapPoint* nextPoint = new CMapPoint(64, 48, 0, 1, 0, 1, 0);
 
 	int GetScore() { return score; }

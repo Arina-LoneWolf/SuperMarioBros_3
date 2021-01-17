@@ -170,6 +170,9 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 	{
 		listMapObj.push_back(obj);
 	}
+
+	if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
+		intro = new CIntroDisplay();
 }
 
 /*
@@ -264,7 +267,13 @@ void COverworldMapScene::Update(ULONGLONG dt)
 	{
 		listMapObj[i]->Update(dt, &listMapObj);
 	}
-	player->UpdateAtOverworldMap(dt, &listMapObj);
+
+	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
+		player->UpdateAtOverworldMap(dt, &listMapObj);
+
+	if (intro)
+		intro->Update(dt);
+	
 	//skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -277,8 +286,15 @@ void COverworldMapScene::Render()
 	{
 		listMapObj[i]->Render();
 	}
-	player->RenderAtOverworldMap();
-	HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+
+	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
+	{
+		player->RenderAtOverworldMap();
+		HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
+	}
+
+	if (intro)
+		intro->Render();
 }
 
 /*
@@ -300,6 +316,8 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((COverworldMapScene*)scene)->GetPlayer();
+
+	CIntroDisplay* intro = ((COverworldMapScene*)scene)->GetIntro();
 	
 	if (mario->vx != 0 || mario->vy != 0)
 		return;
@@ -315,16 +333,31 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 			mario->vx = MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_UP:
-		if (mario->movementPermission.at(ALLOWED_TO_GO_UP))
+		if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
+		{
+			if (intro->GetCursorPosition() == CURSOR_AT_2_PLAYER)
+				intro->SetCursorPosition(CURSOR_AT_1_PLAYER);
+		}
+		else if (mario->movementPermission.at(ALLOWED_TO_GO_UP))
 			mario->vy = -MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_DOWN:
-		if (mario->movementPermission.at(ALLOWED_TO_GO_DOWN))
+		if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
+		{
+			if (intro->GetCursorPosition() == CURSOR_AT_1_PLAYER)
+				intro->SetCursorPosition(CURSOR_AT_2_PLAYER);
+		}
+		else if (mario->movementPermission.at(ALLOWED_TO_GO_DOWN))
 			mario->vy = MARIO_SPEED_ON_MAP;
 		break;
 	case DIK_S:
 		mario->onOverworldMap = false;
 		CGame::GetInstance()->SwitchScene(mario->currentPoint->sceneID);
+	case DIK_W:
+		if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
+		{
+			CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
+		}
 	}
 
 }

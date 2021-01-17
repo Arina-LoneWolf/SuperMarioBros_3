@@ -1,7 +1,9 @@
 [SETTINGS]
-start	0
+start	99
+
 #scene list
 [SCENES]
+99	data\scene-intro.txt
 0	data\scene-0.txt
 1	data\scene-1.txt
 4	data\scene-4.txt
