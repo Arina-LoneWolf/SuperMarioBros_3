@@ -19,6 +19,7 @@ class CStatusBar
 	CTimer* playTime = new CTimer(MAX_PLAY_TIME * CLOCKS_PER_SEC);
 	CTimer* flickerTime = new CTimer(FLICKER_TIME);
 	CTimer* delayTimeToGotCard = new CTimer(GOT_CARD_DELAY_TIME);
+	CTimer* delayTimeToEndScene = new CTimer(2500);
 	int countdown = 0;
 	int item_ani = -1;
 	int item_card_ani;

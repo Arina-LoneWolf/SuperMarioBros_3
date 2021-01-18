@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "MoneyEffect.h"
+#include "VirtualBox.h"
 
 class CKoopa : public CGameObject
 {
@@ -24,6 +25,7 @@ public:
 	
 	CMario* player;
 	CMoneyEffect* effect;
+	//CVirtualBox* virtualBox = new CVirtualBox();
 	
 	CKoopa(CMario* mario, float x, float y);
 	virtual void SetState(int state);

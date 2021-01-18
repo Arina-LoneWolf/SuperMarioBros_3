@@ -123,9 +123,9 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
+		//player->RefreshAtOverworldMap();
 		player->SetPosition(x, y);
 
 		HUD = new CStatusBar(player);

@@ -15,7 +15,7 @@
 // Intro Display
 #define	CURTAIN_HEIGHT			183
 #define LOGO_INITIAL_POS_Y		-113
-#define LOGO_LIMIT_POS_Y		22
+#define LOGO_LIMIT_POS_Y		24
 #define CURSOR_POS_Y_1_PLAYER	144
 #define CURSOR_POS_Y_2_PLAYER	160
 #define CURSOR_POS_X			72
@@ -72,11 +72,13 @@ enum BrickTransformation
 enum ItemOfBrick
 {
 	ITEM_RANDOM = 0,
-	ITEM_COIN_MONEY = 1,
-	ITEM_MONEY = 2,
+	ITEM_COIN = 1,
+	ITEM_COIN_X10 = 2,
 	ITEM_1_UP_MUSHROOM = 5,
 	ITEM_P_SWITCH = 6,
 };
+
+#define MAX_COIN_OF_BRICK			10
 
 #define STATE_PRESSED				250
 #define P_SWITCH_BBBOX_SIDE_LENGTH	16
@@ -442,6 +444,7 @@ enum TypeOfPipe
 #define PARAKOOPA_ANI_MOVE_RIGHT			9
 #define PARAKOOPA_ANI_MOVE_LEFT				8
 
+#define	KOOPA_THOWN_OUT_DX					6
 #define KOOPA_SLEEP_TIME					8000
 #define KOOPA_VIBRATION_TIME				3000
 #define KOOPA_GRAVITY						0.00015f
@@ -466,6 +469,8 @@ enum TypeOfPipe
 #define KOOPA_STATE_BEING_HELD				81
 #define KOOPA_STATE_NORMAL					82
 #define KOOPA_STATE_VIBRATE					83
+
+#define VIRTUAL_BOX_GRAVITY					0.0001f
 
 // Fire Piranha
 enum TypeOfFirePiranha

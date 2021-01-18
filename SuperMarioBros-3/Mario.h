@@ -52,7 +52,6 @@ public:
 	bool kickShell;
 	bool isHoldingShell;
 	bool canFly; // only for Raccoon
-	bool grounded;
 	bool isOnGround = true;
 	bool immovable;
 	bool unpressDown;
@@ -91,6 +90,8 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void Reset();
+	void RefreshAtPlayScene();
+	void RefreshAtOverworldMap();
 	int GetAni() { return ani; }
 
 	void CreateFireball();

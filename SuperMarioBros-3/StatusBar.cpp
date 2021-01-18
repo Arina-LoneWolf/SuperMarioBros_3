@@ -17,6 +17,18 @@ void CStatusBar::Update()
 {
 	countdown = MAX_PLAY_TIME - (int)(playTime->GetElapsedTime() / CLOCKS_PER_SEC);
 	p_meter->Update();
+
+	if (delayTimeToGotCard->IsTimeUp() && delayTimeToEndScene->IsStopped())
+	{
+		delayTimeToEndScene->Start();
+	}
+	
+	if (delayTimeToEndScene->IsTimeUp())
+	{
+		CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
+		//CMario::GetInstance()->SetPosition(CMario::GetInstance()->currentPoint->x + 1, CMario::GetInstance()->currentPoint->y);
+		//CMario::GetInstance()->SetPosition(65, 24);
+	}
 }
 
 void CStatusBar::Render(float camX, float camY)

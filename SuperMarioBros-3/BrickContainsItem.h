@@ -5,7 +5,6 @@
 class CBrickContainsItem : public CGameObject
 {
 public:
-	vector<LPGAMEOBJECT> listItem;
 	CMario* player;
 
 	int brickType;
@@ -15,6 +14,7 @@ public:
 	bool rammed;
 	bool isAboutToDropItem;
 	bool dropped;
+	int coin;
 
 	CBrickContainsItem(int brickType, int itemType, float originalPosY);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);

@@ -52,7 +52,7 @@ void CIntroDisplay::Render()
 	else
 		gameLogo->at(LOGO_ANI_NORMAL)->Render(0, gameLogoPosY);
 
-	if (fullDisplay) // dk: màn hình đã sáng lên 
+	if (fullDisplay) // condition: the background is fully lit up 
 		number_3->Render(NUMBER_3_POS_X, NUMBER_3_POS_Y);
 
 	curtain->Draw(0, curtainPosY);

@@ -1747,6 +1747,28 @@ void CMario::CreateFireball()
 	listWeapons.push_back(fireball);
 }
 
+void CMario::RefreshAtPlayScene()
+{
+	jumpTime->Stop();
+	flyTime->Stop();
+	kickTime->Stop();
+	onOverworldMap = false;
+	justPickedReward = false;
+	last_vx = 0;
+	last_vy = 0;
+}
+
+void CMario::RefreshAtOverworldMap()
+{
+	//jumpTime->Stop();
+	//flyTime->Stop();
+	//kickTime->Stop();
+	onOverworldMap = true;
+	justPickedReward = false;
+	last_vx = 0;
+	last_vy = 0;
+}
+
 void CMario::CollideWithEnemy()
 {
 	if (level > MARIO_LEVEL_BIG)

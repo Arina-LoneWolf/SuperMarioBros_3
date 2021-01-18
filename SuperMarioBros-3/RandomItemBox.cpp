@@ -94,5 +94,6 @@ void CRandomItemBox::SetState(int state)
 		CMario::GetInstance()->autoGoRight = true;
 		CMario::GetInstance()->itemsPickedUp.push_back(itemType);
 		CMario::GetInstance()->justPickedReward = true;
+		CMario::GetInstance()->currentPoint->isConquered = true;
 	}
 }

@@ -1,4 +1,5 @@
 ﻿#include "BrickContainsItem.h"
+#include "CoinEffect.h"
 
 CBrickContainsItem::CBrickContainsItem(int brickType, int itemType, float originalPosY)
 {
@@ -6,6 +7,8 @@ CBrickContainsItem::CBrickContainsItem(int brickType, int itemType, float origin
 	this->brickType = brickType;
 	this->itemType = itemType;
 	this->originalPosY = originalPosY;
+	if (itemType == ItemOfBrick::ITEM_COIN_X10)
+		coin = MAX_COIN_OF_BRICK;
 }
 
 void CBrickContainsItem::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
@@ -25,13 +28,16 @@ void CBrickContainsItem::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		y = originalPosY;
 		vy = 0;
 		isAboutToDropItem = true;
+
+		if (coin > 0)
+			rammed = false;
 	}
 
 }
 
 void CBrickContainsItem::Render()
 {
-	if (state == STATE_RAMMED) // chỗ này có thể đổi lại thành biến rammed (bool)
+	if (state == STATE_RAMMED && coin == 0) // chỗ này có thể đổi lại thành biến rammed (bool)
 		ani = NORMAL_BRICK_ANI;
 	else
 	{
@@ -62,5 +68,7 @@ void CBrickContainsItem::SetState(int state)
 	{
 		if (!rammed)
 			vy = -BRICK_DEFLECT_SPEED_Y;
+		if (itemType == ItemOfBrick::ITEM_COIN_X10 && coin > 0)
+			coin--;
 	}
 }

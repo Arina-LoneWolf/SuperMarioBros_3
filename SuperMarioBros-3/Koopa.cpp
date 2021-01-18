@@ -7,6 +7,7 @@ CKoopa::CKoopa(CMario* mario, float x, float y)
 	startingPosX = x;
 	startingPosY = y;
 	SetState(ENEMY_STATE_MOVE);
+	//virtualBox->SetPosition(583, 355);
 }
 
 void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -29,9 +30,9 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (type == Type::RED_KOOPA)
 	{
-		if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2)
+		if (x > CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR)
 		{
-			if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < startingPosX)
+			if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < startingPosX)
 				Reset();
 		}
 		else if (CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
@@ -42,13 +43,34 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
-	if (camPosY && y > camPosY + SCREEN_HEIGHT / 2)
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR)
 		reset = true;
 
 	if (type != Type::RED_KOOPA && reset)
 	{
-		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / 2 < startingPosX || CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
+		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < startingPosX || CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
 			Reset();
+	}
+
+	if (state == ENEMY_STATE_MOVE && type == Type::RED_KOOPA)
+	{
+		/*if (vx > 0)
+			virtualBox->SetPosition(x + 10, y);
+		else
+			virtualBox->SetPosition(x - 8, y);*/
+
+		/*virtualBox->Update(dt, coObjects);
+
+		if (virtualBox->dropped)
+		{
+			vx = -vx;
+			virtualBox->y = y;
+		}
+
+		if (vx > 0)
+			virtualBox->x = x + 10;
+		else
+			virtualBox->x = x - 8;*/
 	}
 
 	if (isBeingHeld && !player->isHoldingShell)
@@ -57,7 +79,7 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 			object_colliding_nx = 1;
 		else
 			object_colliding_nx = -1;
-		x += 6 * object_colliding_nx; // define plz!
+		x += KOOPA_THOWN_OUT_DX * object_colliding_nx;
 
 		player->kickShell = true;
 		player->kickTime->Start();
@@ -115,8 +137,8 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block every object first!
-		y += min_ty * dy + ny * 0.4f;
-		x += min_tx * dx + nx * 0.1f;
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.1f;
 
 		if (ny != 0)
 		{
@@ -252,7 +274,9 @@ void CKoopa::Render()
 	if (effect)
 		effect->Render();
 
-	//RenderBoundingBox();
+	//virtualBox->Render();
+
+	RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)

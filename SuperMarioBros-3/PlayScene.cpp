@@ -132,6 +132,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
 		player->justPickedReward = false;
+		//player->RefreshAtPlayScene();
 		//player = CMario::GetInstance();
 		player->SetPosition(x, y);
 		HUD = new CStatusBar(player);
@@ -348,7 +349,12 @@ void CPlayScene::Update(ULONGLONG dt)
 			if (brick->isAboutToDropItem && !brick->dropped)
 			{
 				DropItem(brick->itemType, brick->x, brick->y);
-				brick->dropped = true;
+				if (brick->itemType == ItemOfBrick::ITEM_COIN_X10 && brick->coin > 0)
+				{
+					brick->isAboutToDropItem = false;
+				}
+				else
+					brick->dropped = true;
 			}
 		}
 		else if (e->type == Type::P_SWITCH)
@@ -507,7 +513,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		}
 		break;
 	}
-	case ITEM_COIN_MONEY:
+	case ITEM_COIN:
 	{
 		CCoinEffect* effect = new CCoinEffect(x, y);
 		listItems.push_back(effect);
@@ -520,9 +526,17 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		break;
 	}
 	case ITEM_P_SWITCH:
+	{	
 		CP_Switch* p_switch = new CP_Switch();
 		objects.push_back(p_switch);
 		break;
+	}
+	case ITEM_COIN_X10:
+	{
+		CCoinEffect* effect = new CCoinEffect(x, y);
+		listItems.push_back(effect);
+		break;
+	}
 	}
 }
 
