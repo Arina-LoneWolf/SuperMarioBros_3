@@ -20,6 +20,7 @@
 56	textures\power_state.png	175	232	226
 1	textures\black-background.png	255	255	255
 3	textures\course-clear.png	1	1	1
+4	textures\darken-the-screen.png	255	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -568,7 +569,10 @@
 #=============BLACK BACKGROUND============
 11111	0	0	400	32	1
 
-#===============COURSE CLEAR==============
+#==========TRANSITION BACKGROUND==========
+1111	0	0	256	240	4
+
+#==============COURSE CLEAR===============
 # course clear
 1100	8	8	156	21	3
 # you got a card

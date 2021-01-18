@@ -2,6 +2,9 @@
 
 #define ID_TEX_BBOX		-100	// special texture to draw object bounding box
 #define ID_TEX_DARKEN	-200	// special texture to darken the screen
+#define TRANSITION_SPRITE_ID	1111
+#define ALPHA_MAX_VALUE			255
+#define ALPHA_MIN_VALUE			0
 
 // Scene
 #define OVERWORLD_MAP_SCENE_ID	0
@@ -11,12 +14,19 @@
 
 // Intro Display
 #define	CURTAIN_HEIGHT			183
-#define ID_TEX_TRANSITION_BG	99
+#define LOGO_INITIAL_POS_Y		-113
+#define LOGO_LIMIT_POS_Y		22
 #define CURSOR_POS_Y_1_PLAYER	144
 #define CURSOR_POS_Y_2_PLAYER	160
 #define CURSOR_POS_X			72
 #define	NUMBER_3_POS_X			112
 #define	NUMBER_3_POS_Y			96
+
+#define LOGO_VIBRATE_TIME		600
+#define REVEAL_DELAY_TIME		800
+
+#define CURTAIN_SPEED_Y			0.11f
+#define LOGO_SPEED_Y			0.3f
 
 #define LOGO_ANI_NORMAL			0
 #define LOGO_ANI_VIBRATE		1

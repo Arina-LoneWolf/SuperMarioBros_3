@@ -418,6 +418,31 @@ void CPlayScene::Update(ULONGLONG dt)
 	}
 
 	HUD->Update();
+
+	if (alpha == ALPHA_MAX_VALUE && player->screenDim)
+	{
+		player->screenDim = false;
+		player->inStartOfPipe = false;
+
+		if (player->goHiddenArea)
+		{
+			cam->goToHiddenArea = true;
+			player->goHiddenArea = false;
+		}
+		else if (player->leaveHiddenArea)
+		{
+			cam->backFromHiddenArea = true;
+			player->leaveHiddenArea = false;
+		}
+
+		lighteningIsDone = false;
+	}
+
+	if (cam->inHiddenArea && !lighteningIsDone && alpha == ALPHA_MIN_VALUE)
+	{
+		player->readyToOutOfPipe = true;
+		lighteningIsDone = true;
+	}
 }
 
 void CPlayScene::Render()
@@ -439,10 +464,10 @@ void CPlayScene::Render()
 	HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 
 	if (player->screenDim)
-		DarkenTheScreen(player, cam);
+		DarkenTheScreen();
 
 	if (cam->inHiddenArea && !lighteningIsDone)
-		LightenTheScreen(player);
+		LightenTheScreen();
 }
 
 /*
@@ -501,67 +526,30 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 }
 
-void CPlayScene::DarkenTheScreen(CMario* player, Camera* cam)
+void CPlayScene::DarkenTheScreen()
 {
-	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
-	RECT rect;
-
-	float l = CGame::GetInstance()->GetCamPosX();
-	float t = CGame::GetInstance()->GetCamPosY();
-
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = ceil(5 * SCREEN_WIDTH / 14);
-	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
-
 	colorSubtrahend += COLOR_ADDEND_LEVEL_UP;
 	alpha = floor(alpha + colorSubtrahend);
-	if (alpha > 255)
+	if (alpha > ALPHA_MAX_VALUE)
 	{
-		alpha = 255;
-		player->screenDim = false;
-		player->inStartOfPipe = false;
-		if (player->goHiddenArea)
-		{
-			cam->goToHiddenArea = true;
-			player->goHiddenArea = false;
-		}
-		else if (player->leaveHiddenArea)
-		{
-			cam->backFromHiddenArea = true;
-			player->leaveHiddenArea = false;
-		}
+		alpha = ALPHA_MAX_VALUE;
 		colorSubtrahend = 0;
-		lighteningIsDone = false;
 	}
 
-	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
+	CSprites::GetInstance()->Get(TRANSITION_SPRITE_ID)->Draw(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY(), alpha);
 }
 
-void CPlayScene::LightenTheScreen(CMario* player)
+void CPlayScene::LightenTheScreen()
 {
-	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
-	RECT rect;
-
-	float l = CGame::GetInstance()->GetCamPosX();
-	float t = CGame::GetInstance()->GetCamPosY();
-
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = ceil(5 * SCREEN_WIDTH / 14);
-	rect.bottom = ceil(5 * SCREEN_HEIGHT / 14);
-
 	colorSubtrahend += COLOR_ADDEND_LEVEL_UP;
 	alpha = floor(alpha - colorSubtrahend);
-	if (alpha < 0)
+	if (alpha < ALPHA_MIN_VALUE)
 	{
-		alpha = 0;
-		player->readyToOutOfPipe = true;
-		lighteningIsDone = true;
+		alpha = ALPHA_MIN_VALUE;
 		colorSubtrahend = 0;
 	}
 
-	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
+	CSprites::GetInstance()->Get(TRANSITION_SPRITE_ID)->Draw(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY(), alpha);
 }
 
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)

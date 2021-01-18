@@ -11,21 +11,19 @@ class CIntroDisplay
 	LPANIMATION number_3;
 	LPSPRITE cursor;
 
-	CTimer* logoVibrateTime = new CTimer(600);
-	CTimer* delayTimeToRevealCurtain = new CTimer(1000);
+	CTimer* logoVibrateTime = new CTimer(LOGO_VIBRATE_TIME);
+	CTimer* delayTimeToRevealCurtain = new CTimer(REVEAL_DELAY_TIME);
 
-	float curtainPosY;
-	float gameLogoPosY = -113;
+	float curtainPosY = 0;
+	float gameLogoPosY = LOGO_INITIAL_POS_Y;
 	bool logoIsVibrating;
 	bool fullDisplay;
 	bool cursorPos = 0;
 	bool displaySelectionZone;
-	int alpha = 255;
+	int alpha = ALPHA_MAX_VALUE;
 	int colorSubtrahend;
 
 public:
-	//bool cursorPos = 0;
-	
 	CIntroDisplay();
 
 	void Update(ULONGLONG dt);

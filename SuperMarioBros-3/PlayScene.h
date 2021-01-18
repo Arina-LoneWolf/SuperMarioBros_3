@@ -62,8 +62,8 @@ public:
 	virtual void Unload();
 
 	void DropItem(int itemType, float x, float y);
-	void DarkenTheScreen(CMario* player, Camera* cam);
-	void LightenTheScreen(CMario* player);
+	void DarkenTheScreen();
+	void LightenTheScreen();
 
 	CMario * GetPlayer() { return player; } 
 

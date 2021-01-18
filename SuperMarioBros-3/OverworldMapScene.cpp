@@ -314,7 +314,7 @@ void COverworldMapScene::Unload()
 
 void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((COverworldMapScene*)scene)->GetPlayer();
 

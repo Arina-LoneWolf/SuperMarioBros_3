@@ -16,16 +16,14 @@ void CIntroDisplay::Update(ULONGLONG dt)
 	if (delayTimeToRevealCurtain->IsTimeUp())
 	{
 		if (curtainPosY + CURTAIN_HEIGHT >= CGame::GetInstance()->GetCamPosY())
-			curtainPosY += -0.11f * dt;
-		else if (gameLogoPosY < 22)
-			gameLogoPosY += 0.3f * dt;
+			curtainPosY += -CURTAIN_SPEED_Y * dt;
+		else if (gameLogoPosY < LOGO_LIMIT_POS_Y)
+			gameLogoPosY += LOGO_SPEED_Y * dt;
 	}
-
-	if (gameLogoPosY > 22)
-		gameLogoPosY = 22;
 	
-	if (gameLogoPosY >= 22 && logoVibrateTime->IsStopped())
+	if (gameLogoPosY >= LOGO_LIMIT_POS_Y && logoVibrateTime->IsStopped())
 	{
+		gameLogoPosY = LOGO_LIMIT_POS_Y;
 		logoIsVibrating = true;
 		logoVibrateTime->Start();
 	}
@@ -35,6 +33,9 @@ void CIntroDisplay::Update(ULONGLONG dt)
 		logoIsVibrating = false;
 		displaySelectionZone = true;
 	}
+
+	if (alpha == 0)
+		fullDisplay = true;
 }
 
 void CIntroDisplay::Render()
@@ -59,29 +60,15 @@ void CIntroDisplay::Render()
 
 void CIntroDisplay::DisplaySelectionZone()
 {
-	LPDIRECT3DTEXTURE9 darken = CTextures::GetInstance()->Get(ID_TEX_DARKEN);
-	RECT rect;
-
-	float l = CGame::GetInstance()->GetCamPosX();
-	float t = CGame::GetInstance()->GetCamPosY();
-
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = ceil(5 * SCREEN_WIDTH / 14);
-	rect.bottom = 185;
-
 	if (displaySelectionZone)
 	{
 		colorSubtrahend += COLOR_ADDEND_LEVEL_UP;
 		alpha = floor(alpha - colorSubtrahend);
-		if (alpha < 0)
-		{
-			alpha = 0;
-			fullDisplay = true;
-		}
+		if (alpha < ALPHA_MIN_VALUE)
+			alpha = ALPHA_MIN_VALUE;
 	}
 
-	CGame::GetInstance()->Draw(l, t, darken, rect.left, rect.top, rect.right, rect.bottom, alpha);
+	CSprites::GetInstance()->Get(TRANSITION_SPRITE_ID)->Draw(0, 0, alpha);
 }
 
 CIntroDisplay::~CIntroDisplay()

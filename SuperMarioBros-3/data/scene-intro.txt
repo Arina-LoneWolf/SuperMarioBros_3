@@ -2,6 +2,7 @@
 [TEXTURES]
 1	textures\curtain.png	255	255	255
 0	textures\intro-banner.png	185	214	198
+2	textures\darken-the-screen.png	255	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -24,6 +25,9 @@
 
 #================CURTAIN==================
 108	0	0	256	183	1
+
+#==========TRANSITION BACKGROUND==========
+1111	0	0	256	185	2
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
