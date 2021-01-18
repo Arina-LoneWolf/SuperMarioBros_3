@@ -106,6 +106,17 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+	{
+		if (x < CGame::GetInstance()->GetCamPosX())
+		{
+			walkByAutoCam = true;
+			x = CGame::GetInstance()->GetCamPosX();
+		}
+		else
+			walkByAutoCam = false;
+	}
+
 	// Simple fall down
 	if (state == MARIO_STATE_GO_INTO_PIPE)
 	{
@@ -637,9 +648,9 @@ void CMario::Render()
 				goto CASE_FIRE_IS_KICKING;
 			else
 			{
-				if (vx > 0)
+				if (vx > 0 || (nx > 0 && walkByAutoCam))
 					ani = MARIO_FIRE_ANI_WALK_RIGHT;
-				else if (vx < 0)
+				else if (vx < 0 || (nx < 0 && walkByAutoCam))
 					ani = MARIO_FIRE_ANI_WALK_LEFT;
 				else
 				{
@@ -880,14 +891,14 @@ void CMario::Render()
 				goto CASE_RACCOON_IDLE_AND_HOLD_SHELL;
 			if (!isOnGround && !canFly)
 			{
-				DebugOut(L"3333333333\n");
+				//DebugOut(L"3333333333\n");
 				goto CASE_RACCOON_IS_FALLING;
 			}
 			if (kickShell)
 				goto CASE_RACCOON_IS_KICKING;
-			if (vx > 0)
+			if (vx > 0 || (nx > 0 && walkByAutoCam))
 				ani = MARIO_RACCOON_ANI_WALK_RIGHT;
-			else if (vx < 0)
+			else if (vx < 0 || (nx < 0 && walkByAutoCam))
 				ani = MARIO_RACCOON_ANI_WALK_LEFT;
 			else
 			{
@@ -1084,9 +1095,9 @@ void CMario::Render()
 				goto CASE_BIG_IS_FALLING;
 			if (kickShell)
 				goto CASE_BIG_IS_KICKING;
-			if (vx > 0)
+			if (vx > 0 || (nx > 0 && walkByAutoCam))
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else if (vx < 0)
+			else if (vx < 0 || (nx < 0 && walkByAutoCam))
 				ani = MARIO_ANI_BIG_WALKING_LEFT;
 			else
 			{
@@ -1229,9 +1240,9 @@ void CMario::Render()
 				goto CASE_SMALL_IS_KICKING;
 			else
 			{
-				if (vx > 0)
+				if (vx > 0 || (nx > 0 && walkByAutoCam))
 					ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-				else if (vx < 0)
+				else if (vx < 0 || (nx < 0 && walkByAutoCam))
 					ani = MARIO_ANI_SMALL_WALKING_LEFT;
 				else
 				{

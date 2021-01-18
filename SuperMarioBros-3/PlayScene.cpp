@@ -417,7 +417,11 @@ void CPlayScene::Update(ULONGLONG dt)
 	//CGame::GetInstance()->cam_y = 200;
 	float playerLeft = player->x + 11;
 
-	if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID) // thêm 1 dk là đang ở trong vùng autocam
+	{
+		CGame::GetInstance()->cam_x += 0.03f * dt;
+	}
+	else if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
 		cx = playerLeft - (5 * SCREEN_WIDTH / 28);
 		CGame::GetInstance()->cam_x = cx;

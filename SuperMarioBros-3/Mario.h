@@ -67,6 +67,7 @@ public:
 	bool onOverworldMap = true;
 	bool justPickedReward;
 	bool isOnFloatingWood;
+	bool walkByAutoCam;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
 
