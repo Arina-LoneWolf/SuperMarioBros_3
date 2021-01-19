@@ -16,6 +16,8 @@ public:
 	bool isSupine;
 	bool isBeingHeld;
 	bool reset;
+	bool collideWithBrick;
+	bool onBrick;
 
 	CTimer* sleepTime = new CTimer(KOOPA_SLEEP_TIME);
 	CTimer* vibrationTime = new CTimer(KOOPA_VIBRATION_TIME);
@@ -25,10 +27,13 @@ public:
 	
 	CMario* player;
 	CMoneyEffect* effect;
-	//CVirtualBox* virtualBox = new CVirtualBox();
+	CVirtualBox* virtualBoxBelow = new CVirtualBox();
+	CVirtualBox* virtualBoxHorizontally = new CVirtualBox();
 	
 	CKoopa(CMario* mario, float x, float y);
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
+	void GetVirtualBBOX(float& left, float& top, float& right, float& bottom);
+	~CKoopa();
 };

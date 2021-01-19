@@ -7,21 +7,28 @@ CKoopa::CKoopa(CMario* mario, float x, float y)
 	startingPosX = x;
 	startingPosY = y;
 	SetState(ENEMY_STATE_MOVE);
-	//virtualBox->SetPosition(583, 355);
 }
 
 void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	if (died)
 		return;
-	left = x + KOOPA_LEFT_ADDEND;
-	right = left + KOOPA_BBOX_WIDTH;
+	if (state == KOOPA_STATE_SPIN_AND_MOVE)
+	{
+		left = x + 2;
+		right = left + 14;
+	}
+	else
+	{
+		left = x + KOOPA_LEFT_ADDEND;
+		right = left + KOOPA_BBOX_WIDTH;
+	}
 	bottom = y + KOOPA_BBOX_HEIGHT;
 
 	if (state == ENEMY_STATE_MOVE)
 		top = y;
 	else
-		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN);
+		top = y + (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_HEIGHT_LAY_VIBRATE_SPIN) + 1;
 }
 
 void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
@@ -50,27 +57,6 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < startingPosX || CGame::GetInstance()->GetCamPosX() > startingPosX + KOOPA_BBOX_HEIGHT)
 			Reset();
-	}
-
-	if (state == ENEMY_STATE_MOVE && type == Type::RED_KOOPA)
-	{
-		/*if (vx > 0)
-			virtualBox->SetPosition(x + 10, y);
-		else
-			virtualBox->SetPosition(x - 8, y);*/
-
-		/*virtualBox->Update(dt, coObjects);
-
-		if (virtualBox->dropped)
-		{
-			vx = -vx;
-			virtualBox->y = y;
-		}
-
-		if (vx > 0)
-			virtualBox->x = x + 10;
-		else
-			virtualBox->x = x - 8;*/
 	}
 
 	if (isBeingHeld && !player->isHoldingShell)
@@ -107,6 +93,8 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		else
 			vy += MARIO_GRAVITY * dt;
 	}
+	else if (state == KOOPA_STATE_SPIN_AND_MOVE)
+		vy += 0.0015f * dt;
 	else if (state != KOOPA_STATE_BEING_HELD)
 		vy += MARIO_GRAVITY * dt;
 
@@ -115,6 +103,38 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 
 	if (effect)
 		effect->Update(dt, coObjects);
+
+	if (type == Type::RED_KOOPA)
+	{
+		if (vx > 0)
+		{
+			virtualBoxBelow->SetPosition(x + 8, y + KOOPA_BBOX_HEIGHT);
+			virtualBoxHorizontally->SetPosition(x + 11.1f, y + 16);
+		}
+		else
+		{
+			virtualBoxBelow->SetPosition(x + 3, y + KOOPA_BBOX_HEIGHT);
+			virtualBoxHorizontally->SetPosition(x - 1.1f, y + 16);
+		}
+
+		if (virtualBoxBelow->CollideWithGround(coObjects, state))
+		{
+			vx = -vx;
+			DebugOut(L"Groundddddddddddddddd\n");
+		}
+
+		if (!virtualBoxBelow->CollideWithBrick(coObjects) && state == ENEMY_STATE_MOVE && onBrick)
+		{
+			vx = -vx;
+			DebugOut(L"not colliding\n");
+		}
+
+		if (virtualBoxHorizontally->CollidedHorizontally(coObjects, state))
+		{
+			vx = -vx;
+			DebugOut(L"Horizontallllllllllllllll\n");
+		}
+	}
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -137,8 +157,8 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block every object first!
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.1f;
+		x += min_tx * dx + nx * 0.1f;
+		y += min_ty * dy + ny * 0.2f;
 
 		if (ny != 0)
 		{
@@ -150,29 +170,37 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		//
 		// Collision logic with other objects
 		//
+
+		onBrick = false;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
 			if (state == ENEMY_STATE_MOVE || state == KOOPA_STATE_SPIN_AND_MOVE)
 			{
+				if (e->obj->type == Type::BRONZE_BRICK || e->obj->type == Type::BRICK_CONTAINS_ITEM)
+				{
+					if (e->ny < 0)
+						onBrick = true;
+				}
 				if (e->obj->type == Type::COLOR_BOX)
 				{
 					if (e->nx != 0)
 						x += dx;
-				}
-				if (e->obj->category == Category::MISC)
-				{
-					if (e->nx != 0 && e->obj->type != Type::COLOR_BOX)
-					{
-						vx = -vx;
-					}
-					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (x <= e->obj->x || x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH))
+					if (e->ny < 0 && state == ENEMY_STATE_MOVE && (this->x + 8 <= e->obj->x || this->x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH + 8))
 					{
 						if (type == Type::RED_KOOPA)
 							vx = -vx;
 					}
 				}
+				/*if (e->obj->category == Category::MISC)
+				{
+					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (this->x + 8 <= e->obj->x || this->x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH + 8))
+					{
+						if (type == Type::RED_KOOPA)
+							vx = -vx;
+					}
+				}*/
 				if (e->obj->category == Category::ENEMY && state == KOOPA_STATE_SPIN_AND_MOVE)
 				{
 					if (e->nx != 0)
@@ -183,19 +211,6 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 							e->obj->object_colliding_nx = -1;
 
 						e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
-					}
-				}
-				if (e->obj->type == Type::BRICK_CONTAINS_ITEM && state == KOOPA_STATE_SPIN_AND_MOVE)
-				{
-					if (e->nx != 0)
-						e->obj->SetState(STATE_RAMMED);
-				}
-				if (e->obj->type == Type::BRONZE_BRICK && state == KOOPA_STATE_SPIN_AND_MOVE)
-				{
-					if (e->nx != 0)
-					{
-						e->obj->SetState(STATE_DESTROYED);
-						CMario::GetInstance()->score += 10;
 					}
 				}
 			}
@@ -274,9 +289,10 @@ void CKoopa::Render()
 	if (effect)
 		effect->Render();
 
-	//virtualBox->Render();
+	virtualBoxBelow->Render();
+	virtualBoxHorizontally->Render();
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)
@@ -335,7 +351,7 @@ void CKoopa::SetState(int state)
 		break;
 
 	case KOOPA_STATE_SPIN_AND_MOVE:
-		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
+		vx = 0.16f * object_colliding_nx;
 		isBeingHeld = false;
 		sleepTime->Stop();
 		vibrationTime->Stop();
@@ -385,4 +401,19 @@ void CKoopa::Reset()
 	reset = false;
 	sleepTime->Stop();
 	vibrationTime->Stop();
+}
+
+void CKoopa::GetVirtualBBOX(float& left, float& top, float& right, float& bottom)
+{
+	if (vx > 0)
+		left = x + 11;
+	else
+		left = x + 1;
+	top = y + 32;
+	right = left + 7;
+	bottom = top + 7;
+}
+
+CKoopa::~CKoopa()
+{
 }

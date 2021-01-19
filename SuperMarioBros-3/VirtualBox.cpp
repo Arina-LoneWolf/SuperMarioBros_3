@@ -1,47 +1,78 @@
 #include "VirtualBox.h"
+#include "Mario.h"
 
 CVirtualBox::CVirtualBox()
 {
 }
 
-void CVirtualBox::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+bool CVirtualBox::CollideWithBrick(vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
-	vy += VIRTUAL_BOX_GRAVITY;
-
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
-
-	if (coEvents.size() == 0)
+	float vl, vt, vr, vb, bl, bt, br, bb; // virtual box - brick
+	GetBoundingBox(vl, vt, vr, vb);
+	for (UINT i = 0; i < coObjects->size(); i++)
 	{
-		x += dx;
-		y += dy;
-		dropped = true;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny = 0;
-		float rdx = 0;
-		float rdy = 0;
-
-		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		// block every object first!
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.1f;
-
-		if (ny != 0)
+		LPGAMEOBJECT e = coObjects->at(i);
+		if (e->type != Type::BRONZE_BRICK && e->type != Type::BRICK_CONTAINS_ITEM && e->type != Type::COLOR_BOX)
+			continue;
+		e->GetBoundingBox(bl, bt, br, bb);
+		if (CGameObject::CheckAABB(vl, vt, vr, vb, bl, bt, br, bb))
 		{
-			vy = 0;
-			dropped = false;
+			return true;
 		}
 	}
+	return false;
+}
 
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+bool CVirtualBox::CollidedHorizontally(vector<LPGAMEOBJECT>* coObjects, int koopaState)
+{
+	float vl, vt, vr, vb, ol, ot, or, ob; // virtual box - brick
+	GetBoundingBox(vl, vt, vr, vb);
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT e = coObjects->at(i);
+		if (e->type == Type::GREEN_KOOPA || e->type == Type::GREEN_PARAKOOPA || e->type == Type::RED_KOOPA || e->type == Type::RED_PARAKOOPA || e->type == Type::COLOR_BOX)
+			continue;
+		e->GetBoundingBox(ol, ot, or, ob);
+		if (CGameObject::CheckAABB(vl, vt, vr, vb, ol, ot, or, ob))
+		{
+			if (koopaState == KOOPA_STATE_SPIN_AND_MOVE)
+			{
+				if (e->type == Type::BRONZE_BRICK)
+				{
+					e->SetState(STATE_DESTROYED);
+					CMario::GetInstance()->score += 10;
+				}
+				else if (e->type == Type::BRICK_CONTAINS_ITEM)
+				{
+					e->SetState(STATE_RAMMED);
+				}
+			}
+			return true;
+		}
+	}
+	return false;
+}
+
+bool CVirtualBox::CollideWithGround(vector<LPGAMEOBJECT>* coObjects, int koopaState)
+{
+	float vl, vt, vr, vb, ol, ot, or , ob; // virtual box - brick
+	GetBoundingBox(vl, vt, vr, vb);
+	for (UINT i = 0; i < coObjects->size(); i++)
+	{
+		LPGAMEOBJECT e = coObjects->at(i);
+		if (e->category != Category::MISC || e->type == Type::BRONZE_BRICK || e->type == Type::BRICK_CONTAINS_ITEM || e->type == Type::COLOR_BOX)
+			continue;
+		e->GetBoundingBox(ol, ot, or , ob);
+		if (CGameObject::CheckAABB(vl, vt, vr, vb, ol, ot, or , ob))
+		{
+			if (koopaState == ENEMY_STATE_MOVE)
+			{
+				if (this->x + 4 <= e->x || this->x + 1 >= e->x + e->width)
+					return true;
+			}
+		}
+	}
+	return false;
 }
 
 void CVirtualBox::Render()
@@ -52,7 +83,7 @@ void CVirtualBox::Render()
 void CVirtualBox::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
-	t = y;
-	r = l + 16;
-	b = t + 28;
+	t = y + 1;
+	r = l + 7;
+	b = t + 10;
 }

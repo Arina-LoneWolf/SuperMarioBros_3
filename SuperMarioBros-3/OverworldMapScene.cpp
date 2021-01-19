@@ -364,8 +364,10 @@ void COverworldMapSceneKeyHandler::OnKeyDown(int KeyCode)
 			CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
 		}
 		break;
+	case DIK_Q:
+		if (CGame::GetInstance()->GetCurrentSceneID() == OVERWORLD_MAP_SCENE_ID)
+			CGame::GetInstance()->SwitchScene(INTRO_SCENE_ID);
 	}
-
 }
 
 void COverworldMapSceneKeyHandler::KeyState(BYTE* states)
