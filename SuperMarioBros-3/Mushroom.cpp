@@ -1,15 +1,15 @@
-﻿#include "SuperMushroom.h"
+﻿#include "Mushroom.h"
 
-CSuperMushroom::CSuperMushroom(float brickX, float brickY)
+CMushroom::CMushroom(float brickX, float brickY, int mushroomType)
 {
 	category = Category::ITEM;
-
 	this->x = brickX;
 	this->y = brickY;
+	this->mushroomType = mushroomType;
 
-	if (x < BRICK_VERTICAL_SEPARATION_LINE)
+	if (mushroomType == TYPE_SUPER_MUSHROOM)
 		type = Type::SUPER_MUSHROOM;
-	else
+	else if (mushroomType == TYPE_UP_MUSHROOM)
 		type = Type::UP_MUSHROOM;
 
 	vy = -SUPER_MUSHROOM_DEFLECT_SPEED_Y;
@@ -18,7 +18,7 @@ CSuperMushroom::CSuperMushroom(float brickX, float brickY)
 	this->SetAnimationSet(CAnimationSets::GetInstance()->Get(8));
 }
 
-void CSuperMushroom::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
+void CMushroom::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 
@@ -92,11 +92,11 @@ void CSuperMushroom::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CSuperMushroom::Render()
+void CMushroom::Render()
 {
 	if (type == Type::SUPER_MUSHROOM)
 		ani = SUPER_MUSHROOM_ANI;
-	else
+	else if (type == Type::UP_MUSHROOM)
 		ani = UP_MUSHROOM_ANI;
 
 	animation_set->at(ani)->Render(x, y);
@@ -104,7 +104,7 @@ void CSuperMushroom::Render()
 	//RenderBoundingBox();
 }
 
-void CSuperMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;

@@ -50,7 +50,8 @@
 #define	STATE_RAMMED				101
 #define STATE_BEING_HIT_BY_TAIL		102
 
-#define BRICK_VERTICAL_SEPARATION_LINE	1152
+#define TYPE_SUPER_MUSHROOM			1
+#define TYPE_UP_MUSHROOM			2
 
 // Bronze brick and Coin
 #define BRONZE_BRICK_ANI		0

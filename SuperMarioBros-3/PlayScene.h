@@ -14,7 +14,7 @@
 #include "GreenPiranha.h"
 #include "Pipe.h"
 #include "SuperLeaf.h"
-#include "SuperMushroom.h"
+#include "Mushroom.h"
 #include "IceFlower.h"
 #include "CoinEffect.h"
 #include "P_Switch.h"

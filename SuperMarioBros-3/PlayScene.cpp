@@ -418,11 +418,12 @@ void CPlayScene::Update(ULONGLONG dt)
 	//CGame::GetInstance()->cam_y = 200;
 	float playerLeft = player->x + 11;
 
-	//if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID) // thêm 1 dk là đang ở trong vùng autocam
-	//{
-	//	CGame::GetInstance()->cam_x += 0.03f * dt;
-	//}
-	//else if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID) // thêm 1 dk là đang ở trong vùng autocam
+	{
+		if (!player->pauseCam)
+			CGame::GetInstance()->cam_x += 0.03f * dt;
+	}
+	else if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
 		cx = playerLeft - (5 * SCREEN_WIDTH / 28);
 		CGame::GetInstance()->cam_x = cx;
@@ -503,7 +504,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	{
 		if (player->GetLevel() == MARIO_LEVEL_SMALL)
 		{
-			CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+			CMushroom* mushroom = new CMushroom(x, y, TYPE_SUPER_MUSHROOM);
 			priorityListItems.push_back(mushroom);
 		}
 		else if (player->GetLevel() == MARIO_RACCOON)
@@ -526,7 +527,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	}
 	case ITEM_1_UP_MUSHROOM:
 	{
-		CSuperMushroom* mushroom = new CSuperMushroom(x, y);
+		CMushroom* mushroom = new CMushroom(x, y, TYPE_UP_MUSHROOM);
 		priorityListItems.push_back(mushroom);
 		break;
 	}
@@ -659,6 +660,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		//mario->renderBBOX = !mario->renderBBOX;
 		//mario->renderBBOX = mario->renderBBOX == false;
 		//mario->renderBBOX = abs(mario->renderBBOX - 1);
+		break;
+		
+	case DIK_P:
+		mario->pauseCam ^= true;
 		break;
 	}
 }

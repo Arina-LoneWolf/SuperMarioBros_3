@@ -3,8 +3,10 @@
 Camera::Camera(CMario* player)
 {
 	this->player = player;
-	//camY = CAMERA_INITIAL_Y;
-	camY = 0;
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID)
+		camY = CAMERA_INITIAL_Y;
+	else if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+		camY = 0;
 	CGame::GetInstance()->SetCamPosY(camY);
 }
 
@@ -30,7 +32,6 @@ void Camera::Update(ULONGLONG dt)
 		player->y = MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_Y;
 		player->x = MARIO_READY_TO_OUT_OF_HIDDEN_AREA_POS_X;
 		player->inEndOfPipe = true;
-		//inHiddenArea = false;
 	}
 
 	if (player->readyToOutOfPipe)
@@ -94,7 +95,7 @@ void Camera::Update(ULONGLONG dt)
 SET_CAM:
 
 	camY += camSpeedY * dt;
-	if (camY <= 0 || camY > CAMERA_INITIAL_Y)
+	if (camY <= 0 || camY > CAMERA_INITIAL_Y || CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
 		return;
 
 	CGame::GetInstance()->SetCamPosY(camY);

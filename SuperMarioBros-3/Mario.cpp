@@ -106,7 +106,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	/*if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
 	{
 		if (x < CGame::GetInstance()->GetCamPosX())
 		{
@@ -115,7 +115,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 			walkByAutoCam = false;
-	}*/
+	}
 
 	// Simple fall down
 	if (state == MARIO_STATE_GO_INTO_PIPE)

@@ -68,6 +68,7 @@ public:
 	bool justPickedReward;
 	bool isOnFloatingWood;
 	bool walkByAutoCam;
+	bool pauseCam;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
 

@@ -157,7 +157,7 @@
     <ClCompile Include="RandomItemBox.cpp" />
     <ClCompile Include="StatusBar.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
-    <ClCompile Include="SuperMushroom.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="TailHitEffect.cpp" />
     <ClCompile Include="TileMap.cpp" />
@@ -208,7 +208,7 @@
     <ClInclude Include="RandomItemBox.h" />
     <ClInclude Include="StatusBar.h" />
     <ClInclude Include="SuperLeaf.h" />
-    <ClInclude Include="SuperMushroom.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Tail.h" />
     <ClInclude Include="TailHitEffect.h" />
     <ClInclude Include="TileMap.h" />
