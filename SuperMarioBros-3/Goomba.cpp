@@ -83,6 +83,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0)
 					{
 						vx = -vx;
+						e->obj->vx = -e->obj->vx;
 					}
 				}
 			}

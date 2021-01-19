@@ -19,15 +19,7 @@ void CIceFlower::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	y += vy;
 
 	if (y <= minPosY)
-	{
 		vy = 0;
-
-		if (existingTime->IsStopped())
-			existingTime->Start();
-	}
-
-	if (existingTime->IsTimeUp())
-		isFinishedUsing = true;
 }
 
 void CIceFlower::Render()

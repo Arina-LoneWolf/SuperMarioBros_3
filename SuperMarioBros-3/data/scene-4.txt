@@ -19,6 +19,7 @@
 55	textures\status_bar.png	255	0	255
 56	textures\power_state.png	175	232	226
 1	textures\black-background.png	255	255	255
+4	textures\darken-the-screen.png	255	255	255
 
 # id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -567,6 +568,9 @@
 #=============BLACK BACKGROUND============
 11111	0	0	400	32	1
 
+#==========TRANSITION BACKGROUND==========
+1111	0	0	256	240	4
+
 #===============COURSE CLEAR==============
 # course clear
 1100	8	8	156	21	3
@@ -794,7 +798,7 @@
 # stop right
 304	10207	150
 # shoot fireball right
-305	10208	100	10209	100	10200	100
+305	10208	50	10209	50	10200	50
 # shoot fireball while jumping right
 306	10210	100	10211	100	10212	100
 # sit down right
@@ -823,7 +827,7 @@
 # stop left
 324	10227	150
 # shoot fireball left
-325	10228	100	10229	100	10220	100
+325	10228	50	10229	50	10220	50
 # shoot fireball while jumping left
 326	10230	100	10231	100	10232	100
 # sit down left
@@ -932,7 +936,7 @@
 
 # ====== RED PARAKOOPA ======
 # move left
-741	3049	100	3050	100	3051	100	3052	100
+741	3049	65	3050	65	3051	65	3052	65
 
 # ====== GREEN KOOPA ======
 # move right
@@ -954,9 +958,9 @@
 
 # ======= GREEN PARAKOOPA =======
 # move right
-739	3041	100	3042	100	3043	100	3044	100
+739	3041	65	3042	65	3043	65	3044	65
 # move left
-740	3045	100	3046	100	3047	100	3048	100
+740	3045	65	3046	65	3047	65	3048	65
 
 # ====== RED FIRE PIRANHA ======
 # face up left
@@ -1163,13 +1167,17 @@
 12	2192	144	40	1
 
 # MARIO
-0	17	50	1
+#0	17	50	1
 #0	2250	80	1
 # at boomerang
 #0	2192	111	1
+# on pipe
+0	1937	65	1
 
 # KOOPA
-#19	2097	355	4
+19	1983	99	4
+#27	1871	52	4
+27	1871	92	4
 
 # RANDOM ITEM BOX
 #22	2689.5	337	23

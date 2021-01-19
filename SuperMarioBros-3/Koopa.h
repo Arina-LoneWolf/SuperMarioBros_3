@@ -16,8 +16,9 @@ public:
 	bool isSupine;
 	bool isBeingHeld;
 	bool reset;
-	bool collideWithBrick;
 	bool onBrick;
+	bool justLostWings;
+	Type initialType;
 
 	CTimer* sleepTime = new CTimer(KOOPA_SLEEP_TIME);
 	CTimer* vibrationTime = new CTimer(KOOPA_VIBRATION_TIME);
@@ -30,10 +31,9 @@ public:
 	CVirtualBox* virtualBoxBelow = new CVirtualBox();
 	CVirtualBox* virtualBoxHorizontally = new CVirtualBox();
 	
-	CKoopa(CMario* mario, float x, float y);
+	CKoopa(CMario* mario, float x, float y, Type type);
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
-	void GetVirtualBBOX(float& left, float& top, float& right, float& bottom);
 	~CKoopa();
 };

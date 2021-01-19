@@ -1,11 +1,12 @@
 ﻿#include "Koopa.h"
 
-CKoopa::CKoopa(CMario* mario, float x, float y)
+CKoopa::CKoopa(CMario* mario, float x, float y, Type type)
 {
 	category = Category::ENEMY;
 	player = mario;
 	startingPosX = x;
 	startingPosY = y;
+	initialType = type;
 	SetState(ENEMY_STATE_MOVE);
 }
 
@@ -59,6 +60,14 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 			Reset();
 	}
 
+	if (type == Type::RED_PARAKOOPA)
+	{
+		if (vy == 0)
+			vy = 0.05f;
+		if ((vy > 0 && y >= 163) || (vy < 0 && y <= 52))
+			vy = -vy;
+	}
+
 	if (isBeingHeld && !player->isHoldingShell)
 	{
 		if (player->nx > 0)
@@ -95,8 +104,10 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else if (state == KOOPA_STATE_SPIN_AND_MOVE)
 		vy += 0.0015f * dt;
-	else if (state != KOOPA_STATE_BEING_HELD)
+	else if (state != KOOPA_STATE_BEING_HELD && type != Type::RED_PARAKOOPA)
+	{
 		vy += MARIO_GRAVITY * dt;
+	}
 
 	if (isBeingHeld)
 		SetPositionAccordingToPlayer();
@@ -193,14 +204,6 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 							vx = -vx;
 					}
 				}
-				/*if (e->obj->category == Category::MISC)
-				{
-					if (e->ny != 0 && state == ENEMY_STATE_MOVE && (this->x + 8 <= e->obj->x || this->x >= e->obj->x + e->obj->width - KOOPA_BBOX_WIDTH + 8))
-					{
-						if (type == Type::RED_KOOPA)
-							vx = -vx;
-					}
-				}*/
 				if (e->obj->category == Category::ENEMY && state == KOOPA_STATE_SPIN_AND_MOVE)
 				{
 					if (e->nx != 0)
@@ -211,6 +214,14 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 							e->obj->object_colliding_nx = -1;
 
 						e->obj->SetState(ENEMY_STATE_DIE_BY_WEAPON);
+					}
+				}
+				if (e->obj->category == Category::ENEMY && state == ENEMY_STATE_MOVE)
+				{
+					if (e->nx != 0 && e->obj->state != KOOPA_STATE_SPIN_AND_MOVE)
+					{
+						vx = -vx;
+						e->obj->vx = -e->obj->vx;
 					}
 				}
 			}
@@ -252,6 +263,7 @@ void CKoopa::Render()
 			ani = KOOPA_ANI_LAY_PRONE;
 		break;
 
+	case KOOPA_STATE_NORMAL:
 	case ENEMY_STATE_MOVE:
 		if (type == Type::GREEN_PARAKOOPA || type == Type::RED_PARAKOOPA)
 		{
@@ -326,16 +338,19 @@ void CKoopa::SetState(int state)
 		else if (type == Type::RED_PARAKOOPA)
 		{
 			vx = 0;
-			vy = -RED_PARAKOOPA_MOVE_SPEED_Y;
+			//vy = 0;
+			vy = RED_PARAKOOPA_MOVE_SPEED_Y;
 		}
 		else if (type == Type::GREEN_KOOPA)
 		{
 			if (reset)
 				vx = -KOOPA_MOVE_SPEED_X;
-			else
+			else if (!justLostWings)
 				vx = -lastMoveSpeed;
+			else
+				justLostWings = false;
 		}
-		else
+		else if (type == Type::RED_KOOPA)
 			vx = -lastMoveSpeed;
 		isBeingHeld = false;
 		break;
@@ -351,7 +366,7 @@ void CKoopa::SetState(int state)
 		break;
 
 	case KOOPA_STATE_SPIN_AND_MOVE:
-		vx = 0.16f * object_colliding_nx;
+		vx = KOOPA_SPIN_AND_MOVE_SPEED_X * object_colliding_nx;
 		isBeingHeld = false;
 		sleepTime->Stop();
 		vibrationTime->Stop();
@@ -362,8 +377,13 @@ void CKoopa::SetState(int state)
 		break;
 
 	case KOOPA_STATE_NORMAL:
-		type = Type::GREEN_KOOPA;
-		SetState(ENEMY_STATE_MOVE);
+		if (type == Type::GREEN_PARAKOOPA)
+			type = Type::GREEN_KOOPA;
+		else if (type == Type::RED_PARAKOOPA)
+			type = Type::RED_KOOPA;
+		justLostWings = true;
+		if (initialType != Type::RED_PARAKOOPA)
+			SetState(ENEMY_STATE_MOVE);
 		break;
 	}
 }
@@ -395,23 +415,13 @@ void CKoopa::SetPositionAccordingToPlayer()
 
 void CKoopa::Reset()
 {
+	type = initialType;
 	SetPosition(startingPosX, startingPosY);
 	SetState(ENEMY_STATE_MOVE);
 	isSupine = false;
 	reset = false;
 	sleepTime->Stop();
 	vibrationTime->Stop();
-}
-
-void CKoopa::GetVirtualBBOX(float& left, float& top, float& right, float& bottom)
-{
-	if (vx > 0)
-		left = x + 11;
-	else
-		left = x + 1;
-	top = y + 32;
-	right = left + 7;
-	bottom = top + 7;
 }
 
 CKoopa::~CKoopa()

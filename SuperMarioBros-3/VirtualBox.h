@@ -4,9 +4,6 @@
 class CVirtualBox : public CGameObject
 {
 public:
-	bool collideWithBronzeBrick;
-	bool collideWithBrick;
-
 	CVirtualBox();
 	bool CollideWithBrick(vector<LPGAMEOBJECT>* coObjects);
 	bool CollidedHorizontally(vector<LPGAMEOBJECT>* coObjects, int koopaState);

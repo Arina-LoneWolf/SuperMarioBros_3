@@ -5,7 +5,6 @@
 class CIceFlower : public CGameObject
 {
 public:
-	CTimer* existingTime = new CTimer(ICE_FLOWER_MAX_EXISTING_TIME);
 	float minPosY;
 
 	CIceFlower(float brickX, float brickY);
