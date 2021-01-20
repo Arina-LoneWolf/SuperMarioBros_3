@@ -1,37 +1,80 @@
 ﻿#include "Goomba.h"
 
-CGoomba::CGoomba(CMario* player)
+CGoomba::CGoomba(CMario* player, Type goombaType)
 {
 	category = Category::ENEMY;
 	this->player = player;
-	SetState(ENEMY_STATE_MOVE); 
+	type = goombaType;
+	if (type == Type::YELLOW_GOOMBA)
+		SetState(ENEMY_STATE_MOVE); 
+}
+
+float CGoomba::GetSpeedX()
+{
+	if (player->GetLeft() > this->x)
+		return GOOMBA_MOVE_SPEED_X;
+	else
+		return -GOOMBA_MOVE_SPEED_X;
 }
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	if (died)
 		return;
-	left = x;
-	right = x + GOOMBA_BBOX_WIDTH;
-	bottom = y + GOOMBA_BBOX_HEIGHT;
-
+	if (type == Type::RED_PARAGOOMBA)
+	{
+		left = x + GOOMBA_LEFT_ADDEND;
+		top = y + GOOMBA_TOP_ADDEND;
+	}
+	else
+	{
+		left = x;
+		top = y;
+	}
 	if (state == GOOMBA_STATE_DIE_BY_CRUSH)
 		top = y + (GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE_BY_CRUSH);
-	else
-		top = y;
+	right = left + GOOMBA_BBOX_WIDTH;
+	bottom = top + GOOMBA_BBOX_HEIGHT;
 }
 
 void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	vy += MARIO_GRAVITY * dt; // cho gravity nhỏ lại
+	if (state == GOOMBA_STATE_FLY_HIGH)
+		vy += GOOMBA_HIGH_FLYING_GRAVITY * dt; // cho gravity nhỏ lại
+	else
+		vy += GOOMBA_GRAVITY * dt;
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR)
 		isFinishedUsing = true;
 
+	if (type == Type::RED_PARAGOOMBA)
+	{
+		if (CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR >= this->x && !state)
+		{
+			SetState(ENEMY_STATE_MOVE);
+			interestedInChasing->Start();
+		}
+	}
+
 	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
+
+	if (state == ENEMY_STATE_MOVE && delayToRedirectAgain->IsTimeUp() && !lostWings && !interestedInChasing->IsTimeUp()/* || vx < 0*/)
+	{
+		if (type == Type::RED_PARAGOOMBA)
+		{
+			vx = GetSpeedX();
+			delayToRedirectAgain->Stop();
+		}
+	}
+
+	if (walkTime->IsTimeUp() && !died)
+	{
+		SetState(GOOMBA_STATE_FLY_LOW);
+		walkTime->Stop();
+	}
 
 	if (effect)
 		effect->Update(dt, coObjects);
@@ -63,6 +106,12 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		if (ny != 0)
 		{
 			vy = 0;
+			if (state == GOOMBA_STATE_FLY_LOW && lowFlyingCounter < 3)
+				SetState(GOOMBA_STATE_FLY_LOW);
+			else if (state == GOOMBA_STATE_FLY_LOW && lowFlyingCounter == 3)
+				SetState(GOOMBA_STATE_FLY_HIGH);
+			else if (state == GOOMBA_STATE_FLY_HIGH)
+				SetState(ENEMY_STATE_MOVE);
 		}
 		//
 		// Collision logic with other objects
@@ -71,7 +120,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (state == ENEMY_STATE_MOVE)
+			if (state == ENEMY_STATE_MOVE || state == GOOMBA_STATE_FLY_LOW || state == GOOMBA_STATE_FLY_HIGH || state == GOOMBA_STATE_NORMAL)
 			{
 				if (e->obj->type == Type::COLOR_BOX)
 				{
@@ -101,10 +150,19 @@ void CGoomba::Render()
 			ani = RED_PARAGOOMBA_ANI_DIE_BY_ATTACK_TOOL;
 		else if (state == GOOMBA_STATE_DIE_BY_CRUSH)
 			ani = RED_PARAGOOMBA_ANI_DIE_BY_CRUSH;
-		else
-			ani = RED_PARAGOOMBA_ANI_MOVE;
+		else if (state == ENEMY_STATE_MOVE || state == GOOMBA_STATE_NORMAL)
+		{
+			if (lostWings)
+				ani = RED_PARAGOOMBA_ANI_MOVE_WHEN_LOSING_WINGS;
+			else
+				ani = RED_PARAGOOMBA_ANI_MOVE;
+		}
+		else if (state == GOOMBA_STATE_FLY_LOW)
+			ani = RED_PARAGOOMBA_ANI_FLAP_WINGS_SLOWLY;
+		else if (state == GOOMBA_STATE_FLY_HIGH)
+			ani = RED_PARAGOOMBA_ANI_FLAP_WINGS_QUICKLY;
 	}
-	else
+	else/* if (type == Type::YELLOW_GOOMBA)*/
 	{
 		if (state == ENEMY_STATE_DIE_BY_WEAPON || state == ENEMY_STATE_ATTACKED_BY_TAIL)
 			ani = GOOMBA_ANI_DIE_BY_ATTACK_TOOL;
@@ -147,8 +205,20 @@ void CGoomba::SetState(int state)
 		died = true;
 		break;
 
+	case GOOMBA_STATE_NORMAL:
+		lostWings = true;
+		break;
+
 	case ENEMY_STATE_MOVE:
-		vx = -GOOMBA_MOVE_SPEED_X;
+		if (type == Type::RED_PARAGOOMBA)
+		{
+			if (!interestedInChasing->IsTimeUp())
+				vx = GetSpeedX();
+			walkTime->Start();
+			delayToRedirectAgain->Start();
+		}
+		else
+			vx = -GOOMBA_MOVE_SPEED_X;
 		nx = -1;
 		break;
 
@@ -159,11 +229,13 @@ void CGoomba::SetState(int state)
 		break;
 
 	case GOOMBA_STATE_FLY_LOW:
-		vy = -0.05f;
+		vy = -GOOMBA_LOW_FLYING_DEFECT_SPEED_Y;
+		lowFlyingCounter++;
 		break;
 
 	case GOOMBA_STATE_FLY_HIGH:
-		vy = -0.5f;
+		lowFlyingCounter = 0;
+		vy = -GOOMBA_HIGH_FLYING_DEFECT_SPEED_Y;
 		break;
 	}
 }

@@ -26,6 +26,14 @@ void Camera::Update(ULONGLONG dt)
 		inHiddenArea = true;
 	}
 
+	if (goToBackyard)
+	{
+		player->y = 142;
+		player->x = 2191;
+		player->inEndOfPipe = true;
+		inHiddenArea = true;
+	}
+
 	if (backFromHiddenArea)
 	{
 		CGame::GetInstance()->SetCamPosY(CAMERA_INITIAL_Y);
@@ -39,13 +47,14 @@ void Camera::Update(ULONGLONG dt)
 		player->inEndOfPipe = false;
 		if (goToHiddenArea)
 			player->SetState(MARIO_STATE_GO_INTO_PIPE);
-		else if (backFromHiddenArea)
+		else if (backFromHiddenArea || goToBackyard)
 			player->SetState(MARIO_STATE_OUT_OF_PIPE);
 		if (backFromHiddenArea)
 			inHiddenArea = false;
 		player->readyToOutOfPipe = false;
 		goToHiddenArea = false;
 		backFromHiddenArea = false;
+		goToBackyard = false;
 		return;
 	}
 

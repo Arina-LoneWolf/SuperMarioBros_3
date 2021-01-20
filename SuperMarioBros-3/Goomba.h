@@ -12,13 +12,16 @@ class CGoomba : public CGameObject
 	
 public:
 	CTimer* deadTime = new CTimer(GOOMBA_MAX_EXISTING_TIME_AFTER_DEATH);
-	CTimer* walkTime = new CTimer(800);
+	CTimer* walkTime = new CTimer(GOOMBA_WALK_TIME);
+	CTimer* delayToRedirectAgain = new CTimer(GOOMBA_REDIRECTION_DELAY_TIME);
+	CTimer* interestedInChasing = new CTimer(GOOMBA_INTERESTING_TIME);
 	bool died = false;
 	int lowFlyingCounter;
-
+	bool lostWings;
 	CScoreEffect* effect;
 	CMario* player;
 
-	CGoomba(CMario* player);
+	CGoomba(CMario* player, Type goombaType);
+	float GetSpeedX();
 	virtual void SetState(int state);
 };

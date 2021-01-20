@@ -211,7 +211,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case Type::YELLOW_GOOMBA: 
 	case Type::RED_PARAGOOMBA:
-		obj = new CGoomba(player); break;
+		obj = new CGoomba(player, object_type); break;
 
 	case Type::BOOMERANG_BROTHER: obj = CBoomerangBrother::GetInstance(); break;
 
@@ -418,12 +418,12 @@ void CPlayScene::Update(ULONGLONG dt)
 	//CGame::GetInstance()->cam_y = 200;
 	float playerLeft = player->x + 11;
 
-	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID) // thêm 1 dk là đang ở trong vùng autocam
-	{
-		if (!player->pauseCam)
-			CGame::GetInstance()->cam_x += 0.03f * dt;
-	}
-	else if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
+	//if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2079) // thêm 1 dk là đang ở trong vùng autocam
+	//{
+	//	if (!player->pauseCam && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2063)
+	//		CGame::GetInstance()->cam_x += 0.03f * dt;
+	//}
+	/*else*/ if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
 		cx = playerLeft - (5 * SCREEN_WIDTH / 28);
 		CGame::GetInstance()->cam_x = cx;
@@ -435,6 +435,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	{
 		player->screenDim = false;
 		player->inStartOfPipe = false;
+		player->goBackyard = true;
 
 		if (player->goHiddenArea)
 		{
@@ -446,7 +447,11 @@ void CPlayScene::Update(ULONGLONG dt)
 			cam->backFromHiddenArea = true;
 			player->leaveHiddenArea = false;
 		}
-
+		else if (player->goBackyard)
+		{
+			cam->goToBackyard = true;
+			player->goBackyard = false;
+		}
 		lighteningIsDone = false;
 	}
 
@@ -620,6 +625,12 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 			mario->inStartOfPipe = true;
 			mario->SetState(MARIO_STATE_GO_INTO_PIPE);
 		}
+
+		if ((int)mario->GetBottom() == 95 && (int)mario->GetLeft() > 1939 && CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+		{
+			mario->inStartOfPipe = true;
+			mario->SetState(MARIO_STATE_GO_INTO_PIPE);
+		}
 		break;
 
 	case DIK_UP:
@@ -719,8 +730,6 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		return;
 	if (mario->GetState() == MARIO_STATE_GO_INTO_PIPE || mario->GetState() == MARIO_STATE_OUT_OF_PIPE)
 		return;
-	/*if (mario->isWaitingForAni)
-		return;*/
 
 	if ((game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_RIGHT))
 		|| (game->IsKeyDown(DIK_DOWN) && game->IsKeyDown(DIK_UP)))

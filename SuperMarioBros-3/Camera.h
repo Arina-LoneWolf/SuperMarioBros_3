@@ -12,6 +12,7 @@ public:
 	bool goToHiddenArea = false;
 	bool backFromHiddenArea = false;
 	bool inHiddenArea = false;
+	bool goToBackyard = false;
 
 	Camera(CMario* player);
 

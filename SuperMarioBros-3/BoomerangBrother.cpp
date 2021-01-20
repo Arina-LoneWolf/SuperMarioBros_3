@@ -54,7 +54,7 @@ void CBoomerangBrother::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (CMario::GetInstance()->GetLeft() < 2224)
 		{
-			if (listBoomerang.empty() && coolDown->IsTimeUp())
+			if (listBoomerang.empty() && coolDown->IsTimeUp() && CMario::GetInstance()->onBackyardPipe)
 			{
 				CreateBoomerang();
 				coolDown->Stop();

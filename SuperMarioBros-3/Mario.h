@@ -69,6 +69,8 @@ public:
 	bool isOnFloatingWood;
 	bool walkByAutoCam;
 	bool pauseCam;
+	bool goBackyard;
+	bool onBackyardPipe;
 
 	vector<bool> movementPermission{ 0, 1, 0, 0 };
 

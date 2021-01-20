@@ -4,7 +4,7 @@
 class CMapPoint : public CGameObject
 {
 public:
-	float leftEdge, bottomEdge;
+	float leftEdge, topEdge, rightEdge, bottomEdge;
 	int sceneID;
 	vector<bool> hasPoint;
 	bool isConquered;

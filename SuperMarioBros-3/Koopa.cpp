@@ -136,19 +136,19 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		if (virtualBoxBelow->CollideWithGround(coObjects, state))
 		{
 			vx = -vx;
-			DebugOut(L"Groundddddddddddddddd\n");
+			//DebugOut(L"Groundddddddddddddddd\n");
 		}
 
 		if (!virtualBoxBelow->CollideWithBrick(coObjects) && state == ENEMY_STATE_MOVE && onBrick)
 		{
 			vx = -vx;
-			DebugOut(L"not colliding\n");
+			//DebugOut(L"not colliding\n");
 		}
 
 		if (virtualBoxHorizontally->CollidedHorizontally(coObjects, state))
 		{
 			vx = -vx;
-			DebugOut(L"Horizontallllllllllllllll\n");
+			//DebugOut(L"Horizontallllllllllllllll\n");
 		}
 	}
 

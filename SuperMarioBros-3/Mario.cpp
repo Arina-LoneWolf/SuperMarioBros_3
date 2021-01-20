@@ -106,7 +106,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+	/*if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
 	{
 		if (x < CGame::GetInstance()->GetCamPosX())
 		{
@@ -115,7 +115,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else
 			walkByAutoCam = false;
-	}
+	}*/
 
 	// Simple fall down
 	if (state == MARIO_STATE_GO_INTO_PIPE)
@@ -156,18 +156,32 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vy = 0;
 		screenDim = true;
-		//readyToOutOfPipe = true;
-		//inStartOfPipe = false;
+	}
+
+	if (inStartOfPipe && GetTop() >= 97)
+	{
+		vy = 0;
+		screenDim = true;
 	}
 
 	if (inEndOfPipe)
 		vy = 0;
 
-	if ((state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
+	if (((state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
 		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 385))
+		&& (CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID))
 	{
+		//DebugOut(L"get bottom: %f", GetBottom());
 		SetState(MARIO_STATE_IDLE);
 	}
+
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 144)
+	{
+		SetState(MARIO_STATE_IDLE);
+		onBackyardPipe = true;
+	}
+	//DebugOut(L"state: %d\n", state);
+	//DebugOut(L"vy: %d\n", vy);
 
 #pragma region Wait for animation
 
@@ -348,7 +362,10 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (goomba->GetState() != ENEMY_STATE_DIE_BY_WEAPON)
 					{
-						goomba->SetState(GOOMBA_STATE_DIE_BY_CRUSH);
+						if (goomba->type == Type::YELLOW_GOOMBA || goomba->lostWings)
+							goomba->SetState(GOOMBA_STATE_DIE_BY_CRUSH);
+						else
+							goomba->SetState(GOOMBA_STATE_NORMAL);
 						score += 100;
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
