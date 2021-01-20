@@ -131,9 +131,9 @@ void CGoomba::SetState(int state)
 		vx = GOOMBA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -GOOMBA_DEFLECT_SPEED_Y;
 		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x - 1, y - 7 });
+			effect = new CScoreEffect({ x - 1, y - 7 });
 		else
-			effect = new CMoneyEffect({ x + 8, y - 7 });
+			effect = new CScoreEffect({ x + 8, y - 7 });
 		died = true;
 		break;
 
@@ -141,9 +141,9 @@ void CGoomba::SetState(int state)
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
 		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x + 1, y - 3 });
+			effect = new CScoreEffect({ x + 1, y - 3 });
 		else
-			effect = new CMoneyEffect({ x - 7, y - 3 });
+			effect = new CScoreEffect({ x - 7, y - 3 });
 		died = true;
 		break;
 
@@ -155,7 +155,7 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
 		deadTime->Start();
-		effect = new CMoneyEffect({ x + 1, y - 7 });
+		effect = new CScoreEffect({ x + 1, y - 7 });
 		break;
 
 	case GOOMBA_STATE_FLY_LOW:

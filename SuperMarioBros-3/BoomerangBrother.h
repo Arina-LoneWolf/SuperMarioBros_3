@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Boomerang.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 //#include "Timer.h"
 
 class CBoomerangBrother : public CGameObject
@@ -13,7 +13,7 @@ public:
 	CTimer* delayTimeToRest = new CTimer(BOOMERANG_BROTHER_REST_TIME);
 	CTimer* coolDown = new CTimer(BOOMERANG_COOLDOWN_TIME);
 	CTimer* delayToHurlSecBoomerang = new CTimer(HURLING_SEC_BOOMERANG_DELAY_TIME);
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 	int randTurnToJump;
 	int turnCounter;
 	int playerPosition = 1;

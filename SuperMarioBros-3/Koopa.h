@@ -2,7 +2,7 @@
 #include "Math.h"
 #include "GameObject.h"
 #include "Mario.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 #include "VirtualBox.h"
 
 class CKoopa : public CGameObject
@@ -27,7 +27,7 @@ public:
 	float startingPosX, startingPosY;
 	
 	CMario* player;
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 	CVirtualBox* virtualBoxBelow = new CVirtualBox();
 	CVirtualBox* virtualBoxHorizontally = new CVirtualBox();
 	
@@ -35,5 +35,6 @@ public:
 	virtual void SetState(int state);
 	void SetPositionAccordingToPlayer();
 	void Reset();
+	void MakeEffectWhenSteppedOn();
 	~CKoopa();
 };

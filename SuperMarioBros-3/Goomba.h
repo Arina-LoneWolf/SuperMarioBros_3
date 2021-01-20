@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 #include "Mario.h"
 //#include "Timer.h"
 
@@ -16,7 +16,7 @@ public:
 	bool died = false;
 	int lowFlyingCounter;
 
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 	CMario* player;
 
 	CGoomba(CMario* player);

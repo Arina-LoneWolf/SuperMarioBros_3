@@ -165,6 +165,7 @@ enum TypeOfPipe
 #define MONEY_EFFECT_2000	5
 #define MONEY_EFFECT_4000	6
 #define MONEY_EFFECT_8000	7
+#define MONEY_EFFECT_1_UP	8
 
 #define COIN_EFFECT_TIME					1300
 #define COIN_EFFECT_SPEED_Y					0.14f

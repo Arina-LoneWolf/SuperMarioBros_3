@@ -7,6 +7,7 @@ CKoopa::CKoopa(CMario* mario, float x, float y, Type type)
 	startingPosX = x;
 	startingPosY = y;
 	initialType = type;
+	this->type = type;
 	SetState(ENEMY_STATE_MOVE);
 }
 
@@ -113,7 +114,11 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 		SetPositionAccordingToPlayer();
 
 	if (effect)
+	{
 		effect->Update(dt, coObjects);
+		if (effect->isFinishedUsing)
+			effect = nullptr;
+	}
 
 	if (type == Type::RED_KOOPA)
 	{
@@ -316,9 +321,9 @@ void CKoopa::SetState(int state)
 		vx = KOOPA_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -KOOPA_DEFLECT_SPEED_Y;
 		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x - 1, y - 7 });
+			effect = new CScoreEffect({ x - 1, y - 7 });
 		else
-			effect = new CMoneyEffect({ x + 8, y - 7 });
+			effect = new CScoreEffect({ x + 8, y - 7 });
 		died = true;
 		break;
 
@@ -326,21 +331,15 @@ void CKoopa::SetState(int state)
 		isSupine = true;
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
-		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x + 1, y - 3 });
+		/*if (object_colliding_nx > 0)
+			effect = new CScoreEffect({ x + 1, y - 3 });
 		else
-			effect = new CMoneyEffect({ x - 7, y - 3 });
+			effect = new CScoreEffect({ x - 7, y - 3 });*/
 		break;
 
 	case ENEMY_STATE_MOVE:
 		if (type == Type::GREEN_PARAKOOPA)
 			vx = -GREEN_PARAKOOPA_MOVE_SPEED_X;
-		else if (type == Type::RED_PARAKOOPA)
-		{
-			vx = 0;
-			//vy = 0;
-			vy = RED_PARAKOOPA_MOVE_SPEED_Y;
-		}
 		else if (type == Type::GREEN_KOOPA)
 		{
 			if (reset)
@@ -353,6 +352,7 @@ void CKoopa::SetState(int state)
 		else if (type == Type::RED_KOOPA)
 			vx = -lastMoveSpeed;
 		isBeingHeld = false;
+		isSupine = false;
 		break;
 
 	case KOOPA_STATE_BEING_HELD:
@@ -422,6 +422,11 @@ void CKoopa::Reset()
 	reset = false;
 	sleepTime->Stop();
 	vibrationTime->Stop();
+}
+
+void CKoopa::MakeEffectWhenSteppedOn()
+{
+	effect = new CScoreEffect({ x + 1, y - 7 });
 }
 
 CKoopa::~CKoopa()

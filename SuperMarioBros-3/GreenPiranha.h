@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 
 class CGreenPiranha : public CGameObject
 {
@@ -14,7 +14,7 @@ public:
 	bool vanish = false;
 
 	CMario* player;
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 
 	CGreenPiranha(CMario* mario);
 	virtual void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);

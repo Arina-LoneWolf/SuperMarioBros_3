@@ -83,7 +83,7 @@ void CGreenPiranha::SetState(int state)
 		vy = GREEN_PIRANHA_MOVE_SPEED_Y;
 		break;
 	case ENEMY_STATE_DIE_BY_WEAPON:
-		effect = new CMoneyEffect({ x + 3, y - 7 });
+		effect = new CScoreEffect({ x + 3, y - 7 });
 		vanish = true;
 		deadTime->Start();
 		break;

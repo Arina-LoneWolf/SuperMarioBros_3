@@ -30,7 +30,7 @@ void CCoinEffect::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vanish = true;
 		isFalling = false;
-		effect = new CMoneyEffect(moneyStartingPos);
+		effect = new CScoreEffect(moneyStartingPos);
 		CMario::GetInstance()->score += 100;
 	}
 	

@@ -374,6 +374,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (ny < 0)
 					{
+						koopa->MakeEffectWhenSteppedOn();
 						koopa->SetState(KOOPA_STATE_NORMAL);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
@@ -386,6 +387,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (ny < 0 && nx == 0)
 					{
+						koopa->MakeEffectWhenSteppedOn();
 						koopa->SetState(ENEMY_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
@@ -398,12 +400,12 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						isHoldingShell = true;
 						koopa->SetState(KOOPA_STATE_BEING_HELD);
-						//isHoldingShell = true;
 					}
 					else if (nx == 0 && ny < 0)
 					{
 						y += dy;
 						koopa->object_colliding_nx = this->nx;
+						koopa->MakeEffectWhenSteppedOn();
 						koopa->SetState(KOOPA_STATE_SPIN_AND_MOVE);
 					}
 					else
@@ -716,12 +718,12 @@ void CMario::Render()
 		case MARIO_STATE_STOP:
 			if (!isOnGround && !canFly)
 			{
-				DebugOut(L"falling\n");
+				//DebugOut(L"falling\n");
 				goto CASE_RACCOON_IS_FALLING;
 			}
 			if (isHoldingShell)
 			{
-				DebugOut(L"hold shell\n");
+				//DebugOut(L"hold shell\n");
 				goto CASE_RACCOON_WALK_AND_HOLD_SHELL;
 			}
 			if (nx > 0)
@@ -733,7 +735,7 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_RIGHT:
 			if (isSitting && !isOnGround)
 			{
-				DebugOut(L"sittttttttt\n");
+				//DebugOut(L"sittttttttt\n");
 				goto CASE_RACCOON_IS_SITTING;
 			}
 			if (!isOnGround && isHoldingShell)
@@ -1806,16 +1808,31 @@ void CMario::CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem)
 		e->GetBoundingBox(il, it, ir, ib);
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, il, it, ir, ib))
 		{
+			CScoreEffect* effect;
 			switch (e->type)
 			{
 			case Type::SUPER_MUSHROOM:
 				SetLevel(MARIO_LEVEL_BIG);
+				effect = new CScoreEffect({ GetLeft() + 3, GetTop() }, MONEY_EFFECT_1000);
+				listEffects.push_back(effect);
+				score += 1000;
 				break;
 			case Type::SUPER_LEAF:
 				SetLevel(MARIO_RACCOON);
+				effect = new CScoreEffect({ GetLeft() + 3, GetTop() }, MONEY_EFFECT_1000);
+				listEffects.push_back(effect);
+				score += 1000;
 				break;
 			case Type::ICE_FLOWER:
 				SetLevel(MARIO_FIRE);
+				effect = new CScoreEffect({ GetLeft() + 3, GetTop() }, MONEY_EFFECT_1000);
+				listEffects.push_back(effect);
+				score += 1000;
+				break;
+			case Type::UP_MUSHROOM:
+				lives++;
+				effect = new CScoreEffect({ GetLeft() + 6, GetTop() }, MONEY_EFFECT_1_UP);
+				listEffects.push_back(effect);
 				break;
 			}
 			e->isFinishedUsing = true;

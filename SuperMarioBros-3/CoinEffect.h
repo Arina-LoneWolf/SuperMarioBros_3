@@ -1,6 +1,6 @@
 #pragma once
 #include "Effect.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 
 class CCoinEffect : public CEffect
 {
@@ -12,7 +12,7 @@ public:
 	bool isFalling = false;
 	bool vanish = false;
 
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 
 	CCoinEffect(float brickX, float brickY);
 	void Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects);

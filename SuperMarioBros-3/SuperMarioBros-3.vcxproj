@@ -152,7 +152,7 @@
     <ClCompile Include="P_Meter.cpp" />
     <ClCompile Include="P_Switch.cpp" />
     <ClCompile Include="Koopa.cpp" />
-    <ClCompile Include="MoneyEffect.cpp" />
+    <ClCompile Include="ScoreEffect.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="RandomItemBox.cpp" />
     <ClCompile Include="StatusBar.cpp" />
@@ -203,7 +203,7 @@
     <ClInclude Include="P_Meter.h" />
     <ClInclude Include="P_Switch.h" />
     <ClInclude Include="Koopa.h" />
-    <ClInclude Include="MoneyEffect.h" />
+    <ClInclude Include="ScoreEffect.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="RandomItemBox.h" />
     <ClInclude Include="StatusBar.h" />

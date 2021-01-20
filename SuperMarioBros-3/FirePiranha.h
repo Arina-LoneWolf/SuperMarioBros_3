@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "PiranhaFireball.h"
-#include "MoneyEffect.h"
+#include "ScoreEffect.h"
 #include "Timer.h"
 
 class CFirePiranha : public CGameObject
@@ -25,7 +25,7 @@ public:
 	int piranhaType;
 	Area playerArea;
 	CMario* player;
-	CMoneyEffect* effect;
+	CScoreEffect* effect;
 	float minPosY;
 	bool vanish = false;
 

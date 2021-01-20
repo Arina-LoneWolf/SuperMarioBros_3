@@ -21,7 +21,11 @@ void CBoomerangBrother::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		isFinishedUsing = true;
 
 	if (effect)
+	{
 		effect->Update(dt, coObjects);
+		if (effect->isFinishedUsing)
+			effect = nullptr;
+	}
 
 	if ((vx > 0 && x >= BOOMERANG_BROTHER_LIMIT_X_RIGHT) || (vx < 0 && x <= BOOMERANG_BROTHER_LIMIT_X_LEFT))
 	{
@@ -218,9 +222,9 @@ void CBoomerangBrother::SetState(int state)
 		vx = BOOMERANG_BROTHER_DEFLECT_SPEED_X * object_colliding_nx;
 		vy = -BOOMERANG_BROTHER_DEFLECT_SPEED_Y;
 		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x - 1, y - 7 });
+			effect = new CScoreEffect({ x - 1, y - 7 });
 		else
-			effect = new CMoneyEffect({ x + 8, y - 7 });
+			effect = new CScoreEffect({ x + 8, y - 7 });
 		died = true;
 		break;
 
@@ -228,16 +232,16 @@ void CBoomerangBrother::SetState(int state)
 		vx = BOOMERANG_BROTHER_DEFLECT_SPEED_X_BY_TAIL * object_colliding_nx;
 		vy = -BOOMERANG_BROTHER_DEFLECT_SPEED_Y_BY_TAIL;
 		if (object_colliding_nx > 0)
-			effect = new CMoneyEffect({ x + 1, y - 3 });
+			effect = new CScoreEffect({ x + 1, y - 3 });
 		else
-			effect = new CMoneyEffect({ x - 7, y - 3 });
+			effect = new CScoreEffect({ x - 7, y - 3 });
 		died = true;
 		break;
 
 	case BOOMERANG_BROTHER_STATE_DIE_BY_CRUSH:
 		vx = 0;
 		died = true;
-		effect = new CMoneyEffect({ x + 1, y - 7 });
+		effect = new CScoreEffect({ x + 1, y - 7 });
 		break;
 	}
 }
