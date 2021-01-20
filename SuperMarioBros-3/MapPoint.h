@@ -6,10 +6,12 @@ class CMapPoint : public CGameObject
 public:
 	float leftEdge, topEdge, rightEdge, bottomEdge;
 	int sceneID;
-	vector<bool> hasPoint;
+	int id;
+	vector<bool> hasPointAround;
 	bool isConquered;
+	bool isCurrentPlayerPos;
 
-	CMapPoint(float x, float y, int sceneID, bool left, bool right, bool above, bool under);
+	CMapPoint(float x, float y, int sceneID, bool left, bool right, bool above, bool under, int id);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Render();
 	bool HasPortal() { return !sceneID; }

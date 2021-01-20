@@ -36,44 +36,24 @@ void CMario::UpdateAtOverworldMap(ULONGLONG dt, vector<LPGAMEOBJECT>* coPoints)
 		if (CGameObject::CheckAABB(ml, mt, mr, mb, pl, pt, pr, pb))
 		{
 			CMapPoint* point = dynamic_cast<CMapPoint*>(coPoints->at(i));
-			if (point->leftEdge == currentPoint->leftEdge && point->bottomEdge == currentPoint->bottomEdge)
-				return;
-			else
-				nextPoint = point;
+			if (point->id != currentPoint->id)
+			{
+				float playerLeft, playerTop, playerRight, playerBottom;
+				GetBoundingBox(playerLeft, playerTop, playerRight, playerBottom);
+				
+				if ((vx > 0 && playerRight >= point->rightEdge)
+					|| (vx < 0 && playerLeft <= point->leftEdge)
+					|| (vy > 0 && playerBottom >= point->bottomEdge)
+					|| (vy < 0 && playerTop <= point->topEdge))
+				{
+					vx = 0;
+					vy = 0;
+					SetPositionAtCurrentPoint(point->x, point->y);
+					movementPermission.assign(point->hasPointAround.begin(), point->hasPointAround.end());
+					currentPoint = point;
+				}
+			}
 		}
-	}
-
-	if (vx > 0 && GetLeft() >= nextPoint->leftEdge + 100 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
-	{
-		DebugOut(L"GetLeft: %f\n", GetLeft());
-		DebugOut(L"left edge: %f\n", nextPoint->leftEdge);
-		vx = 0;
-		SetPositionAtCurrentPoint(nextPoint->leftEdge + 1, y);
-		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
-		currentPoint = nextPoint;
-	}
-	else if (vx < 0 && GetLeft() <= nextPoint->leftEdge && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
-	{
-		DebugOut(L"GetLeft: %f\n", GetLeft());
-		DebugOut(L"left edge: %f\n", nextPoint->leftEdge);
-		vx = 0;
-		SetPositionAtCurrentPoint(nextPoint->leftEdge, y);
-		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
-		currentPoint = nextPoint;
-	}
-	else if (vy < 0 && GetBottom() <= nextPoint->bottomEdge + 16 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
-	{
-		vy = 0;
-		SetPositionAtCurrentPoint(x, nextPoint->bottomEdge - 16);
-		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
-		currentPoint = nextPoint;
-	}
-	else if (vy > 0 && GetBottom() >= nextPoint->bottomEdge + 14 && nextPoint->bottomEdge != currentPoint->bottomEdge || nextPoint->leftEdge != currentPoint->leftEdge)
-	{
-		vy = 0;
-		SetPositionAtCurrentPoint(x, nextPoint->bottomEdge - 16);
-		movementPermission.assign(nextPoint->hasPoint.begin(), nextPoint->hasPoint.end());
-		currentPoint = nextPoint;
 	}
 }
 
@@ -1645,24 +1625,24 @@ float CMario::GetBottom()
 	return bottom;
 }
 
-void CMario::SetPositionAtCurrentPoint(float x, float y)
+void CMario::SetPositionAtCurrentPoint(float pointX, float pointY)
 {
 	switch (level)
 	{
 	case MARIO_LEVEL_SMALL:
-		this->x = x/* + MARIO_ON_OVERWORLD_MAP_SMALL_BBOX_ADDEND*/;
-		this->y = y;
+		this->x = pointX + MARIO_ON_OVERWORLD_MAP_SMALL_BBOX_ADDEND;
+		this->y = pointY;
 		break;
 
 	case MARIO_LEVEL_BIG:
 	case MARIO_FIRE:
-		this->x = x;
-		this->y = y - MARIO_ON_OVERWORLD_MAP_BIG_BBOX_ADDEND;
+		this->x = pointX;
+		this->y = pointY - MARIO_ON_OVERWORLD_MAP_BIG_BBOX_ADDEND;
 		break;
 
 	case MARIO_RACCOON:
-		this->x = x;
-		this->y = y - MARIO_ON_OVERWORLD_MAP_RACCOON_BBOX_ADDEND;
+		this->x = pointX;
+		this->y = pointY - MARIO_ON_OVERWORLD_MAP_RACCOON_BBOX_ADDEND;
 		break;
 	}
 }

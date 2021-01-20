@@ -1,13 +1,23 @@
 #include "MapPoint.h"
 
-CMapPoint::CMapPoint(float x, float y, int sceneID, bool left, bool right, bool above, bool under)
+//int id_count = 0;
+//int get_id()
+//{
+//	static int id = id_count++;
+//	return id;
+//}
+
+CMapPoint::CMapPoint(float x, float y, int sceneID, bool left, bool right, bool above, bool under, int id)
 {
+	this->id = id;
 	this->x = x;
 	this->y = y;
 	leftEdge = x;
+	topEdge = y;
+	rightEdge = x + 16;
 	bottomEdge = y + 16;
 	this->sceneID = sceneID;
-	hasPoint.insert(hasPoint.end(), { left, right, above, under });
+	hasPointAround.insert(hasPointAround.end(), { left, right, above, under });
 }
 
 void CMapPoint::GetBoundingBox(float& l, float& t, float& r, float& b)

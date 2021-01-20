@@ -114,6 +114,7 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
 	CGameObject* obj = NULL;
+	CMapPoint* point = NULL;
 
 	switch (object_type)
 	{
@@ -126,8 +127,8 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
 		//player->RefreshAtOverworldMap();
-		player->SetPosition(x, y);
-
+		//player->SetPosition(x, y);
+		player->SetPositionAtCurrentPoint(player->currentPoint->x, player->currentPoint->y + MAP_POINT_Y_OFFSET);
 		HUD = new CStatusBar(player);
 
 		DebugOut(L"[INFO] Player object created!\n");
@@ -140,7 +141,8 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		int r = atoi(tokens[6].c_str());
 		int a = atoi(tokens[7].c_str());
 		int u = atoi(tokens[8].c_str());
-		obj = new CMapPoint(x, y, sceneID, l, r, a, u);
+		int id = atoi(tokens[9].c_str());
+		point = new CMapPoint(x, y, sceneID, l, r, a, u, id);
 		break;
 	}
 	
@@ -157,19 +159,27 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	// General object setup
-	obj->SetPosition(x, y);
-
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 
-	obj->SetAnimationSet(ani_set);
-	obj->SetType(object_type);
-
-	//list obj pushback
-	if (obj->type != Type::MARIO)
+	if (point)
 	{
-		listMapObj.push_back(obj);
+		point->SetType(object_type);
+		point->SetPosition(x, y);
+		point->SetAnimationSet(ani_set);
+		listPoints.push_back(point);
 	}
+	else
+	{
+		obj->SetType(object_type);
+		obj->SetAnimationSet(ani_set);
+		if (obj->type != Type::MARIO)
+		{
+			obj->SetPosition(x, y);
+			listMapObj.push_back(obj);
+		}
+	}
+
+	
 
 	if (CGame::GetInstance()->GetCurrentSceneID() == INTRO_SCENE_ID)
 		intro = new CIntroDisplay();
@@ -261,8 +271,10 @@ void COverworldMapScene::Load()
 
 void COverworldMapScene::Update(ULONGLONG dt)
 {
-	//mario
-	
+	for (size_t i = 0; i < listPoints.size(); i++)
+	{
+		listMapObj.push_back(listPoints[i]);
+	}
 
 	for (size_t i = 0; i < listMapObj.size(); i++)
 	{
@@ -270,7 +282,7 @@ void COverworldMapScene::Update(ULONGLONG dt)
 	}
 
 	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
-		player->UpdateAtOverworldMap(dt, &listMapObj);
+		player->UpdateAtOverworldMap(dt, &listPoints);
 
 	if (intro)
 		intro->Update(dt);

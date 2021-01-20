@@ -224,7 +224,7 @@ enum TypeOfPipe
 #define MARIO_DIE_DEFLECT_SPEED		0.5f
 #define MARIO_FLY_SPEED_Y			0.25f
 
-#define MARIO_SPEED_ON_MAP	0.05f
+#define MARIO_SPEED_ON_MAP	0.1f
 
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
@@ -817,6 +817,8 @@ enum class ItemOfBox
 #define EMPTY_ITEM_SPEED_Y	0.1f
 
 // Overworld map
+#define MAP_POINT_Y_OFFSET					8
+
 #define MAP_OBJECT_ANI_TUSSOCK				0
 #define MAP_OBJECT_ANI_HELP_BUBBLE			1
 #define MAP_OBJECT_ANI_GATEKEEPER_RIGHT		2

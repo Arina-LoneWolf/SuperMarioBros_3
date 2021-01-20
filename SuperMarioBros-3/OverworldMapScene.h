@@ -16,6 +16,8 @@ protected:
 	CStatusBar* HUD;
 	CIntroDisplay* intro;
 	vector<LPGAMEOBJECT> listMapObj;
+	vector<LPGAMEOBJECT> listPoints;
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
