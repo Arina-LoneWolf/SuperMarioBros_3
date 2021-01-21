@@ -64,7 +64,6 @@ void TileMap::Load()
 	DebugOut(L"[INFO] Done loading map resources %s\n", filePath_data);
 }
 
-
 void TileMap::Draw()
 {
 

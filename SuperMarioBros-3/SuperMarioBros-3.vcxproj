@@ -140,6 +140,7 @@
     <ClCompile Include="FloatingWood.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="GreenPiranha.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="HitEffect.cpp" />
     <ClCompile Include="IceFlower.cpp" />
     <ClCompile Include="IntroDisplay.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="FloatingWood.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="GreenPiranha.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="HitEffect.h" />
     <ClInclude Include="IceFlower.h" />
     <ClInclude Include="IntroDisplay.h" />

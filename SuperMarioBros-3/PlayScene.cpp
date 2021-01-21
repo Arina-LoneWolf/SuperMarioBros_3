@@ -508,7 +508,7 @@ void CPlayScene::Unload()
 	listBronzeBricks.clear();
 	listItems.clear();
 	priorityListItems.clear();
-	player = NULL;
+	//player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
@@ -687,6 +687,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		
 	case DIK_P:
 		mario->pauseCam ^= true;
+		break;
+
+	case DIK_Q:
+		CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
 		break;
 	}
 }

@@ -1102,7 +1102,7 @@
 12	2320	464	40	5
 
 # MARIO
-0	17	100	1
+#0	17	100	1
 #0	2250	80	1
 # at cloud
 #0	1302	100	1
@@ -1111,12 +1111,12 @@
 # start at bronze brick position
 #0	1912	100	1
 # start at koopa position
-0	465	100	1
+#0	465	100	1
 #0	1460	245	1
 # start at red fire piranha position
 #0	320	100	1
 # start at random item box
-#0	2656	100	1
+0	2656	100	1
 # at koopa bronze brick
 #0	2050	100	1
 # at red paragoomba

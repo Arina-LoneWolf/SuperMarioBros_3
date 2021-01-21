@@ -126,7 +126,7 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = CMario::GetInstance();
 		player = (CMario*)obj;
-		//player->RefreshAtOverworldMap();
+		player->RefreshAtOverworldMap();
 		//player->SetPosition(x, y);
 		player->SetPositionAtCurrentPoint(player->currentPoint->x, player->currentPoint->y + MAP_POINT_Y_OFFSET);
 		HUD = new CStatusBar(player);
@@ -284,7 +284,7 @@ void COverworldMapScene::Update(ULONGLONG dt)
 	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
 		player->UpdateAtOverworldMap(dt, &listPoints);
 
-	if (intro)
+	if (intro!=nullptr)
 		intro->Update(dt);
 	
 	//skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -330,7 +330,9 @@ void COverworldMapScene::Unload()
 	listMapObj.clear();
 	listPoints.clear();
 	player = NULL;
+	//intro = NULL;
 	delete HUD;
+	//delete intro;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 

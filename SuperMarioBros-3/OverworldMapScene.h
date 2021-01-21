@@ -14,7 +14,7 @@ protected:
 	CMario* player = nullptr;					// A play scene has to have player, right? 
 	TileMap* map = nullptr;
 	CStatusBar* HUD;
-	CIntroDisplay* intro;
+	CIntroDisplay* intro = nullptr;
 	vector<LPGAMEOBJECT> listMapObj;
 	vector<LPGAMEOBJECT> listPoints;
 

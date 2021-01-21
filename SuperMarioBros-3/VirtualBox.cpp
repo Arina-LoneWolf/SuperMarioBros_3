@@ -77,7 +77,8 @@ bool CVirtualBox::CollideWithGround(vector<LPGAMEOBJECT>* coObjects, int koopaSt
 
 void CVirtualBox::Render()
 {
-	RenderBoundingBox();
+	DebugOut(L"gagaag %f \n", y);
+	//RenderBoundingBox();
 }
 
 void CVirtualBox::GetBoundingBox(float& l, float& t, float& r, float& b)
