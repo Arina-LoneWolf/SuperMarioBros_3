@@ -278,8 +278,12 @@ void COverworldMapScene::Update(ULONGLONG dt)
 		listMapObj[i]->Update(dt, &listMapObj);
 	}
 
-	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID && player)
-		player->UpdateAtOverworldMap(dt, &listPoints);
+	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
+	{
+		if (player)
+			player->UpdateAtOverworldMap(dt, &listPoints);
+		HUD->Update();
+	}
 
 	if (intro!=nullptr)
 		intro->Update(dt);

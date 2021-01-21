@@ -634,7 +634,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	case DIK_DOWN:
 		mario->unpressDown = false;
-		if ((int)mario->GetBottom() == MARIO_AT_HIDDEN_AREA_ENTRANCE && mario->GetLevel() == MARIO_RACCOON)
+		if ((int)mario->GetBottom() == MARIO_AT_HIDDEN_AREA_ENTRANCE && mario->GetLevel() == MARIO_RACCOON && CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID)
 		{
 			mario->goHiddenArea = true;
 			mario->inStartOfPipe = true;

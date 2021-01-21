@@ -15,7 +15,8 @@ CStatusBar::CStatusBar(CMario* player)
 
 void CStatusBar::Update()
 {
-	countdown = MAX_PLAY_TIME - (int)(playTime->GetElapsedTime() / CLOCKS_PER_SEC);
+	if (CGame::GetInstance()->GetCurrentSceneID() != OVERWORLD_MAP_SCENE_ID && CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
+		countdown = MAX_PLAY_TIME - (int)(playTime->GetElapsedTime() / CLOCKS_PER_SEC);
 	p_meter->Update();
 
 	if (delayTimeToGotCard->IsTimeUp() && delayTimeToEndScene->IsStopped())
