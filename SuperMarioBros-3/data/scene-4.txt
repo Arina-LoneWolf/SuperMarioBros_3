@@ -19,6 +19,7 @@
 55	textures\status_bar.png	255	0	255
 56	textures\power_state.png	175	232	226
 1	textures\black-background.png	255	255	255
+3	textures\course-clear.png	1	1	1
 4	textures\darken-the-screen.png	255	255	255
 
 # id	left	top	right	bottom	texture_id

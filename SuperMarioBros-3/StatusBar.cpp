@@ -25,6 +25,7 @@ void CStatusBar::Update()
 	
 	if (delayTimeToEndScene->IsTimeUp())
 	{
+		CMario::GetInstance()->onOverworldMap = true;
 		CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
 		//CMario::GetInstance()->SetPosition(CMario::GetInstance()->currentPoint->x + 1, CMario::GetInstance()->currentPoint->y);
 		//CMario::GetInstance()->SetPosition(65, 24);

@@ -3,6 +3,7 @@
 CMapObject::CMapObject()
 {
 	vx = -GATEKEEPER_SPEED_X;
+	vx = -0.007f;
 }
 
 void CMapObject::Render()

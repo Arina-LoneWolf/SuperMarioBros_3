@@ -824,7 +824,7 @@ enum class ItemOfBox
 #define MAP_OBJECT_ANI_GATEKEEPER_RIGHT		2
 #define MAP_OBJECT_ANI_GATEKEEPER_LEFT		3
 
-#define GATEKEEPER_SPEED_X		0.014f
+#define GATEKEEPER_SPEED_X		0.007f
 #define GATEKEEPER_LEFT_LIMIT	153.0f
 #define GATEKEEPER_RIGHT_LIMIT	168.0f
 
@@ -836,7 +836,7 @@ enum class ItemOfBox
 #define ALLOWED_TO_GO_DOWN	3
 
 #define START_POINT_X	32
-#define START_POINT_Y	48
+#define START_POINT_Y	56
 
 //ItemOfBox operator++(ItemOfBox& item)
 //{

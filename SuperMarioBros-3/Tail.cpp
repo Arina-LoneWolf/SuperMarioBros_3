@@ -1,6 +1,10 @@
 #include "Tail.h"
 #include "Mario.h"
 
+CTail::CTail()
+{
+}
+
 void CTail::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	for (LPGAMEOBJECT effect : listEffect)

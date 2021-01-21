@@ -50,7 +50,7 @@ void CMario::UpdateAtOverworldMap(ULONGLONG dt, vector<LPGAMEOBJECT>* coPoints)
 					vy = 0;
 					SetPositionAtCurrentPoint(point->x, point->y);
 					movementPermission.assign(point->hasPointAround.begin(), point->hasPointAround.end());
-					currentPoint = point;
+					*currentPoint = *point;
 				}
 			}
 		}
@@ -1766,17 +1766,23 @@ void CMario::RefreshAtPlayScene()
 	justPickedReward = false;
 	last_vx = 0;
 	last_vy = 0;
+	vx = 0;
+	vy = 0;
+	autoGoRight = false;
 }
 
 void CMario::RefreshAtOverworldMap()
 {
-	//jumpTime->Stop();
-	//flyTime->Stop();
-	//kickTime->Stop();
+	jumpTime->Stop();
+	flyTime->Stop();
+	kickTime->Stop();
 	onOverworldMap = true;
 	justPickedReward = false;
 	last_vx = 0;
 	last_vy = 0;
+	vx = 0;
+	vy = 0;
+	autoGoRight = false;
 }
 
 void CMario::CollideWithEnemy()

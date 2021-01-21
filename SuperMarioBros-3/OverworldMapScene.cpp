@@ -112,24 +112,26 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	CGameObject* obj = NULL;
 	CMapPoint* point = NULL;
 
 	switch (object_type)
 	{
 	case Type::MARIO:
-		if (player != NULL)
+		/*if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
-		}
-		obj = CMario::GetInstance();
-		player = (CMario*)obj;
+		}*/
+		player = CMario::GetInstance();
+		player->justPickedReward = false;
+		//player->RefreshAtPlayScene();
+		player->SetAnimationSet(ani_set);
 		player->RefreshAtOverworldMap();
-		//player->SetPosition(x, y);
-		player->SetPositionAtCurrentPoint(player->currentPoint->x, player->currentPoint->y + MAP_POINT_Y_OFFSET);
+		player->SetPositionAtCurrentPoint(player->currentPoint->x, player->currentPoint->y);
 		HUD = new CStatusBar(player);
+		CGame::GetInstance()->SetCamPos(0, 0);
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -159,8 +161,6 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		return;
 	}
 
-	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
 	if (point)
 	{
 		point->SetType(object_type);
@@ -168,15 +168,12 @@ void COverworldMapScene::_ParseSection_OBJECTS(string line)
 		point->SetAnimationSet(ani_set);
 		listPoints.push_back(point);
 	}
-	else
+	else if (obj)
 	{
 		obj->SetType(object_type);
 		obj->SetAnimationSet(ani_set);
-		if (obj->type != Type::MARIO)
-		{
-			obj->SetPosition(x, y);
-			listMapObj.push_back(obj);
-		}
+		obj->SetPosition(x, y);
+		listMapObj.push_back(obj);
 	}
 
 	
@@ -281,7 +278,7 @@ void COverworldMapScene::Update(ULONGLONG dt)
 		listMapObj[i]->Update(dt, &listMapObj);
 	}
 
-	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
+	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID && player)
 		player->UpdateAtOverworldMap(dt, &listPoints);
 
 	if (intro!=nullptr)
@@ -308,7 +305,8 @@ void COverworldMapScene::Render()
 
 	if (CGame::GetInstance()->GetCurrentSceneID() != INTRO_SCENE_ID)
 	{
-		player->RenderAtOverworldMap();
+		if (player)
+			player->RenderAtOverworldMap();
 		HUD->Render(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY());
 	}
 

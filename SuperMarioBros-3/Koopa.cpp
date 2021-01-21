@@ -306,8 +306,8 @@ void CKoopa::Render()
 	if (effect)
 		effect->Render();
 
-	virtualBoxBelow->Render();
-	virtualBoxHorizontally->Render();
+	//virtualBoxBelow->Render();
+	//virtualBoxHorizontally->Render();
 
 	//RenderBoundingBox();
 }

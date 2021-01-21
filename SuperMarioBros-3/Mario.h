@@ -42,7 +42,6 @@ public:
 	vector<ItemOfBox> itemsPickedUp/*{ hud1, hud2 }*/;
 
 	CMapPoint* currentPoint = new CMapPoint(START_POINT_X, START_POINT_Y, 4, 0, 1, 0, 0, 1);
-	//CMapPoint* nextPoint = new CMapPoint(64, 48, 0, 1, 0, 1, 0);
 
 	int GetScore() { return score; }
 	int GetMoney() { return money; }

@@ -129,12 +129,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 		}
 
-		obj = CMario::GetInstance();
-		player = (CMario*)obj;
+		player = CMario::GetInstance();
 		player->justPickedReward = false;
-		//player->RefreshAtPlayScene();
-		//player = CMario::GetInstance();
+		player->RefreshAtPlayScene();
 		player->SetPosition(x, y);
+		player->SetAnimationSet(ani_set);
 		HUD = new CStatusBar(player);
 		cam = new Camera(player);
 
@@ -200,7 +199,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CKoopa(player, x, y, object_type);
 		break;
 	}
-	
+
 	case Type::COIN:
 	case Type::BRONZE_BRICK:
 	{
@@ -209,7 +208,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case Type::YELLOW_GOOMBA: 
+	case Type::YELLOW_GOOMBA:
 	case Type::RED_PARAGOOMBA:
 		obj = new CGoomba(player, object_type); break;
 
@@ -221,7 +220,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
-	
+
 
 	if (brick)
 	{
@@ -230,7 +229,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		brick->SetAnimationSet(ani_set);
 		listBronzeBricks.push_back(brick);
 	}
-	else
+	else if (obj)
 	{
 		obj->SetType(object_type);
 		obj->SetPosition(x, y);
@@ -324,8 +323,6 @@ void CPlayScene::Update(ULONGLONG dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (dynamic_cast<CMario*>(objects[i]))
-			continue;
 		coObjects.push_back(objects[i]);
 	}
 
@@ -333,6 +330,9 @@ void CPlayScene::Update(ULONGLONG dt)
 	{
 		coObjects.push_back(listBronzeBricks[i]);
 	}
+
+	if (player)
+		player->Update(dt, &coObjects);
 
 	cam->Update(dt);
 
@@ -343,7 +343,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 		LPGAMEOBJECT e = objects[i];
-		
+
 		if (e->type == Type::BRICK_CONTAINS_ITEM)
 		{
 			CBrickContainsItem* brick = dynamic_cast<CBrickContainsItem*>(e);
@@ -402,7 +402,7 @@ void CPlayScene::Update(ULONGLONG dt)
 			listItems.erase(listItems.begin() + i);
 	}
 
-	
+
 	for (size_t i = 0; i < priorityListItems.size(); i++)
 	{
 		if (priorityListItems[i]->isFinishedUsing)
@@ -472,6 +472,9 @@ void CPlayScene::Render()
 	for (int i = listBronzeBricks.size() - 1; i >= 0; i--)
 		listBronzeBricks[i]->Render();
 
+	if (player)
+		player->Render();
+
 	for (int i = objects.size() - 1; i >= 0; i--)
 		objects[i]->Render();
 
@@ -508,7 +511,7 @@ void CPlayScene::Unload()
 	listBronzeBricks.clear();
 	listItems.clear();
 	priorityListItems.clear();
-	//player = NULL;
+	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
@@ -540,7 +543,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	{
 		CCoinEffect* effect = new CCoinEffect(x, y);
 		listItems.push_back(effect);
-		break; 
+		break;
 	}
 	case ITEM_1_UP_MUSHROOM:
 	{
@@ -549,7 +552,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 		break;
 	}
 	case ITEM_P_SWITCH:
-	{	
+	{
 		CP_Switch* p_switch = new CP_Switch();
 		objects.push_back(p_switch);
 		break;
@@ -684,13 +687,22 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		//mario->renderBBOX = mario->renderBBOX == false;
 		//mario->renderBBOX = abs(mario->renderBBOX - 1);
 		break;
-		
+
 	case DIK_P:
 		mario->pauseCam ^= true;
 		break;
 
 	case DIK_Q:
+		mario->onOverworldMap = true;
 		CGame::GetInstance()->SwitchScene(OVERWORLD_MAP_SCENE_ID);
+
+		break;
+
+	case DIK_E:
+		if (CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID)
+			CGame::GetInstance()->SwitchScene(MAP_4_SCENE_ID);
+		else
+			CGame::GetInstance()->SwitchScene(MAP_1_SCENE_ID);
 		break;
 	}
 }
