@@ -40,10 +40,10 @@
 23	103	70	104	70	105	70	106	70	105	70	104	70	103	70
 
 # ====== CURSOR ======
-24	107	100
+#24	107	100
 
 # ====== CURTAIN ======
-25	108	100
+#25	108	100
 
 #
 # id	ani1	ani2	ani3
@@ -54,21 +54,15 @@
 # FLICKER NUMBER 3
 2	23
 # CURSOR
-3	24
+#3	24
 # CURTAIN
-4	25
+#4	25
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 
 # MARIO
 0	36	56	2
-
-# CURSOR
-#41	72	144	3
-
-# CURTAIN
-#40	0	0	4
 
 [TILEMAP]
 100	textures\map-intro.png	data\map-intro.txt	15	3	14	52	16	16

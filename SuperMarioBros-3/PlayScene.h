@@ -38,7 +38,6 @@ protected:
 	vector<LPGAMEOBJECT> listBronzeBricks;
 	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> priorityListItems;
-	vector<LPGAMEOBJECT> listPipes;
 
 	double colorSubtrahend;
 	int alpha = 0;

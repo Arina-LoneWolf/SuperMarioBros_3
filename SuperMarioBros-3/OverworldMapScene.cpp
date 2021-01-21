@@ -273,7 +273,7 @@ void COverworldMapScene::Update(ULONGLONG dt)
 {
 	for (size_t i = 0; i < listPoints.size(); i++)
 	{
-		listMapObj.push_back(listPoints[i]);
+		listMapObj[i]->Update(dt, &listPoints);
 	}
 
 	for (size_t i = 0; i < listMapObj.size(); i++)
@@ -295,6 +295,12 @@ void COverworldMapScene::Update(ULONGLONG dt)
 void COverworldMapScene::Render()
 {
 	map->Draw();
+
+	for (size_t i = 0; i < listPoints.size(); i++)
+	{
+		listMapObj[i]->Render();
+	}
+
 	for (size_t i = 0; i < listMapObj.size(); i++)
 	{
 		listMapObj[i]->Render();
@@ -318,7 +324,11 @@ void COverworldMapScene::Unload()
 	for (int i = 0; i < listMapObj.size(); i++)
 		delete listMapObj[i];
 
+	for (int i = 0; i < listPoints.size(); i++)
+		delete listPoints[i];
+
 	listMapObj.clear();
+	listPoints.clear();
 	player = NULL;
 	delete HUD;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);

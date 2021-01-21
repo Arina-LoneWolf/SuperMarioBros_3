@@ -495,7 +495,19 @@ void CPlayScene::Unload()
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 
+	for (int i = 0; i < listBronzeBricks.size(); i++)
+		delete listBronzeBricks[i];
+
+	for (int i = 0; i < listItems.size(); i++)
+		delete listItems[i];
+
+	for (int i = 0; i < priorityListItems.size(); i++)
+		delete priorityListItems[i];
+
 	objects.clear();
+	listBronzeBricks.clear();
+	listItems.clear();
+	priorityListItems.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
