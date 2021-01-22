@@ -38,10 +38,13 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	if (state == GOOMBA_STATE_FLY_HIGH)
-		vy += GOOMBA_HIGH_FLYING_GRAVITY * dt; // cho gravity nhỏ lại
-	else
-		vy += GOOMBA_GRAVITY * dt;
+	if (deadTime->IsStopped())
+	{
+		if (state == GOOMBA_STATE_FLY_HIGH)
+			vy += GOOMBA_HIGH_FLYING_GRAVITY * dt;
+		else
+			vy += GOOMBA_GRAVITY * dt;
+	}
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
 	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR + 250)
@@ -141,6 +144,8 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	DebugOut(L"state: %d\n", state);
 }
 
 void CGoomba::Render()
@@ -225,6 +230,7 @@ void CGoomba::SetState(int state)
 
 	case GOOMBA_STATE_DIE_BY_CRUSH:
 		vx = 0;
+		vy = 0;
 		deadTime->Start();
 		effect = new CScoreEffect({ x + 1, y - 7 });
 		break;

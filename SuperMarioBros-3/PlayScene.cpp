@@ -395,6 +395,8 @@ void CPlayScene::Update(ULONGLONG dt)
 		}
 	}
 
+	//ResetObjectsOutOfCam(objects);
+
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -662,6 +664,18 @@ void CPlayScene::InsertObjectToGrid()
 	for (UINT i = 0; i < tempDynamicObjects.size(); i++)
 	{
 		objects.push_back(tempDynamicObjects[i]);
+	}
+}
+
+void CPlayScene::ResetObjectsOutOfCam(vector<LPGAMEOBJECT>& listObj)
+{
+	for (LPGAMEOBJECT obj : listObj)
+	{
+		if (dynamic_cast<CKoopa*>(obj) && !obj->onCam)
+		{
+			CKoopa* koopa = dynamic_cast<CKoopa*>(obj);
+			koopa->Reset();
+		}
 	}
 }
 

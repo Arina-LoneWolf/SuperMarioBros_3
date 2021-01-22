@@ -71,6 +71,7 @@ public:
 	void DarkenTheScreen();
 	void LightenTheScreen();
 	void InsertObjectToGrid();
+	void ResetObjectsOutOfCam(vector<LPGAMEOBJECT>& listObj);
 
 	CMario * GetPlayer() { return player; } 
 
