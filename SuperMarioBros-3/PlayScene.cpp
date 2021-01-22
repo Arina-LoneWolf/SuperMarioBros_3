@@ -396,7 +396,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	}
 
 	//ResetObjectsOutOfCam(objects);
-
+	DebugOut(L"%d\n", objects.size());
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);

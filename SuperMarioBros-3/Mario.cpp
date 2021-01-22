@@ -109,7 +109,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	else if (isWaggingTail && isFalling)
 	{
 		//DebugOut(L"slowwwwww\n");
-		vy += 0.000035f * dt;
+		vy += MARIO_WAGGING_GRAVITY * dt;
 	}
 	else if (canFly)
 	{
@@ -118,8 +118,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		//DebugOut(L"666666666\n");
-		//vy += MARIO_GRAVITY * dt;
-		vy += 0.0006f * dt;
+		vy += MARIO_GRAVITY * dt;
 	}
 
 	if (autoGoRight)
@@ -132,14 +131,14 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		isSitting = false;
 
 	if (((inStartOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE && GetTop() < MARIO_UNDER_TOP_OF_PIPE + 1)
-		|| (inStartOfPipe && GetBottom() <= 495 && GetBottom() > 494))
+		|| (inStartOfPipe && GetBottom() <= MARIO_IN_TOP_PIPE_1_COMPLETELY && GetBottom() > MARIO_IN_TOP_PIPE_1_COMPLETELY - 1))
 		&& CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID)
 	{
 		vy = 0;
 		screenDim = true;
 	}
 
-	if (inStartOfPipe && GetTop() >= 97 && CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
+	if (inStartOfPipe && GetTop() >= MARIO_IN_TOP_PIPE_4_COMPLETELY && CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
 	{
 		vy = 0;
 		screenDim = true;
@@ -149,14 +148,14 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = 0;
 
 	if (((state == MARIO_STATE_GO_INTO_PIPE && GetTop() >= MARIO_UNDER_END_OF_PIPE)
-		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 385))
+		|| (state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= MARIO_OUT_TOP_PIPE_1_COMPLETELY))
 		&& (CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID))
 	{
 		//DebugOut(L"get bottom: %f", GetBottom());
 		SetState(MARIO_STATE_IDLE);
 	}
 
-	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= 144)
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && state == MARIO_STATE_OUT_OF_PIPE && GetBottom() <= MARIO_OUT_TOP_PIPE_4_COMPLETELY)
 	{
 		SetState(MARIO_STATE_IDLE);
 		onBackyardPipe = true;
@@ -1369,24 +1368,24 @@ void CMario::SetState(int state)
 	case MARIO_STATE_FLYING:
 		if (vx > 0)
 		{
-			vy = -(MARIO_GRAVITY + 0.004f * 4) * dt;
+			vy = -(MARIO_GRAVITY + MARIO_FLY_ADDEND_GRAVITY * 4) * dt;
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
 				vx = MARIO_MAX_WALKING_SPEED;
-			if (vy <= -0.13f)
+			if (vy <= -MARIO_MAX_FLYING_SPEED_Y)
 			{
-				vy = -0.13f;
+				vy = -MARIO_MAX_FLYING_SPEED_Y;
 			}
 		}
 		else
 		{
-			vy = -(MARIO_GRAVITY + 0.004f * 4) * dt;
+			vy = -(MARIO_GRAVITY + MARIO_FLY_ADDEND_GRAVITY * 4) * dt;
 			vx -= MARIO_WALKING_ACCELERATION * dt;
 			if (vx < -MARIO_MAX_WALKING_SPEED)
 				vx = -MARIO_MAX_WALKING_SPEED;
-			if (vy <= -0.1f)
+			if (vy <= -MARIO_MAX_FLYING_SPEED_Y)
 			{
-				vy = -0.1f;
+				vy = -MARIO_MAX_FLYING_SPEED_Y;
 			}
 		}
 

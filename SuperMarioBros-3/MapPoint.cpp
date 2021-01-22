@@ -14,16 +14,16 @@ CMapPoint::CMapPoint(float x, float y, int sceneID, bool left, bool right, bool 
 	this->y = y;
 	leftEdge = x;
 	topEdge = y;
-	rightEdge = x + 16;
-	bottomEdge = y + 16;
+	rightEdge = x + POINT_WIDTH;
+	bottomEdge = y + POINT_WIDTH;
 	this->sceneID = sceneID;
 	hasPointAround.insert(hasPointAround.end(), { left, right, above, under });
 }
 
 void CMapPoint::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x + 6;
-	t = y + 6;
+	l = x + POINT_BBOX_ADDEND;
+	t = y + POINT_BBOX_ADDEND;
 	r = l + POINT_SIDE_LENGTH;
 	b = t + POINT_SIDE_LENGTH;
 }

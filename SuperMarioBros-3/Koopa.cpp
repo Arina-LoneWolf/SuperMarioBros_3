@@ -338,10 +338,6 @@ void CKoopa::SetState(int state)
 		isSupine = true;
 		vx = ENEMY_DEFECT_SPEED_X_CAUSED_BY_TAIL * object_colliding_nx;
 		vy = -ENEMY_DEFECT_SPEED_Y_CAUSED_BY_TAIL;
-		/*if (object_colliding_nx > 0)
-			effect = new CScoreEffect({ x + 1, y - 3 });
-		else
-			effect = new CScoreEffect({ x - 7, y - 3 });*/
 		break;
 
 	case ENEMY_STATE_MOVE:

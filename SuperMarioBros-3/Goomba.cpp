@@ -47,7 +47,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
-	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR + 250)
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR)
 		isFinishedUsing = true;
 
 	if (type == Type::RED_PARAGOOMBA)
@@ -62,7 +62,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (deadTime->IsTimeUp())
 		isFinishedUsing = true;
 
-	if (state == ENEMY_STATE_MOVE && delayToRedirectAgain->IsTimeUp() && !lostWings && !interestedInChasing->IsTimeUp()/* || vx < 0*/)
+	if (state == ENEMY_STATE_MOVE && delayToRedirectAgain->IsTimeUp() && !lostWings && !interestedInChasing->IsTimeUp())
 	{
 		if (type == Type::RED_PARAGOOMBA)
 		{
@@ -145,7 +145,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
-	DebugOut(L"state: %d\n", state);
+	//DebugOut(L"state: %d\n", state);
 }
 
 void CGoomba::Render()
