@@ -199,6 +199,13 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 					if (e->ny < 0)
 						onBrick = true;
 				}
+				if (e->obj->type == Type::COIN)
+				{
+					if (e->nx != 0)
+						x += dx;
+					else if (e->ny != 0)
+						y += dy;
+				}
 				if (e->obj->type == Type::COLOR_BOX)
 				{
 					if (e->nx != 0)

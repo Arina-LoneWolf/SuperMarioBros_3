@@ -30,7 +30,7 @@ bool CVirtualBox::CollidedHorizontally(vector<LPGAMEOBJECT>* coObjects, int koop
 	for (UINT i = 0; i < coObjects->size(); i++)
 	{
 		LPGAMEOBJECT e = coObjects->at(i);
-		if (e->type == Type::GREEN_KOOPA || e->type == Type::GREEN_PARAKOOPA || e->type == Type::RED_KOOPA || e->type == Type::RED_PARAKOOPA || e->type == Type::COLOR_BOX)
+		if (e->type == Type::GREEN_KOOPA || e->type == Type::GREEN_PARAKOOPA || e->type == Type::RED_KOOPA || e->type == Type::RED_PARAKOOPA || e->type == Type::COLOR_BOX || e->type == Type::COIN)
 			continue;
 		e->GetBoundingBox(ol, ot, or, ob);
 		if (CGameObject::CheckAABB(vl, vt, vr, vb, ol, ot, or, ob))

@@ -21,8 +21,8 @@ void CP_Switch::Render()
 
 void CP_Switch::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	if (state == STATE_PRESSED)
-		return;
+	/*if (state == STATE_PRESSED)
+		return;*/
 
 	l = x;
 	t = y;

@@ -381,7 +381,19 @@ void CPlayScene::Update(ULONGLONG dt)
 	cam->Update(dt);
 
 	for (LPGAMEOBJECT item : priorityListItems)
+	{
 		item->Update(dt, &coObjects);
+
+		if (item->type == Type::P_SWITCH)
+		{
+			CP_Switch* p_switch = dynamic_cast<CP_Switch*>(item);
+			if (p_switch->GetState() == STATE_PRESSED && p_switch->readyToPerform)
+			{
+				p_switch->PerformBricksTransformation(&listBronzeBricks);
+				p_switch->readyToPerform = false;
+			}
+		}
+	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -402,15 +414,6 @@ void CPlayScene::Update(ULONGLONG dt)
 					brick->dropped = true;
 			}
 		}
-		else if (e->type == Type::P_SWITCH)
-		{
-			CP_Switch* p_switch = dynamic_cast<CP_Switch*>(e);
-			if (p_switch->GetState() == STATE_PRESSED && p_switch->readyToPerform)
-			{
-				p_switch->PerformBricksTransformation(&listBronzeBricks);
-				p_switch->readyToPerform = false;
-			}
-		}
 	}
 
 	player->CheckCollisionWithItems(&listItems);
@@ -422,7 +425,11 @@ void CPlayScene::Update(ULONGLONG dt)
 	}*/
 
 	for (LPGAMEOBJECT item : listItems)
+	{
 		item->Update(dt, &coObjects);
+
+		
+	}
 
 	// remove objects
 	for (size_t i = 0; i < objects.size(); i++)
@@ -603,7 +610,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	case ITEM_P_SWITCH:
 	{
 		CP_Switch* p_switch = new CP_Switch();
-		listItems.push_back(p_switch);
+		priorityListItems.push_back(p_switch);
 		break;
 	}
 	case ITEM_COIN_X10:

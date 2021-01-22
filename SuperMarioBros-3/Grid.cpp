@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "Koopa.h"
 
 CGrid::CGrid()
 {

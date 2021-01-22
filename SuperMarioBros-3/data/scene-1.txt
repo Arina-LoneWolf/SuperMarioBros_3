@@ -1110,7 +1110,7 @@
 #0	672	100	1
 #0	325	100	1
 # start at bronze brick position
-#0	1912	100	1
+0	1912	100	1
 # start at koopa position
 #0	465	100	1
 #0	1460	245	1

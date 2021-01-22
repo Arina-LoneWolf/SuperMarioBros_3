@@ -440,14 +440,6 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 					e->obj->SetState(STATE_RAMMED);
 				}
 			}
-			else if (e->obj->type == Type::P_SWITCH)
-			{
-				if (e->ny < 0)
-				{
-					vy = -MARIO_JUMP_DEFLECT_SPEED;
-					e->obj->SetState(STATE_PRESSED);
-				}
-			}
 			else if (e->obj->type == Type::COIN)
 			{
 				vy = last_vy;
@@ -1839,8 +1831,16 @@ void CMario::CheckCollisionWithItems(vector<LPGAMEOBJECT>* listItem)
 				effect = new CScoreEffect({ GetLeft() + 6, GetTop() }, MONEY_EFFECT_1_UP);
 				listEffects.push_back(effect);
 				break;
+			case Type::P_SWITCH:
+				if (vy > 0 && e->state != STATE_PRESSED)
+				{
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+					e->SetState(STATE_PRESSED);
+				}
+				break;
 			}
-			e->isFinishedUsing = true;
+			if (e->type != Type::P_SWITCH)
+				e->isFinishedUsing = true;
 		}
 	}
 }
