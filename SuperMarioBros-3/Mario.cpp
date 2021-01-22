@@ -131,14 +131,15 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (unpressDown && isOnGround)
 		isSitting = false;
 
-	if ((inStartOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE && GetTop() < MARIO_UNDER_TOP_OF_PIPE + 1)
+	if (((inStartOfPipe && GetTop() >= MARIO_UNDER_TOP_OF_PIPE && GetTop() < MARIO_UNDER_TOP_OF_PIPE + 1)
 		|| (inStartOfPipe && GetBottom() <= 495 && GetBottom() > 494))
+		&& CGame::GetInstance()->GetCurrentSceneID() == MAP_1_SCENE_ID)
 	{
 		vy = 0;
 		screenDim = true;
 	}
 
-	if (inStartOfPipe && GetTop() >= 97)
+	if (inStartOfPipe && GetTop() >= 97 && CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID)
 	{
 		vy = 0;
 		screenDim = true;
@@ -172,6 +173,7 @@ void CMario::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		canFly = false;
 		flyTime->Stop();
+		//DebugOut(L"STOPPPPP FLY\n");
 	}
 
 	if (level == MARIO_RACCOON && attackStartTime
@@ -1379,9 +1381,9 @@ void CMario::SetState(int state)
 			vx += MARIO_WALKING_ACCELERATION * dt;
 			if (vx > MARIO_MAX_WALKING_SPEED)
 				vx = MARIO_MAX_WALKING_SPEED;
-			if (vy <= -0.1f)
+			if (vy <= -0.13f)
 			{
-				vy = -0.1f;
+				vy = -0.13f;
 			}
 		}
 		else
@@ -1717,7 +1719,7 @@ void CMario::Fly()
 		isFlying = true;
 	if (isOnGround && flyTime->IsStopped())
 	{
-		DebugOut(L"START FLY\n");
+		//DebugOut(L"START FLY\n");
 		isFlying = true;
 		flyTime->Start();
 	}

@@ -54,6 +54,7 @@ public:
 	float vx;
 	float vy;
 
+	bool onCam = false;
 	bool isFinishedUsing = false;
 	Type type;
 	Category category;

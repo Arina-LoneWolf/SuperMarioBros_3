@@ -23,6 +23,7 @@
 #include "RandomItemBox.h"
 #include "StatusBar.h"
 #include "Camera.h"
+#include "Grid.h"
 
 
 class CPlayScene: public CScene
@@ -34,6 +35,13 @@ protected:
 	CStatusBar* HUD;
 	int worldID = 1;
 
+	CGrid* staticGrid;
+	CGrid* dynamicGrid;
+
+	vector<LPGAMEOBJECT> staticObjects;
+	vector<LPGAMEOBJECT> dynamicObjects;
+	vector<LPGAMEOBJECT> tempDynamicObjects;
+
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listBronzeBricks;
 	vector<LPGAMEOBJECT> listItems;
@@ -41,7 +49,6 @@ protected:
 
 	double colorSubtrahend;
 	int alpha = 0;
-	//bool darkeningIsDone = false;
 	bool lighteningIsDone = false;
 
 	void _ParseSection_TEXTURES(string line);
@@ -63,6 +70,7 @@ public:
 	void DropItem(int itemType, float x, float y);
 	void DarkenTheScreen();
 	void LightenTheScreen();
+	void InsertObjectToGrid();
 
 	CMario * GetPlayer() { return player; } 
 

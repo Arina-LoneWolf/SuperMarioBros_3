@@ -1091,6 +1091,7 @@
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+
 # PIPE
 12	352	368	40	2
 12	1792	384	40	1
@@ -1116,11 +1117,11 @@
 # start at red fire piranha position
 #0	320	100	1
 # start at random item box
-0	2656	100	1
+#0	2656	100	1
 # at koopa bronze brick
 #0	2050	100	1
 # at red paragoomba
-#0	1030	100	1
+0	1030	100	1
 
 # GOOMBA
 2	250	399	3

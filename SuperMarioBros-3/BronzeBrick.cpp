@@ -50,6 +50,8 @@ void CBronzeBrick::Render()
 
 	for (LPGAMEOBJECT piece : listPiece)
 		piece->Render();
+
+	RenderBoundingBox();
 }
 
 void CBronzeBrick::GetBoundingBox(float& l, float& t, float& r, float& b)

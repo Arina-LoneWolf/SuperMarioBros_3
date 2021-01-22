@@ -154,14 +154,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int width = atoi(tokens[4].c_str());
 		int height = atoi(tokens[5].c_str());
 		obj = new CFloor(width, height);
+		staticObjects.push_back(obj);
 		break;
 	}
 
 	case Type::COLOR_BOX:
 	{
-		int width = atoi(tokens[4].c_str()); // Why float?
+		int width = atoi(tokens[4].c_str());
 		int height = atoi(tokens[5].c_str());
 		obj = new CColorBox(width, height);
+		staticObjects.push_back(obj);
 		break;
 	}
 
@@ -170,6 +172,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int brickType = atoi(tokens[4].c_str());
 		int itemType = atoi(tokens[5].c_str());
 		obj = new CBrickContainsItem(brickType, itemType, y);
+		dynamicObjects.push_back(obj);
 		break;
 	}
 
@@ -177,17 +180,36 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int piranhaType = atoi(tokens[4].c_str());
 		obj = new CFirePiranha(player, piranhaType);
+		dynamicObjects.push_back(obj);
 		break;
 	}
 
-	case Type::GREEN_PIRANHA: obj = new CGreenPiranha(player); break;
-	case Type::RANDOM_ITEM_BOX: obj = new CRandomItemBox(); break;
-	case Type::FLOATING_WOOD: obj = new CFloatingWood(); break;
+	case Type::GREEN_PIRANHA: 
+	{
+		obj = new CGreenPiranha(player); 
+		dynamicObjects.push_back(obj);
+		break;
+	}
+
+	case Type::RANDOM_ITEM_BOX: 
+	{
+		obj = new CRandomItemBox(); 
+		dynamicObjects.push_back(obj);
+		break;
+	}
+
+	case Type::FLOATING_WOOD: 
+	{
+		obj = new CFloatingWood(); 
+		dynamicObjects.push_back(obj);
+		break;
+	}
 
 	case Type::PIPE:
 	{
 		int pipeType = atoi(tokens[4].c_str());
 		obj = new CPipe(pipeType);
+		staticObjects.push_back(obj);
 		break;
 	}
 
@@ -197,6 +219,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case Type::GREEN_PARAKOOPA:
 	{
 		obj = new CKoopa(player, x, y, object_type);
+		dynamicObjects.push_back(obj);
 		break;
 	}
 
@@ -205,14 +228,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		int transformation = atoi(tokens[4].c_str());
 		brick = new CBronzeBrick(transformation);
+		dynamicObjects.push_back(brick);
 		break;
 	}
 
 	case Type::YELLOW_GOOMBA:
 	case Type::RED_PARAGOOMBA:
-		obj = new CGoomba(player, object_type); break;
+	{
+		obj = new CGoomba(player, object_type);
+		dynamicObjects.push_back(obj);
+		break;
+	}
 
-	case Type::BOOMERANG_BROTHER: obj = CBoomerangBrother::GetInstance(); break;
+	case Type::BOOMERANG_BROTHER: 
+	{
+		obj = CBoomerangBrother::GetInstance(); 
+		dynamicObjects.push_back(obj);
+		break;
+	}
 
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -251,7 +284,13 @@ void CPlayScene::_ParseSection_TileMap(string line)
 	int col_on_tile_map = atoi(tokens[6].c_str());
 	int tile_width = atoi(tokens[7].c_str());
 	int tile_height = atoi(tokens[8].c_str());
-	//int texID = atoi(tokens[0].c_str());
+
+	staticGrid = new CGrid();
+	staticGrid->Resize();
+
+	dynamicGrid = new CGrid();
+	dynamicGrid->Resize();
+
 	map = new TileMap(ID, file_texture.c_str(), file_path.c_str(), row_on_textures, col_on_textures, row_on_tile_map, col_on_tile_map, tile_width, tile_height);
 }
 
@@ -319,6 +358,11 @@ void CPlayScene::Update(ULONGLONG dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
+	//staticGrid->MakeObjectOutCam(staticObjects);
+	dynamicGrid->MakeObjectOutCam(dynamicObjects);
+
+	InsertObjectToGrid();
+
 	vector<LPGAMEOBJECT> coObjects;
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -372,10 +416,10 @@ void CPlayScene::Update(ULONGLONG dt)
 	player->CheckCollisionWithItems(&listItems);
 	player->CheckCollisionWithItems(&priorityListItems);
 
-	for (size_t i = 0; i < listBronzeBricks.size(); i++)
+	/*for (size_t i = 0; i < listBronzeBricks.size(); i++)
 	{
 		listBronzeBricks[i]->Update(dt, &coObjects);
-	}
+	}*/
 
 	for (LPGAMEOBJECT item : listItems)
 		item->Update(dt, &coObjects);
@@ -460,6 +504,8 @@ void CPlayScene::Update(ULONGLONG dt)
 		player->readyToOutOfPipe = true;
 		lighteningIsDone = true;
 	}
+
+	dynamicGrid->Reset(dynamicObjects);
 }
 
 void CPlayScene::Render()
@@ -469,8 +515,8 @@ void CPlayScene::Render()
 	for (LPGAMEOBJECT item : priorityListItems)
 		item->Render();
 
-	for (int i = listBronzeBricks.size() - 1; i >= 0; i--)
-		listBronzeBricks[i]->Render();
+	/*for (int i = listBronzeBricks.size() - 1; i >= 0; i--)
+		listBronzeBricks[i]->Render();*/
 
 	if (player)
 		player->Render();
@@ -511,6 +557,9 @@ void CPlayScene::Unload()
 	listBronzeBricks.clear();
 	listItems.clear();
 	priorityListItems.clear();
+	staticObjects.clear();
+	dynamicObjects.clear();
+	tempDynamicObjects.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
@@ -554,7 +603,7 @@ void CPlayScene::DropItem(int itemType, float x, float y)
 	case ITEM_P_SWITCH:
 	{
 		CP_Switch* p_switch = new CP_Switch();
-		objects.push_back(p_switch);
+		listItems.push_back(p_switch);
 		break;
 	}
 	case ITEM_COIN_X10:
@@ -592,6 +641,23 @@ void CPlayScene::LightenTheScreen()
 	CSprites::GetInstance()->Get(TRANSITION_SPRITE_ID)->Draw(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY(), alpha);
 }
 
+void CPlayScene::InsertObjectToGrid()
+{
+	objects.clear();
+	tempDynamicObjects.clear();
+
+	for (UINT i = 0; i < staticObjects.size(); i++)
+	{
+		objects.push_back(staticObjects[i]);
+	}
+
+	dynamicGrid->Get(tempDynamicObjects);
+	for (UINT i = 0; i < tempDynamicObjects.size(); i++)
+	{
+		objects.push_back(tempDynamicObjects[i]);
+	}
+}
+
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -617,6 +683,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->canFly && mario->GetLevel() == MARIO_RACCOON)
 		{
 			mario->Fly();
+			//DebugOut(L"Flyyyyyyy\n");
 		}
 		else
 		{

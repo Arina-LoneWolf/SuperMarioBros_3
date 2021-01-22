@@ -10,8 +10,8 @@ CRandomItemBox::CRandomItemBox()
 
 void CRandomItemBox::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == STATE_EMPTY)
-		return;
+	/*if (state == STATE_EMPTY)
+		return;*/
 
 	left = x + ITEM_POS_X_OFFSET;
 	top = y;

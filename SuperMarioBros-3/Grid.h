@@ -1,22 +1,23 @@
-#include"Utils.h"
-#define Cell_width 265
-#define Cell_height 250
+#pragma once
+#include "GameObject.h"
+#include "Game.h"
 
-class Grid
+#define CELL_WIDTH	150
+#define CELL_HEIGHT	180
+
+#define MAP_WIDTH	3328
+#define MAP_HEIGHT	1000
+
+class CGrid
 {
-	int map_width, map_height;
-	int cell_width, cell_height;
-	vector<vector<vector<LPGAMEOBJECT>>> allcells;
+	vector<vector<vector<LPGAMEOBJECT>>> cells;
 public:
-	Grid(int cell_width = Cell_width, int cell_height = Cell_height);
-	~Grid();
-	void Resize(int map_width, int map_height);
-	void ClearGrid(int nums_row, int nums_col);
-	void ResetGrid(vector<LPGAMEOBJECT> list);
-	void PushGrid(vector<LPGAMEOBJECT> list);
-	void GetGrid(vector<LPGAMEOBJECT>& list);
-	void PushGridStart(LPGAMEOBJECT obj, int row, int col);
-	void CheckCamGrid(vector<LPGAMEOBJECT>& list);
-
+	CGrid();
+	~CGrid();
+	void Resize();
+	void Clear(int numRow, int numCol);
+	void Reset(vector<LPGAMEOBJECT> listObj);
+	void Get(vector<LPGAMEOBJECT>& listObj);
+	void MakeObjectOutCam(vector<LPGAMEOBJECT>& listObj);
 };
 

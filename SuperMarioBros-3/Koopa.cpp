@@ -13,8 +13,6 @@ CKoopa::CKoopa(CMario* mario, float x, float y, Type type)
 
 void CKoopa::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	if (died)
-		return;
 	if (state == KOOPA_STATE_SPIN_AND_MOVE)
 	{
 		left = x + 2;
@@ -156,7 +154,9 @@ void CKoopa::Update(ULONGLONG dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
+
+	if (!died)
+		CalcPotentialCollisions(coObjects, coEvents);
 
 	if (coEvents.size() == 0)
 	{

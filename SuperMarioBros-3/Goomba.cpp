@@ -19,8 +19,6 @@ float CGoomba::GetSpeedX()
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (died)
-		return;
 	if (type == Type::RED_PARAGOOMBA)
 	{
 		left = x + GOOMBA_LEFT_ADDEND;
@@ -46,7 +44,7 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += GOOMBA_GRAVITY * dt;
 
 	float camPosY = CGame::GetInstance()->GetCamPosY();
-	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR)
+	if (camPosY && y > camPosY + SCREEN_HEIGHT / SCREEN_DIVISOR + 250)
 		isFinishedUsing = true;
 
 	if (type == Type::RED_PARAGOOMBA)
@@ -79,11 +77,14 @@ void CGoomba::Update(ULONGLONG dt, vector<LPGAMEOBJECT>* coObjects)
 	if (effect)
 		effect->Update(dt, coObjects);
 
+	
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	CalcPotentialCollisions(coObjects, coEvents);
+	if (!died)
+		CalcPotentialCollisions(coObjects, coEvents);
 
 	if (coEvents.size() == 0)
 	{
