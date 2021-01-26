@@ -559,12 +559,12 @@ void CPlayScene::Update(ULONGLONG dt)
 	//CGame::GetInstance()->cam_y = 200;
 	float playerLeft = player->x + 11;
 
-	//if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2079) // thêm 1 dk là đang ở trong vùng autocam
-	//{
-	//	if (!player->pauseCam && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2063)
-	//		CGame::GetInstance()->cam_x += CAM_SPEED * dt;
-	//}
-	/*else*/ if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
+	if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2079) // thêm 1 dk là đang ở trong vùng autocam
+	{
+		if (!player->pauseCam && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2063)
+			CGame::GetInstance()->cam_x += CAM_SPEED * dt;
+	}
+	else if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
 		cx = playerLeft - (5 * SCREEN_WIDTH / 28);
 		CGame::GetInstance()->cam_x = cx;
