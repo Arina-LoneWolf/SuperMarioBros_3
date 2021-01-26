@@ -1,0 +1,17 @@
+[NO_CHOICE]
+# Goomba, Koopa, Green Piranha, Random Item Box, Bronze brick, Coin, Floating Wood, Boomerang Brother, Brick contains item
+
+[PIPE_CHOICE]
+
+[PIRANHA_CHOICE]
+
+[SPECIAL]
+# Floor, Color Box
+4	160	276	22	110	1
+4	-16	48	22	1	10
+4	0	112	22	10	5
+4	1920	160	22	8	2
+4	2032	0	22	1	10
+4	1968	128	22	3	2
+4	2064	176	22	32	1
+

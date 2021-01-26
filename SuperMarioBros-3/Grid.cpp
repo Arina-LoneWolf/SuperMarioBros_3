@@ -28,7 +28,12 @@ void CGrid::Clear(int numRow, int numCol)
 			cells[i][j].clear();
 }
 
-void CGrid::Reset(vector<LPGAMEOBJECT> listObj)
+void CGrid::Push(LPGAMEOBJECT obj, int row, int col)
+{
+	cells[row][col].push_back(obj);
+}
+
+void CGrid::Update(vector<LPGAMEOBJECT> listObj)
 {
 	Clear(MAP_HEIGHT / CELL_HEIGHT, MAP_WIDTH / CELL_WIDTH);
 
@@ -37,10 +42,10 @@ void CGrid::Reset(vector<LPGAMEOBJECT> listObj)
 		float l, t, r, b;
 		listObj[i]->GetBoundingBox(l, t, r, b);
 
-		int cellLeft = int(l / CELL_WIDTH);
 		int cellTop = int(t / CELL_HEIGHT);
-		int cellRight = ceil(r / CELL_WIDTH);
 		int cellBottom = ceil(b / CELL_HEIGHT);
+		int cellLeft = int(l / CELL_WIDTH);
+		int cellRight = ceil(r / CELL_WIDTH);
 
 		if (!listObj[i]->isFinishedUsing)
 		{
@@ -63,6 +68,7 @@ void CGrid::Get(vector<LPGAMEOBJECT>& listObj)
 		{
 			for (int k = 0; k < cells[i][j].size(); k++)
 			{
+				if (cells[i][j][k]!=NULL)
 				if (!cells[i][j][k]->onCam && !cells[i][j][k]->isFinishedUsing)
 				{
 					cells[i][j][k]->onCam = true;
@@ -73,7 +79,7 @@ void CGrid::Get(vector<LPGAMEOBJECT>& listObj)
 	}
 }
 
-void CGrid::MakeObjectOutCam(vector<LPGAMEOBJECT>& listObj)
+void CGrid::MakeObjectsOutCam(vector<LPGAMEOBJECT>& listObj)
 {
 	for (LPGAMEOBJECT obj : listObj)
 		obj->onCam = false;

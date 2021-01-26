@@ -849,3 +849,6 @@ enum class ItemOfBox
 //	item = static_cast<ItemOfBox>(((int)item + 1) % (int)ItemOfBox::MAX_ITEM_TYPE_NUM);
 //	return item;
 //}
+
+// final
+#define CAM_SPEED	0.03f

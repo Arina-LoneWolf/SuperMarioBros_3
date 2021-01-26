@@ -16,8 +16,9 @@ public:
 	~CGrid();
 	void Resize();
 	void Clear(int numRow, int numCol);
-	void Reset(vector<LPGAMEOBJECT> listObj);
+	void Push(LPGAMEOBJECT obj, int row, int col);
+	void Update(vector<LPGAMEOBJECT> listObj);
 	void Get(vector<LPGAMEOBJECT>& listObj);
-	void MakeObjectOutCam(vector<LPGAMEOBJECT>& listObj);
+	void MakeObjectsOutCam(vector<LPGAMEOBJECT>& listObj);
 };
 

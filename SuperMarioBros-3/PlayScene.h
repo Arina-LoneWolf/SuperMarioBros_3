@@ -40,7 +40,7 @@ protected:
 
 	vector<LPGAMEOBJECT> staticObjects;
 	vector<LPGAMEOBJECT> dynamicObjects;
-	vector<LPGAMEOBJECT> tempDynamicObjects;
+	vector<LPGAMEOBJECT> temp;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listBronzeBricks;
@@ -70,7 +70,7 @@ public:
 	void DropItem(int itemType, float x, float y);
 	void DarkenTheScreen();
 	void LightenTheScreen();
-	void InsertObjectToGrid();
+	void GetObjectsFromGrid();
 	void ResetObjectsOutOfCam(vector<LPGAMEOBJECT>& listObj);
 
 	CMario * GetPlayer() { return player; } 

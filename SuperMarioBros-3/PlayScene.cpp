@@ -112,8 +112,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	Type object_type = static_cast<Type>(atoi(tokens[0].c_str()));
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
-
 	int ani_set_id = atoi(tokens[3].c_str());
+	int top = atoi(tokens[4].c_str());
+	int bot = atoi(tokens[5].c_str());
+	int left = atoi(tokens[6].c_str());
+	int right = atoi(tokens[7].c_str());
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
@@ -147,40 +150,67 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
+		DebugOut(L"[INFO] Portal!\n");
 	}
 
 	case Type::FLOOR:
 	{
-		int width = atoi(tokens[4].c_str());
-		int height = atoi(tokens[5].c_str());
+		int width = atoi(tokens[8].c_str());
+		int height = atoi(tokens[9].c_str());
 		obj = new CFloor(width, height);
 		staticObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				staticGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] FLOOR!\n");
 		break;
 	}
 
 	case Type::COLOR_BOX:
 	{
-		int width = atoi(tokens[4].c_str());
-		int height = atoi(tokens[5].c_str());
+		int width = atoi(tokens[8].c_str());
+		int height = atoi(tokens[9].c_str());
 		obj = new CColorBox(width, height);
 		staticObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				staticGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] COLOR BOX!\n");
 		break;
 	}
 
 	case Type::BRICK_CONTAINS_ITEM:
 	{
-		int brickType = atoi(tokens[4].c_str());
-		int itemType = atoi(tokens[5].c_str());
+		int brickType = atoi(tokens[8].c_str());
+		int itemType = atoi(tokens[9].c_str());
 		obj = new CBrickContainsItem(brickType, itemType, y);
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] BRICK CONTANT ITEM!\n");
+
 		break;
 	}
 
 	case Type::FIRE_PIRANHA:
 	{
-		int piranhaType = atoi(tokens[4].c_str());
+		int piranhaType = atoi(tokens[8].c_str());
 		obj = new CFirePiranha(player, piranhaType);
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] FIRE!\n");
+
 		break;
 	}
 
@@ -188,6 +218,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CGreenPiranha(player); 
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] GREEN!\n");
+
 		break;
 	}
 
@@ -195,6 +232,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CRandomItemBox(); 
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] RANDOM ITEM!\n");
+
 		break;
 	}
 
@@ -202,14 +246,30 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CFloatingWood(); 
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] WOOD!\n");
+
 		break;
 	}
 
 	case Type::PIPE:
 	{
-		int pipeType = atoi(tokens[4].c_str());
+		int pipeType = atoi(tokens[8].c_str());
 		obj = new CPipe(pipeType);
+		obj->SetPosition(x, y);
+		obj->SetAnimationSet(ani_set);
 		staticObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				staticGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] PIPE!\n");
+
 		break;
 	}
 
@@ -220,15 +280,29 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CKoopa(player, x, y, object_type);
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] MIX!\n");
+
 		break;
 	}
 
 	case Type::COIN:
 	case Type::BRONZE_BRICK:
 	{
-		int transformation = atoi(tokens[4].c_str());
+		int transformation = atoi(tokens[8].c_str());
 		brick = new CBronzeBrick(transformation);
 		dynamicObjects.push_back(brick);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] COIN!\n");
+
 		break;
 	}
 
@@ -237,6 +311,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CGoomba(player, object_type);
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] PARA_GOOMBA!\n");
+
 		break;
 	}
 
@@ -244,6 +325,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = CBoomerangBrother::GetInstance(); 
 		dynamicObjects.push_back(obj);
+		for (int row = top; row < bot; row++)
+		{
+			for (int col = left; col < right; col++)
+				dynamicGrid->Push(obj, row, col);
+		}
+		DebugOut(L"[INFO] COLOR BOX!\n");
+
 		break;
 	}
 
@@ -358,10 +446,10 @@ void CPlayScene::Update(ULONGLONG dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
-	//staticGrid->MakeObjectOutCam(staticObjects);
-	dynamicGrid->MakeObjectOutCam(dynamicObjects);
+	staticGrid->MakeObjectsOutCam(staticObjects);
+	dynamicGrid->MakeObjectsOutCam(dynamicObjects);
 
-	InsertObjectToGrid();
+	GetObjectsFromGrid();
 
 	vector<LPGAMEOBJECT> coObjects;
 
@@ -474,7 +562,7 @@ void CPlayScene::Update(ULONGLONG dt)
 	//if (CGame::GetInstance()->GetCurrentSceneID() == MAP_4_SCENE_ID && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2079) // thêm 1 dk là đang ở trong vùng autocam
 	//{
 	//	if (!player->pauseCam && CGame::GetInstance()->GetCamPosX() + SCREEN_WIDTH / SCREEN_DIVISOR < 2063)
-	//		CGame::GetInstance()->cam_x += 0.03f * dt;
+	//		CGame::GetInstance()->cam_x += CAM_SPEED * dt;
 	//}
 	/*else*/ if (playerLeft > (5 * SCREEN_WIDTH / 28) && playerLeft + (5 * SCREEN_WIDTH / 28) < map->GetWidthTileMap())
 	{
@@ -514,7 +602,7 @@ void CPlayScene::Update(ULONGLONG dt)
 		lighteningIsDone = true;
 	}
 
-	dynamicGrid->Reset(dynamicObjects);
+	dynamicGrid->Update(dynamicObjects);
 }
 
 void CPlayScene::Render()
@@ -531,7 +619,16 @@ void CPlayScene::Render()
 		player->Render();
 
 	for (int i = objects.size() - 1; i >= 0; i--)
-		objects[i]->Render();
+	{
+		if (objects[i]->type != Type::BOOMERANG_BROTHER)
+			objects[i]->Render();
+	}
+
+	for (int i = objects.size() - 1; i >= 0; i--)
+	{
+		if (objects[i]->type == Type::BOOMERANG_BROTHER)
+			objects[i]->Render();
+	}
 
 	for (LPGAMEOBJECT item : listItems)
 		item->Render();
@@ -568,7 +665,7 @@ void CPlayScene::Unload()
 	priorityListItems.clear();
 	staticObjects.clear();
 	dynamicObjects.clear();
-	tempDynamicObjects.clear();
+	temp.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
@@ -650,20 +747,17 @@ void CPlayScene::LightenTheScreen()
 	CSprites::GetInstance()->Get(TRANSITION_SPRITE_ID)->Draw(CGame::GetInstance()->GetCamPosX(), CGame::GetInstance()->GetCamPosY(), alpha);
 }
 
-void CPlayScene::InsertObjectToGrid()
+void CPlayScene::GetObjectsFromGrid()
 {
 	objects.clear();
-	tempDynamicObjects.clear();
+	temp.clear();
 
-	for (UINT i = 0; i < staticObjects.size(); i++)
-	{
-		objects.push_back(staticObjects[i]);
-	}
+	staticGrid->Get(temp);
+	dynamicGrid->Get(temp);
 
-	dynamicGrid->Get(tempDynamicObjects);
-	for (UINT i = 0; i < tempDynamicObjects.size(); i++)
+	for (UINT i = 0; i < temp.size(); i++)
 	{
-		objects.push_back(tempDynamicObjects[i]);
+		objects.push_back(temp[i]);
 	}
 }
 
